@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\PasswordChangeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 // Guest routes (belum login)
 Route::middleware('guest')->group(function () {
@@ -34,3 +35,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');

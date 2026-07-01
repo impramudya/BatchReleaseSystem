@@ -12,11 +12,16 @@ class CheckPasswordExpired
         $user = $request->user();
 
         if ($user && ! $request->routeIs('password.change', 'password.change.update', 'logout')) {
-            $changedAt = $user->password_changed_at ?? $user->created_at;
+            $changedAt = $user->password_changed_at;
 
-            if (now()->diffInDays($changedAt) >= 90) {
-                return redirect()->route('password.change')
-                    ->with('warning', 'Password Anda sudah lebih dari 90 hari, silakan ganti password terlebih dahulu.');
+            if (is_null($changedAt)) {
+                // Belum pernah ganti password sama sekali (pertama kali login)
+                session()->flash('force_password_change', true);
+                session()->flash('password_change_reason', 'first_login');
+            } elseif (now()->diffInDays($changedAt) >= 90) {
+                // Sudah 90 hari sejak ganti password terakhir
+                session()->flash('force_password_change', true);
+                session()->flash('password_change_reason', 'expired');
             }
         }
 
