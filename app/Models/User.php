@@ -20,9 +20,21 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+    'email',
+    'password',
+    'password_changed_at',
     ];
+
+    protected $casts = [
+    'email_verified_at' => 'datetime',
+    'password_changed_at' => 'datetime',
+    'password' => 'hashed',
+];
+
+public function passwordHistories()
+{
+    return $this->hasMany(\App\Models\PasswordHistory::class)->latest()->limit(5);
+}
 
     /**
      * The attributes that should be hidden for serialization.

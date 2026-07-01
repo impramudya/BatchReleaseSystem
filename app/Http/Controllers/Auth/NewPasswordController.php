@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PasswordHistory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,8 +31,20 @@ class NewPasswordController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
+                foreach ($user->passwordHistories as $old) {
+                    if (Hash::check($request->password, $old->password)) {
+                        abort(422, 'Password tidak boleh sama dengan password sebelumnya.');
+                    }
+                }
+
+                PasswordHistory::create([
+                    'user_id' => $user->id,
+                    'password' => $user->password,
+                ]);
+
                 $user->forceFill([
                     'password' => Hash::make($request->password),
+                    'password_changed_at' => now(),
                     'remember_token' => Str::random(60),
                 ])->save();
 
