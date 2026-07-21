@@ -22,14 +22,12 @@ class PasswordChangeController extends Controller
 
         $user = $request->user();
 
-        // Cek terhadap password saat ini
         if (Hash::check($request->password, $user->password)) {
             return back()->withErrors([
                 'password' => 'Password baru tidak boleh sama dengan password sebelumnya.',
             ]);
         }
 
-        // Cek terhadap history (5 password terakhir)
         foreach ($user->passwordHistories as $old) {
             if (Hash::check($request->password, $old->password)) {
                 return back()->withErrors([
@@ -38,7 +36,6 @@ class PasswordChangeController extends Controller
             }
         }
 
-        // Simpan password lama ke history
         PasswordHistory::create([
             'user_id' => $user->id,
             'password' => $user->password,

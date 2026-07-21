@@ -4,10 +4,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\PasswordChangeController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserManagementController;
+use Illuminate\Support\Facades\Route;
 
-// Guest routes (belum login)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -19,22 +19,17 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
-// Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/password/change', [PasswordChangeController::class, 'edit'])->name('password.change');
     Route::post('/password/change', [PasswordChangeController::class, 'update'])->name('password.change.update');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management.index');
 });
 
-// Redirect root ke login kalau belum login
 Route::get('/', function () {
     return redirect()->route('login');
 });
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');

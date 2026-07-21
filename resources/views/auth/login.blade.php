@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BatchReleaseSystem</title>
-    @vite('resources/css/app.css')
+    <title>Login - BatchReleasePro</title>
+    @vite('resources/css/auth.css')
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="font-sans bg-gray-100 min-h-screen flex items-center justify-center">
 
     <div class="w-full max-w-md bg-white shadow-md rounded-lg p-8">
         <h1 class="text-2xl font-bold text-center mb-6">Login</h1>
@@ -14,12 +14,6 @@
         @if (session('status'))
             <div class="mb-4 text-sm text-green-600 bg-green-50 p-3 rounded">
                 {{ session('status') }}
-            </div>
-        @endif
-
-        @if (session('warning'))
-            <div class="mb-4 text-sm text-yellow-700 bg-yellow-50 p-3 rounded">
-                {{ session('warning') }}
             </div>
         @endif
 

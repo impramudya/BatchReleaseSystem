@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password - BatchReleaseSystem</title>
+    <title>Lupa Password - BatchReleasePro</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="font-sans bg-gray-100 min-h-screen flex items-center justify-center">
 
     <div class="w-full max-w-md bg-white shadow-md rounded-lg p-8">
         <h1 class="text-2xl font-bold text-center mb-2">Lupa Password</h1>
