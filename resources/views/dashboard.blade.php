@@ -4,31 +4,127 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-6 shadow-sm">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Selamat datang, {{ auth()->user()->name }}!</h3>
-        <p class="text-gray-500 dark:text-gray-400">Kamu berhasil login ke sistem.</p>
+    <div class="brp-welcome-card">
+        <h3>Selamat datang, {{ auth()->user()->name }}!</h3>
+        <p>Kamu berhasil login ke sistem.</p>
     </div>
 
     @if (session('force_password_change'))
-        <div id="password-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg max-w-sm w-full p-6 text-center">
+        <div id="password-modal" class="brp-modal-overlay">
+            <div class="brp-modal-box">
                 @if (session('password_change_reason') === 'first_login')
-                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Ganti Password Anda</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                        Ini adalah login pertama Anda. Untuk keamanan, silakan ganti password default Anda.
-                    </p>
+                    <h3>Ganti Password Anda</h3>
+                    <p>Ini adalah login pertama Anda. Untuk keamanan, silakan ganti password default Anda.</p>
                 @else
-                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Password Anda Sudah Kedaluwarsa</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                        Password Anda sudah digunakan lebih dari 90 hari. Silakan ganti password untuk melanjutkan.
-                    </p>
+                    <h3>Password Anda Sudah Kedaluwarsa</h3>
+                    <p>Password Anda sudah digunakan lebih dari 90 hari. Silakan ganti password untuk melanjutkan.</p>
                 @endif
 
-                <a href="{{ route('password.change') }}"
-                    class="block w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                <a href="{{ route('password.change') }}" class="brp-modal-btn">
                     Ganti Password Sekarang
                 </a>
             </div>
         </div>
     @endif
+
+    <style>
+        /* ---------- Card "Selamat datang" ---------- */
+        .brp-welcome-card {
+            background: var(--content-surface);
+            border: 1px solid var(--content-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .brp-welcome-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--content-text);
+            margin: 0 0 0.5rem;
+        }
+
+        .brp-welcome-card p {
+            font-size: 0.9rem;
+            color: var(--content-text-soft);
+            margin: 0;
+        }
+
+        /* ---------- Modal overlay ---------- */
+        .brp-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 28, 44, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            animation: brpFadeIn 0.2s ease-out;
+        }
+
+        @keyframes brpFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .brp-modal-box {
+            background: var(--content-surface);
+            border: 1px solid var(--content-border);
+            border-radius: 8px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            max-width: 24rem;
+            width: 90%;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            animation: brpPopUp 0.25s ease-out;
+        }
+
+        @keyframes brpPopUp {
+            from { opacity: 0; transform: scale(0.95) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .brp-modal-box h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--content-text);
+            margin: 0 0 0.6rem;
+        }
+
+        .brp-modal-box p {
+            font-size: 0.85rem;
+            color: var(--content-text-soft);
+            margin: 0 0 1.5rem;
+            line-height: 1.5;
+        }
+
+        .brp-modal-btn {
+            display: block;
+            width: 100%;
+            background: var(--teal);
+            color: var(--paper);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.6rem 0;
+            border-radius: 6px;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .brp-modal-btn:hover {
+            background: var(--teal-dark);
+        }
+
+        .brp-modal-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 480px) {
+            .brp-welcome-card { padding: 1.25rem; }
+            .brp-modal-box { padding: 1.5rem 1.25rem; }
+        }
+    </style>
 @endsection

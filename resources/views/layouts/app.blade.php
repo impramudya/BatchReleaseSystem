@@ -393,9 +393,15 @@
 
             <div class="brp-nav-group">
                 <p class="brp-nav-label">Master Data</p>
-                <a href="#" class="brp-nav-link">
+                <a href="{{ route('product-master.index') }}" class="brp-nav-link {{ request()->routeIs('product-master.*') ? 'is-active' : '' }}">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6.5L10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 6.5V14l7 3.5 7-3.5V6.5"/><path d="M10 10v7.5"/></svg>
                     Product Master
+                </a>
+                <a href="{{ route('category-master.index') }}" class="brp-nav-link {{ request()->routeIs('category-master.*') ? 'is-active' : '' }}">
+                    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M8 3.5a2 2 0 1 1 4 0v1h2.5a1.5 1.5 0 0 1 1.5 1.5v2.5h-1a2 2 0 1 0 0 4h1v2.5a1.5 1.5 0 0 1-1.5 1.5H12v-1a2 2 0 1 0-4 0v1H5.5A1.5 1.5 0 0 1 4 15v-2.5h1a2 2 0 1 0 0-4H4V6a1.5 1.5 0 0 1 1.5-1.5H8v-1z"/>
+                    </svg>
+                    Category Master
                 </a>
                 <a href="#" class="brp-nav-link">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5h.01M5 10h.01M5 15h.01"/><path d="M8.5 5h8M8.5 10h8M8.5 15h8"/></svg>
@@ -417,10 +423,10 @@
 
         </nav>
 
-        <div class="brp-status-line">
+        {{-- <div class="brp-status-line">
             <span class="brp-status-dot" aria-hidden="true"></span>
             Sistem aktif &mdash; tersinkron
-        </div>
+        </div> --}}
 
         <div class="brp-user-wrap" id="user-menu-wrap">
             <div class="brp-user-menu">

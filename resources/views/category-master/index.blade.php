@@ -1,202 +1,216 @@
 @extends('layouts.app')
 
-@section('title', 'User Management')
-@section('page-title', 'User Management')
+@section('title', 'Master Kategori Produk')
+@section('page-title', 'Master Kategori Produk')
 
 @section('content')
 
     <style>
-        .um-card {
+        .cm-card {
             background: var(--content-surface);
             border: 1px solid var(--content-border);
             border-radius: 8px;
             overflow: hidden;
         }
 
-        .um-card-head {
+        .cm-card-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            padding: 1.15rem 1.4rem;
+            padding: 1.25rem 1.5rem;
             border-bottom: 1px solid var(--content-border);
         }
 
-        .um-card-title {
+        .cm-card-title {
             font-family: 'poppins', sans-serif;
             font-size: 1rem;
             font-weight: 600;
+            line-height: 1.3;
             margin: 0;
             color: var(--content-text);
         }
 
-        .um-card-sub {
+        .cm-card-sub {
             font-family: 'poppins', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
+            line-height: 1.4;
             color: var(--content-text-soft);
             margin: 0.25rem 0 0;
         }
 
-        .um-head-right {
+        .cm-head-right {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.75rem;
         }
 
-        .um-search {
+        .cm-search {
             position: relative;
             width: 240px;
         }
-        .um-search svg {
+        .cm-search svg {
             position: absolute;
-            left: 0.7rem;
+            left: 0.75rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--content-text-soft);
+            pointer-events: none;
         }
-        .um-search input {
+        .cm-search input {
             width: 100%;
-            padding: 0.5rem 0.75rem 0.5rem 2.1rem;
+            padding: 0.55rem 0.75rem 0.55rem 2.25rem;
             font-size: 0.85rem;
             font-family: 'poppins', sans-serif;
+            line-height: 1.4;
             color: var(--content-text);
             background: var(--content-bg);
             border: 1px solid var(--content-border);
             border-radius: 6px;
         }
-        .um-search input:focus-visible {
+        .cm-search input:focus-visible {
             outline: none;
             border-color: var(--teal);
             box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15);
         }
 
-        .um-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+        .cm-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            table-layout: fixed;
+        }
 
-        .um-table thead th {
+        .cm-table thead th {
             text-align: left;
-            padding: 0.7rem 1.4rem;
+            padding: 0.75rem 1.5rem;
             font-family: 'poppins', monospace;
-            font-size: 0.66rem;
+            font-size: 0.6875rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--content-text-soft);
             border-bottom: 1px solid var(--content-border);
+            white-space: nowrap;
         }
 
-        .um-table tbody tr {
+        .cm-table thead th:first-child { width: 26%; }
+        .cm-table thead th:nth-child(2) { width: 54%; }
+        .cm-table thead th:last-child { width: 20%; text-align: right; }
+
+        .cm-table tbody tr {
             border-bottom: 1px solid var(--content-border);
             transition: background 0.12s ease;
         }
-        .um-table tbody tr:last-child { border-bottom: none; }
-        .um-table tbody tr:hover { background: var(--teal-tint); }
-        html.dark .um-table tbody tr:hover { background: rgba(14, 124, 123, 0.08); }
+        .cm-table tbody tr:last-child { border-bottom: none; }
+        .cm-table tbody tr:hover { background: var(--teal-tint); }
+        html.dark .cm-table tbody tr:hover { background: rgba(14, 124, 123, 0.08); }
 
-        .um-table td { padding: 0.85rem 1.4rem; vertical-align: middle; color: var(--content-text); }
-
-        .um-person { display: flex; align-items: center; gap: 0.65rem; }
-        .um-avatar {
-            width: 30px; height: 30px;
-            border-radius: 7px;
-            background: var(--teal-tint);
-            color: var(--teal-dark);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 700;
-            flex-shrink: 0;
+        .cm-table td {
+            padding: 0.875rem 1.5rem;
+            vertical-align: middle;
+            color: var(--content-text);
+            line-height: 1.45;
         }
-        html.dark .um-avatar { background: rgba(14, 124, 123, 0.22); color: #7fd6cf; }
+        .cm-table td:last-child { text-align: right; }
 
-        .um-name { font-weight: 600; color: var(--content-text); }
-        .um-email { color: var(--content-text-soft); }
-
-        .um-role {
-            display: inline-block;
-            font-family: 'poppins', monospace;
-            font-size: 0.68rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: var(--teal-dark);
-            border: 1px solid var(--teal);
-            padding: 0.2rem 0.55rem;
-            border-radius: 999px;
+        .cm-name {
+            font-weight: 600;
+            color: var(--content-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        html.dark .um-role { color: #7fd6cf; }
+        .cm-desc {
+            color: var(--content-text-soft);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-        .um-status { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; }
-        .um-status .dot { width: 6px; height: 6px; border-radius: 999px; background: #1f9d6b; flex-shrink: 0; }
-        .um-status.inactive .dot { background: var(--content-text-soft); }
-        .um-status.inactive { color: var(--content-text-soft); }
-
-        .um-actions { display: flex; align-items: center; gap: 0.4rem; }
-        .um-icon-btn {
-            width: 30px; height: 30px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 5px;
+        .cm-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cm-icon-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
             border: 1px solid var(--content-border);
             background: transparent;
             color: var(--content-text-soft);
             cursor: pointer;
             text-decoration: none;
+            transition: color 0.12s ease, border-color 0.12s ease;
         }
-        .um-icon-btn:hover { color: var(--content-text); border-color: var(--teal); }
-        .um-icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+        .cm-icon-btn:hover { color: var(--content-text); border-color: var(--teal); }
+        .cm-icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
 
-        .um-empty {
-            padding: 3rem 1.5rem;
+        .cm-empty {
+            padding: 3.5rem 1.5rem;
             text-align: center;
             color: var(--content-text-soft);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
-        .um-add-btn {
+        .cm-add-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
+            gap: 0.5rem;
             background: var(--teal);
             color: #fff;
             font-size: 0.85rem;
             font-weight: 600;
-            padding: 0.5rem 0.9rem;
+            line-height: 1.4;
+            padding: 0.55rem 1rem;
             border-radius: 6px;
             text-decoration: none;
             white-space: nowrap;
+            transition: background 0.12s ease;
         }
-        .um-add-btn:hover { background: var(--teal-dark); }
+        .cm-add-btn:hover { background: var(--teal-dark); }
 
-        .um-pagination { padding: 1rem 1.4rem; border-top: 1px solid var(--content-border); }
+        .cm-pagination {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--content-border);
+        }
 
         /* Toast notification */
-        .um-toast {
+        .cm-toast {
             position: fixed;
-            top: 1.25rem;
-            right: 1.25rem;
+            top: 1.5rem;
+            right: 1.5rem;
             z-index: 9999;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.8rem 1.1rem;
+            gap: 0.625rem;
+            padding: 0.875rem 1.25rem;
             border-radius: 8px;
             font-family: 'poppins', sans-serif;
             font-size: 0.85rem;
             font-weight: 500;
+            line-height: 1.4;
             color: #fff;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
             transform: translateY(-12px);
             opacity: 0;
-            transition: all 0.25s ease;
+            transition: transform 0.25s ease, opacity 0.25s ease;
             pointer-events: none;
         }
-        .um-toast.show {
+        .cm-toast.show {
             transform: translateY(0);
             opacity: 1;
         }
-        .um-toast.success { background: #1f9d6b; }
-        .um-toast.error { background: var(--danger, #dc2626); }
-        .um-toast svg { flex-shrink: 0; }
+        .cm-toast.success { background: #1f9d6b; }
+        .cm-toast.error { background: var(--danger, #dc2626); }
+        .cm-toast svg { flex-shrink: 0; }
 
         /* Modal konfirmasi delete */
-        .um-modal-overlay {
+        .cm-modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(17, 24, 21, 0.5);
@@ -209,11 +223,11 @@
             visibility: hidden;
             transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.18s;
         }
-        .um-modal-overlay.show {
+        .cm-modal-overlay.show {
             opacity: 1;
             visibility: visible;
         }
-.um-modal {
+        .cm-modal {
             background: var(--content-surface);
             border: 1px solid var(--content-border);
             border-radius: 12px;
@@ -228,10 +242,10 @@
             transform: translateY(6px) scale(0.98);
             transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .um-modal-overlay.show .um-modal {
+        .cm-modal-overlay.show .cm-modal {
             transform: translateY(0) scale(1);
         }
-        .um-modal-icon {
+        .cm-modal-icon {
             width: 38px;
             height: 38px;
             border-radius: 9px;
@@ -242,157 +256,138 @@
             justify-content: center;
             margin: 0 auto 1rem;
         }
-        .um-modal-title {
+        .cm-modal-title {
             font-family: 'poppins', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             letter-spacing: -0.01em;
+            line-height: 1.35;
             color: var(--content-text);
-            margin: 0 0 0.35rem;
+            margin: 0 0 0.5rem;
         }
-        .um-modal-text {
+        .cm-modal-text {
             font-family: 'poppins', sans-serif;
             font-size: 0.8125rem;
             color: var(--content-text-soft);
             line-height: 1.55;
             margin: 0 0 1.5rem;
         }
-        .um-modal-text strong {
+        .cm-modal-text strong {
             color: var(--content-text);
             font-weight: 600;
         }
-        .um-modal-actions {
+        .cm-modal-actions {
             display: flex;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.625rem;
         }
-        .um-modal-actions button {
-            padding: 0.5rem 1.1rem;
+        .cm-modal-actions button {
+            padding: 0.55rem 1.15rem;
             border-radius: 7px;
             font-family: 'poppins', sans-serif;
             font-size: 0.8125rem;
             font-weight: 500;
+            line-height: 1.3;
             cursor: pointer;
             border: 1px solid transparent;
             transition: background 0.12s ease, border-color 0.12s ease;
         }
-        .um-modal-cancel {
+        .cm-modal-cancel {
             background: transparent;
             border-color: var(--content-border);
             color: var(--content-text-soft);
         }
-        .um-modal-cancel:hover {
+        .cm-modal-cancel:hover {
             background: var(--content-bg);
             color: var(--content-text);
         }
-        .um-modal-confirm {
+        .cm-modal-confirm {
             background: var(--danger, #dc2626);
             color: #fff;
         }
-        .um-modal-confirm:hover {
+        .cm-modal-confirm:hover {
             background: color-mix(in srgb, var(--danger, #dc2626) 85%, black);
         }
-        .um-modal-confirm:active {
+        .cm-modal-confirm:active {
             transform: scale(0.98);
         }
 
         @media (max-width: 640px) {
-            .um-card-head {
+            .cm-card-head {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .um-head-right {
+            .cm-head-right {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .um-search { width: 100%; }
+            .cm-search { width: 100%; }
         }
     </style>
 
-    <div id="um-toast" class="um-toast">
-        <svg id="um-toast-icon" class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"></svg>
-        <span id="um-toast-text"></span>
+    <div id="cm-toast" class="cm-toast">
+        <svg id="cm-toast-icon" class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"></svg>
+        <span id="cm-toast-text"></span>
     </div>
 
-    <div id="um-modal-overlay" class="um-modal-overlay">
-        <div class="um-modal" role="alertdialog" aria-modal="true" aria-labelledby="um-modal-title">
-            <div class="um-modal-icon">
+    <div id="cm-modal-overlay" class="cm-modal-overlay">
+        <div class="cm-modal" role="alertdialog" aria-modal="true" aria-labelledby="cm-modal-title">
+            <div class="cm-modal-icon">
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" width="19" height="19">
                     <path d="M4.5 6h11M8 6V4.5h4V6M6 6l.6 9.5h6.8L14 6" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h3 class="um-modal-title" id="um-modal-title">Hapus pengguna ini?</h3>
-            <p class="um-modal-text">
-                <strong id="um-modal-name"></strong> akan kehilangan akses sepenuhnya. Data yang sudah dihapus tidak bisa dikembalikan.
+            <h3 class="cm-modal-title" id="cm-modal-title">Hapus kategori ini?</h3>
+            <p class="cm-modal-text">
+                <strong id="cm-modal-name"></strong> akan dihapus permanen. Kategori yang masih dipakai produk tidak bisa dihapus.
             </p>
-            <div class="um-modal-actions">
-                <button type="button" class="um-modal-cancel" id="um-modal-cancel">Batal</button>
-                <button type="button" class="um-modal-confirm" id="um-modal-confirm">Hapus pengguna</button>
+            <div class="cm-modal-actions">
+                <button type="button" class="cm-modal-cancel" id="cm-modal-cancel">Batal</button>
+                <button type="button" class="cm-modal-confirm" id="cm-modal-confirm">Hapus kategori</button>
             </div>
         </div>
     </div>
 
-    <div class="um-card">
-        <div class="um-card-head">
+    <div class="cm-card">
+        <div class="cm-card-head">
             <div>
-                <h3 class="um-card-title">Daftar Pengguna</h3>
-                <p class="um-card-sub">{{ $users->total() }} akun terdaftar di sistem QA</p>
+                <h3 class="cm-card-title">Master Kategori Produk</h3>
+                <p class="cm-card-sub">{{ $categories->total() }} kategori terdaftar di sistem QA</p>
             </div>
-            <div class="um-head-right">
-                <div class="um-search">
+            <div class="cm-head-right">
+                <div class="cm-search">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M16 16l-3.3-3.3"/></svg>
-                    <input type="text" id="um-search-input" placeholder="Cari nama atau email...">
+                    <input type="text" id="cm-search-input" placeholder="Cari kategori...">
                 </div>
-                <a href="{{ route('user-management.create') }}" class="um-add-btn">
+                <a href="{{ route('category-master.create') }}" class="cm-add-btn">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4.5v11M4.5 10h11"/></svg>
-                    Tambah User
+                    Tambah Kategori
                 </a>
             </div>
         </div>
 
-        <table class="um-table">
+        <table class="cm-table">
             <thead>
                 <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <th>Nama Kategori</th>
+                    <th>Deskripsi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody id="um-table-body">
-                @forelse ($users as $user)
+            <tbody id="cm-table-body">
+                @forelse ($categories as $category)
                     <tr>
+                        <td class="cm-name" title="{{ $category->name }}">{{ $category->name }}</td>
+                        <td class="cm-desc" title="{{ $category->description }}">{{ $category->description ?? '—' }}</td>
                         <td>
-                            <div class="um-person">
-                                <div class="um-avatar">{{ strtoupper(substr($user->name, 0, 2)) }}</div>
-                                <span class="um-name">{{ $user->name }}</span>
-                            </div>
-                        </td>
-                        <td class="um-email">{{ $user->email }}</td>
-                        <td><span class="um-role">{{ $user->role }}</span></td>
-                        <td>
-                            @if(($user->status ?? 'active') === 'active')
-                                <span class="um-status"><span class="dot"></span> Aktif</span>
-                            @else
-                                <span class="um-status inactive"><span class="dot"></span> Nonaktif</span>
-                            @endif
-                        </td>
-                        <td>
-                            <div class="um-actions">
-                                <a href="{{ route('user-management.edit', $user->id) }}" class="um-icon-btn" title="Edit pengguna">
+                            <div class="cm-actions">
+                                <a href="{{ route('category-master.edit', $category->id) }}" class="cm-icon-btn" title="Edit kategori">
                                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 3.5l3 3L7 16H4v-3z"/></svg>
                                 </a>
-                                <form action="{{ route('user-management.reset-password', $user->id) }}" method="POST" onsubmit="return confirm('Reset password {{ $user->name }} dengan password sementara?');">
-                                    @csrf
-                                    <button type="submit" class="um-icon-btn" title="Reset password">
-                                        <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="13" r="3"/><path d="M9.2 10.8L15.5 4.5M13.5 6.5l2 2M15.5 4.5l2 2"/></svg>
-                                    </button>
-                                </form>
-                                <form action="{{ route('user-management.destroy', $user->id) }}" method="POST" class="um-delete-form" data-name="{{ $user->name }}">
+                                <form action="{{ route('category-master.destroy', $category->id) }}" method="POST" class="cm-delete-form" data-name="{{ $category->name }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="um-icon-btn danger um-delete-trigger" title="Hapus pengguna">
+                                    <button type="button" class="cm-icon-btn danger cm-delete-trigger" title="Hapus kategori">
                                         <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 6h11M8 6V4.5h4V6M6 6l.6 9.5h6.8L14 6"/></svg>
                                     </button>
                                 </form>
@@ -401,24 +396,24 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">
-                            <div class="um-empty">Belum ada pengguna. Klik "Tambah User" untuk menambahkan akun baru.</div>
+                        <td colspan="3">
+                            <div class="cm-empty">Belum ada kategori. Klik "Tambah Kategori" untuk menambahkan.</div>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        @if (method_exists($users, 'links'))
-            <div class="um-pagination">{{ $users->links() }}</div>
+        @if (method_exists($categories, 'links'))
+            <div class="cm-pagination">{{ $categories->links() }}</div>
         @endif
     </div>
 
     <script>
         (function () {
             // Search
-            const input = document.getElementById('um-search-input');
-            const rows = document.querySelectorAll('#um-table-body tr');
+            const input = document.getElementById('cm-search-input');
+            const rows = document.querySelectorAll('#cm-table-body tr');
             if (input) {
                 input.addEventListener('input', function () {
                     const q = input.value.trim().toLowerCase();
@@ -431,12 +426,12 @@
 
             // Toast
             function showToast(message, type) {
-                const toast = document.getElementById('um-toast');
-                const text = document.getElementById('um-toast-text');
-                const icon = document.getElementById('um-toast-icon');
+                const toast = document.getElementById('cm-toast');
+                const text = document.getElementById('cm-toast-text');
+                const icon = document.getElementById('cm-toast-icon');
 
                 text.textContent = message;
-                toast.className = 'um-toast ' + type;
+                toast.className = 'cm-toast ' + type;
 
                 icon.innerHTML = type === 'success'
                     ? '<path d="M4 10.5l4 4 8-9"/>'
@@ -459,10 +454,10 @@
             @endif
 
             // Modal konfirmasi delete
-            const overlay = document.getElementById('um-modal-overlay');
-            const modalName = document.getElementById('um-modal-name');
-            const btnCancel = document.getElementById('um-modal-cancel');
-            const btnConfirm = document.getElementById('um-modal-confirm');
+            const overlay = document.getElementById('cm-modal-overlay');
+            const modalName = document.getElementById('cm-modal-name');
+            const btnCancel = document.getElementById('cm-modal-cancel');
+            const btnConfirm = document.getElementById('cm-modal-confirm');
             let formToSubmit = null;
 
             function openModal(form) {
@@ -478,9 +473,9 @@
                 formToSubmit = null;
             }
 
-            document.querySelectorAll('.um-delete-trigger').forEach(function (btn) {
+            document.querySelectorAll('.cm-delete-trigger').forEach(function (btn) {
                 btn.addEventListener('click', function () {
-                    openModal(btn.closest('.um-delete-form'));
+                    openModal(btn.closest('.cm-delete-form'));
                 });
             });
 

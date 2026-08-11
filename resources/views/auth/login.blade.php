@@ -340,7 +340,7 @@
                     <button type="submit" class="brp-submit">Masuk</button>
                 </form>
 
-                <p class="brp-footnote">Akses hanya untuk personel yang berwenang.</p>
+                <p class="brp-footnote">Akses hanya untuk yang berwenang.</p>
             </div>
         </div>
 

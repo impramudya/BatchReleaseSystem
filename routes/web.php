@@ -7,6 +7,8 @@ use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductMasterController;
+use App\Http\Controllers\CategoryMasterController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -35,7 +37,36 @@ Route::middleware('auth')->group(function () {
     Route::put('/user-management/{user}', [UserManagementController::class, 'update'])->name('user-management.update');
     Route::delete('/user-management/{user}', [UserManagementController::class, 'destroy'])->name('user-management.destroy');
     Route::post('/user-management/{user}/reset-password', [UserManagementController::class, 'resetPassword'])->name('user-management.reset-password');
+
+// Category Master
+    Route::get('/category-master', [CategoryMasterController::class, 'index'])
+        ->name('category-master.index');
+    Route::get('/category-master/create', [CategoryMasterController::class, 'create'])
+        ->name('category-master.create');
+    Route::post('/category-master', [CategoryMasterController::class, 'store'])
+        ->name('category-master.store');
+    Route::get('/category-master/{category}/edit', [CategoryMasterController::class, 'edit'])
+        ->name('category-master.edit');
+    Route::put('/category-master/{category}', [CategoryMasterController::class, 'update'])
+        ->name('category-master.update');
+    Route::delete('/category-master/{category}', [CategoryMasterController::class, 'destroy'])
+        ->name('category-master.destroy');
+
+//product master
+    Route::get('/product-master', [ProductMasterController::class, 'index'])
+        ->name('product-master.index');
+    Route::get('/product-master/create', [ProductMasterController::class, 'create'])
+        ->name('product-master.create');
+    Route::post('/product-master', [ProductMasterController::class, 'store'])
+        ->name('product-master.store');
+    Route::get('/product-master/{product}/edit', [ProductMasterController::class, 'edit'])
+        ->name('product-master.edit');
+    Route::put('/product-master/{product}', [ProductMasterController::class, 'update'])
+        ->name('product-master.update');
+    Route::delete('/product-master/{product}', [ProductMasterController::class, 'destroy'])
+        ->name('product-master.destroy');
 });
+
 
 Route::get('/', function () {
     return redirect()->route('login');
