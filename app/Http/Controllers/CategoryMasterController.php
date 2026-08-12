@@ -32,7 +32,7 @@ class CategoryMasterController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:product_categories,name'],
+            'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
             'description' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -53,7 +53,7 @@ class CategoryMasterController extends Controller
         $validated = $request->validate([
             'name' => [
                 'required', 'string', 'max:255',
-                Rule::unique('product_categories', 'name')->ignore($category->id),
+                Rule::unique('categories', 'name')->ignore($category->id),
             ],
             'description' => ['nullable', 'string', 'max:255'],
         ]);

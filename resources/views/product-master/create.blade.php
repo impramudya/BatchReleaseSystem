@@ -1,5 +1,6 @@
 {{-- product-master/create.blade.php --}}
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}">
 
 @section('title', 'Tambah Produk')
 @section('page-title', 'Tambah Produk')

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/category-master.css') }}">
 
 @section('title', 'Edit Kategori Produk')
 @section('page-title', 'Edit Kategori Produk')

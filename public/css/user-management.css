@@ -1,0 +1,576 @@
+.um-form-card {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.um-form-head {
+    padding: 1.15rem 1.4rem;
+    border-bottom: 1px solid var(--content-border);
+}
+.um-form-title {
+    font-family: "poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--content-text);
+}
+.um-form-sub {
+    font-family: "poppins", sans-serif;
+    font-size: 0.72rem;
+    color: var(--content-text-soft);
+    margin: 0.25rem 0 0;
+}
+
+.um-form-body {
+    padding: 1.4rem;
+}
+
+.um-field {
+    margin-bottom: 1.1rem;
+}
+.um-field:last-child {
+    margin-bottom: 0;
+}
+
+.um-field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--content-text);
+    margin-bottom: 0.4rem;
+}
+
+.um-field .hint {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--content-text-soft);
+    margin-top: 0.3rem;
+}
+
+.um-field input[type="text"],
+.um-field input[type="email"],
+.um-field input[type="password"],
+.um-field select {
+    width: 100%;
+    padding: 0.62rem 0.75rem;
+    font-size: 0.9rem;
+    font-family: "poppins", sans-serif;
+    color: var(--content-text);
+    background: var(--content-bg);
+    border: 1px solid var(--content-border);
+    border-radius: 5px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+.um-field input:focus-visible,
+.um-field select:focus-visible {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15);
+}
+
+.um-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 560px) {
+    .um-field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.um-error {
+    font-size: 0.78rem;
+    color: var(--danger);
+    margin: 0.35rem 0 0;
+}
+
+.um-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 1.4rem;
+    border-top: 1px solid var(--content-border);
+    background: var(--content-bg);
+}
+
+.um-btn-primary {
+    padding: 0.62rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--teal);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.um-btn-primary:hover {
+    background: var(--teal-dark);
+}
+
+.um-btn-ghost {
+    padding: 0.62rem 1.1rem;
+    font-size: 0.88rem;
+    color: var(--content-text-soft);
+    background: transparent;
+    border: 1px solid var(--content-border);
+    border-radius: 5px;
+    text-decoration: none;
+}
+.um-btn-ghost:hover {
+    color: var(--content-text);
+    border-color: var(--teal);
+}
+
+.um-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: "poppins", sans-serif;
+    font-size: 0.8rem;
+    color: var(--content-text-soft);
+    margin-bottom: 1.1rem;
+}
+.um-breadcrumb a {
+    color: var(--content-text-soft);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.um-breadcrumb a:hover {
+    color: var(--content-text);
+}
+.um-breadcrumb svg {
+    width: 13px;
+    height: 13px;
+}
+.um-breadcrumb .sep {
+    color: var(--content-border);
+}
+.um-breadcrumb .current {
+    color: var(--content-text);
+    font-weight: 500;
+}
+
+/* index.php */
+.um-card {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.um-card-head {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.4rem;
+    border-bottom: 1px solid var(--content-border);
+}
+
+.um-card-title {
+    font-family: "poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--content-text);
+}
+
+.um-card-sub {
+    font-family: "poppins", sans-serif;
+    font-size: 0.72rem;
+    color: var(--content-text-soft);
+    margin: 0.25rem 0 0;
+}
+
+.um-head-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.um-search {
+    position: relative;
+    width: 240px;
+    height: 38px;
+}
+.um-search svg {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    transform: translateY(-50%);
+    color: var(--content-text-soft);
+    pointer-events: none;
+}
+.um-search input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0 0.75rem 0 2.1rem;
+    font-size: 0.85rem;
+    line-height: 1;
+    font-family: "poppins", sans-serif;
+    color: var(--content-text);
+    background: var(--content-bg);
+    border: 1px solid var(--content-border);
+    border-radius: 6px;
+}
+.um-search input:focus-visible {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15);
+}
+
+.um-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.87rem;
+}
+
+.um-table thead th {
+    text-align: left;
+    padding: 0.7rem 1.4rem;
+    font-family: "poppins", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--content-text-soft);
+    border-bottom: 1px solid var(--content-border);
+}
+
+.um-table tbody tr {
+    border-bottom: 1px solid var(--content-border);
+    transition: background 0.12s ease;
+}
+.um-table tbody tr:last-child {
+    border-bottom: none;
+}
+.um-table tbody tr:hover {
+    background: var(--teal-tint);
+}
+html.dark .um-table tbody tr:hover {
+    background: rgba(14, 124, 123, 0.08);
+}
+
+.um-table td {
+    padding: 0.85rem 1.4rem;
+    vertical-align: middle;
+    color: var(--content-text);
+}
+
+.um-person {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+.um-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: var(--teal-tint);
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+html.dark .um-avatar {
+    background: rgba(14, 124, 123, 0.22);
+    color: #7fd6cf;
+}
+
+.um-name {
+    font-weight: 600;
+    color: var(--content-text);
+}
+.um-email {
+    color: var(--content-text-soft);
+}
+
+.um-role {
+    display: inline-block;
+    font-family: "poppins", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    border: 1px solid var(--teal);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+}
+html.dark .um-role {
+    color: #7fd6cf;
+}
+
+.um-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+}
+.um-status .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #1f9d6b;
+    flex-shrink: 0;
+}
+.um-status.inactive .dot {
+    background: var(--content-text-soft);
+}
+.um-status.inactive {
+    color: var(--content-text-soft);
+}
+
+.um-table th:last-child,
+.um-table td:last-child {
+    text-align: right;
+}
+
+.um-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+}
+.um-icon-btn {
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid var(--content-border);
+    background: transparent;
+    color: var(--content-text-soft);
+    cursor: pointer;
+    text-decoration: none;
+}
+.um-icon-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    display: block;
+}
+.um-delete-form,
+.um-actions form {
+    display: flex;
+    margin: 0;
+}
+.um-icon-btn:hover {
+    color: var(--content-text);
+    border-color: var(--teal);
+}
+.um-icon-btn.danger:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.um-empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: var(--content-text-soft);
+    font-size: 0.9rem;
+}
+
+.um-add-btn {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    height: 38px;
+    background: var(--teal);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.um-add-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+.um-add-btn:hover {
+    background: var(--teal-dark);
+}
+
+.um-pagination {
+    padding: 1rem 1.4rem;
+    border-top: 1px solid var(--content-border);
+}
+
+/* Toast notification */
+.um-toast {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.1rem;
+    border-radius: 8px;
+    font-family: "poppins", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-12px);
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+}
+.um-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+.um-toast.success {
+    background: #1f9d6b;
+}
+.um-toast.error {
+    background: var(--danger, #dc2626);
+}
+.um-toast svg {
+    flex-shrink: 0;
+}
+
+/* Modal konfirmasi delete */
+.um-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 21, 0.5);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.18s;
+}
+.um-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.um-modal {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 12px;
+    padding: 1.75rem 1.75rem 1.5rem;
+    width: 100%;
+    max-width: 336px;
+    text-align: center;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 12px 28px -6px rgba(0, 0, 0, 0.22),
+        0 24px 48px -12px rgba(0, 0, 0, 0.18);
+    transform: translateY(6px) scale(0.98);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.um-modal-overlay.show .um-modal {
+    transform: translateY(0) scale(1);
+}
+.um-modal-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--danger, #dc2626) 10%, transparent);
+    color: var(--danger, #dc2626);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+.um-modal-title {
+    font-family: "poppins", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--content-text);
+    margin: 0 0 0.35rem;
+}
+.um-modal-text {
+    font-family: "poppins", sans-serif;
+    font-size: 0.8125rem;
+    color: var(--content-text-soft);
+    line-height: 1.55;
+    margin: 0 0 1.5rem;
+}
+.um-modal-text strong {
+    color: var(--content-text);
+    font-weight: 600;
+}
+.um-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.um-modal-actions button {
+    padding: 0.5rem 1.1rem;
+    border-radius: 7px;
+    font-family: "poppins", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+        background 0.12s ease,
+        border-color 0.12s ease;
+}
+.um-modal-cancel {
+    background: transparent;
+    border-color: var(--content-border);
+    color: var(--content-text-soft);
+}
+.um-modal-cancel:hover {
+    background: var(--content-bg);
+    color: var(--content-text);
+}
+.um-modal-confirm {
+    background: var(--danger, #dc2626);
+    color: #fff;
+}
+.um-modal-confirm:hover {
+    background: color-mix(in srgb, var(--danger, #dc2626) 85%, black);
+}
+.um-modal-confirm:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 640px) {
+    .um-card-head {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .um-head-right {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .um-search {
+        width: 100%;
+    }
+}

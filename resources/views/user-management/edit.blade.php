@@ -1,43 +1,11 @@
 @extends('layouts.app')
 
+<link rel="stylesheet" href="{{ asset('css/user-management.css') }}">
+
 @section('title', 'Edit User')
 @section('page-title', 'Edit User')
 
 @section('content')
-
-    <style>
-        .um-breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: 'poppins', sans-serif;
-            font-size: 0.8rem;
-            color: var(--content-text-soft);
-            margin-bottom: 1.1rem;
-        }
-        .um-breadcrumb a {
-            color: var(--content-text-soft);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .um-breadcrumb a:hover {
-            color: var(--content-text);
-        }
-        .um-breadcrumb svg {
-            width: 13px;
-            height: 13px;
-        }
-        .um-breadcrumb .sep {
-            color: var(--content-border);
-        }
-        .um-breadcrumb .current {
-            color: var(--content-text);
-            font-weight: 500;
-        }
-    </style>
-
     <div class="um-breadcrumb">
         <a href="{{ route('user-management.index') }}">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4.5L6 10l6 5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

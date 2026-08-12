@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<link rel="stylesheet" href="{{ asset('css/category-master.css') }}">
+
 @section('title', 'Tambah Kategori Produk')
 @section('page-title', 'Tambah Kategori Produk')
 

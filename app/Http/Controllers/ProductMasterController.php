@@ -40,7 +40,7 @@ class ProductMasterController extends Controller
         $validated = $request->validate([
             'product_code' => ['required', 'string', 'max:50', 'unique:products,product_code'],
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'exists:product_categories,id'],
+            'category_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
@@ -67,7 +67,7 @@ class ProductMasterController extends Controller
                 Rule::unique('products', 'product_code')->ignore($product->id),
             ],
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'exists:product_categories,id'],
+            'category_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
