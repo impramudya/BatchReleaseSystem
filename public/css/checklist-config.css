@@ -1,0 +1,396 @@
+/* ---------- Flash messages ---------- */
+.ccfg-flash {
+    margin-bottom: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: #ecf7f2;
+    border: 1px solid #bfe3d2;
+    color: #1f7a52;
+}
+.ccfg-flash-error {
+    background: #fbeae6;
+    border-color: #f0c4b8;
+    color: var(--danger);
+}
+.ccfg-flash-error ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+/* ---------- Layout ---------- */
+.ccfg-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .ccfg-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ccfg-panel {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ccfg-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--content-border);
+}
+
+.ccfg-panel-header h3 {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--content-text);
+}
+
+.ccfg-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+/* ---------- Buttons ---------- */
+.ccfg-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+}
+.ccfg-btn-primary:hover {
+    background: var(--teal-dark);
+}
+
+.ccfg-btn-secondary {
+    background: transparent;
+    border: 1px solid var(--content-border);
+    color: var(--content-text-soft);
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.ccfg-btn-secondary:hover {
+    color: var(--content-text);
+    border-color: var(--teal);
+}
+
+.ccfg-icon-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--content-border);
+    border-radius: 6px;
+    color: var(--content-text-soft);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.ccfg-icon-btn:hover {
+    color: var(--content-text);
+    border-color: var(--teal);
+}
+.ccfg-icon-btn-danger:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+/* ---------- Category list (left panel) ---------- */
+.ccfg-category-list {
+    padding: 0.65rem;
+}
+
+.ccfg-category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-radius: 8px;
+    padding: 0.15rem 0.15rem 0.15rem 0.15rem;
+    margin-bottom: 0.35rem;
+}
+.ccfg-category-item:last-child {
+    margin-bottom: 0;
+}
+
+.ccfg-category-item.is-active {
+    background: rgba(14, 124, 123, 0.12);
+}
+
+.ccfg-category-link {
+    flex: 1;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--content-text-soft);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: color 0.15s ease;
+}
+.ccfg-category-item.is-active .ccfg-category-link {
+    color: var(--teal-dark);
+    font-weight: 600;
+}
+html.dark .ccfg-category-item.is-active .ccfg-category-link {
+    color: #6fc7ac;
+}
+.ccfg-category-link:hover {
+    color: var(--content-text);
+}
+
+.ccfg-category-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding-right: 0.35rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.ccfg-category-item:hover .ccfg-category-actions,
+.ccfg-category-item.is-active .ccfg-category-actions {
+    opacity: 1;
+}
+.ccfg-category-actions form {
+    margin: 0;
+}
+.ccfg-category-actions .ccfg-icon-btn {
+    width: 26px;
+    height: 26px;
+}
+.ccfg-category-actions .ccfg-icon {
+    width: 13px;
+    height: 13px;
+}
+
+/* ---------- Table (right panel) ---------- */
+.ccfg-table-wrap {
+    overflow-x: auto;
+}
+
+.ccfg-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ccfg-table th {
+    text-align: left;
+    padding: 0.85rem 1.25rem;
+    font-family: "Poppins", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--content-text-soft);
+    border-bottom: 1px solid var(--content-border);
+}
+
+.ccfg-table td {
+    padding: 0.9rem 1.25rem;
+    font-size: 0.87rem;
+    color: var(--content-text);
+    border-bottom: 1px solid var(--content-border);
+    vertical-align: middle;
+}
+
+.ccfg-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.ccfg-col-no {
+    width: 3rem;
+    color: var(--content-text-soft);
+}
+.ccfg-col-status {
+    width: 8rem;
+}
+.ccfg-col-action {
+    width: 6rem;
+}
+
+/* ---------- Status pill ---------- */
+.ccfg-status-pill {
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+.ccfg-status-pill:hover {
+    filter: brightness(0.95);
+}
+
+.ccfg-status-active {
+    background: #e4f3e0;
+    color: #4a7c2f;
+}
+html.dark .ccfg-status-active {
+    background: rgba(143, 197, 105, 0.16);
+    color: #a3d68a;
+}
+
+.ccfg-status-inactive {
+    background: #f1eeea;
+    color: var(--content-text-soft);
+}
+html.dark .ccfg-status-inactive {
+    background: rgba(247, 245, 240, 0.08);
+    color: var(--content-text-soft);
+}
+
+.ccfg-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.ccfg-row-actions form {
+    margin: 0;
+}
+
+/* ---------- Empty state ---------- */
+.ccfg-empty {
+    padding: 1.5rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--content-text-soft);
+    text-align: center;
+}
+
+/* ---------- Modal ---------- */
+.ccfg-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 28, 44, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 1rem;
+}
+.ccfg-modal-overlay.is-open {
+    display: flex;
+}
+
+.ccfg-modal-box {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    width: 100%;
+    max-width: 26rem;
+    padding: 1.75rem;
+}
+
+.ccfg-modal-box h3 {
+    margin: 0 0 0.4rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--content-text);
+}
+
+.ccfg-modal-subtext {
+    margin: 0 0 1.25rem;
+    font-size: 0.82rem;
+    color: var(--content-text-soft);
+}
+
+.ccfg-field {
+    margin-bottom: 1.1rem;
+}
+.ccfg-field:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+.ccfg-field label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--content-text);
+    margin-bottom: 0.4rem;
+}
+
+.ccfg-field input,
+.ccfg-field textarea,
+.ccfg-field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.88rem;
+    font-family: "Poppins", sans-serif;
+    color: var(--content-text);
+    background: var(--content-bg);
+    border: 1px solid var(--content-border);
+    border-radius: 6px;
+    outline: none;
+    resize: vertical;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+.ccfg-field input:focus,
+.ccfg-field textarea:focus,
+.ccfg-field select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.18);
+}
+
+.ccfg-error {
+    font-size: 0.75rem;
+    color: var(--danger);
+    margin: 0.35rem 0 0;
+}
+
+.ccfg-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.ccfg-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+.ccfg-btn-danger:hover {
+    filter: brightness(0.9);
+}

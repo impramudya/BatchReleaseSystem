@@ -75,7 +75,7 @@
                     </svg>
                     Category Master
                 </a>
-                <a href="#" class="brp-nav-link">
+                <a href="{{ route('checklist-config.index') }}" class="brp-nav-link {{ request()->routeIs('checklist-config.*') ? 'is-active' : '' }}">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5h.01M5 10h.01M5 15h.01"/><path d="M8.5 5h8M8.5 10h8M8.5 15h8"/></svg>
                     Checklist Config
                 </a>
@@ -145,7 +145,9 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
+<script src="{{ asset('js/app.js') }}" defer></script>
+
+    @stack('scripts')
 
 </body>
 </html>

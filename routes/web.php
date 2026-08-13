@@ -9,6 +9,9 @@ use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductMasterController;
 use App\Http\Controllers\CategoryMasterController;
+use App\Http\Controllers\ChecklistConfigController;
+use App\Http\Controllers\ChecklistCategoryController;
+use App\Http\Controllers\ChecklistQuestionController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -65,6 +68,29 @@ Route::middleware('auth')->group(function () {
         ->name('product-master.update');
     Route::delete('/product-master/{product}', [ProductMasterController::class, 'destroy'])
         ->name('product-master.destroy');
+
+//chekslist config
+    Route::get('/checklist-config/{category?}', [ChecklistConfigController::class, 'index'])
+        ->name('checklist-config.index');
+
+    // CRUD Kategori Evaluasi
+    Route::post('/checklist-categories', [ChecklistCategoryController::class, 'store'])
+        ->name('checklist-categories.store');
+    Route::put('/checklist-categories/{category}', [ChecklistCategoryController::class, 'update'])
+        ->name('checklist-categories.update');
+    Route::delete('/checklist-categories/{category}', [ChecklistCategoryController::class, 'destroy'])
+        ->name('checklist-categories.destroy');
+
+    // CRUD Pertanyaan
+    Route::post('/checklist-categories/{category}/questions', [ChecklistQuestionController::class, 'store'])
+        ->name('checklist-questions.store');
+    Route::put('/checklist-questions/{question}', [ChecklistQuestionController::class, 'update'])
+        ->name('checklist-questions.update');
+    Route::delete('/checklist-questions/{question}', [ChecklistQuestionController::class, 'destroy'])
+        ->name('checklist-questions.destroy');
+    Route::patch('/checklist-questions/{question}/toggle-status', [ChecklistQuestionController::class, 'toggleStatus'])
+        ->name('checklist-questions.toggle-status');
+
 });
 
 
