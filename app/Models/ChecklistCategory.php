@@ -15,17 +15,12 @@ class ChecklistCategory extends Model
         'name',
     ];
 
-    /**
-     * Semua pertanyaan milik kategori ini, terurut sesuai order_no.
-     */
+
     public function questions(): HasMany
     {
         return $this->hasMany(ChecklistQuestion::class)->orderBy('order_no');
     }
 
-    /**
-     * Label gabungan untuk ditampilkan, contoh: "A. Prosedur Pengolahan Induk".
-     */
     public function getLabelAttribute(): string
     {
         return "{$this->code}. {$this->name}";

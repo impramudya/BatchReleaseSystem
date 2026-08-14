@@ -15,19 +15,34 @@ class ChecklistQuestionController extends Controller
         $validated = $request->validate([
             'question' => ['required', 'string'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
+            'parent_id' => ['nullable', 'integer', 'exists:checklist_questions,id'],
         ]);
 
-        $nextOrderNo = (int) $category->questions()->max('order_no') + 1;
+        $parentId = $validated['parent_id'] ?? null;
+
+        if ($parentId) {
+            $parentExists = $category->questions()->where('id', $parentId)->exists();
+            if (! $parentExists) {
+                return back()->withErrors(['parent_id' => 'Pertanyaan induk tidak valid.']);
+            }
+        }
+
+        $nextOrderNo = (int) $category->questions()
+            ->where('parent_id', $parentId)
+            ->max('order_no') + 1;
 
         $category->questions()->create([
+            'parent_id' => $parentId,
             'order_no' => $nextOrderNo,
             'question' => $validated['question'],
             'status' => $validated['status'],
         ]);
 
+        $message = $parentId ? 'Sub-pertanyaan berhasil ditambahkan.' : 'Pertanyaan berhasil ditambahkan.';
+
         return redirect()
             ->route('checklist-config.index', $category)
-            ->with('status', 'Pertanyaan berhasil ditambahkan.');
+            ->with('status', $message);
     }
 
     public function update(Request $request, ChecklistQuestion $question): RedirectResponse

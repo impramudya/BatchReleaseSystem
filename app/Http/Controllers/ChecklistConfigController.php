@@ -15,7 +15,11 @@ class ChecklistConfigController extends Controller
         $selectedCategory = $category ?? $categories->first();
 
         $questions = $selectedCategory
-            ? $selectedCategory->questions()->orderBy('order_no')->get()
+            ? $selectedCategory->questions()
+                ->topLevel()
+                ->with('children')
+                ->orderBy('order_no')
+                ->get()
             : collect();
 
         return view('checklist-config.index', [

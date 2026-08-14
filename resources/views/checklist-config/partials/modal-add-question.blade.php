@@ -1,11 +1,13 @@
-{{-- ================= MODAL: TAMBAH PERTANYAAN ================= --}}
-{{-- Partial ini hanya di-include kalau $selectedCategory ada (lihat index.blade.php) --}}
+{{-- ================= MODAL: TAMBAH PERTANYAAN / SUB-PERTANYAAN ================= --}}
 <div class="ccfg-modal-overlay" id="modal-add-question">
     <div class="ccfg-modal-box">
-        <h3>Tambah Pertanyaan</h3>
-        <p class="ccfg-modal-subtext">Kategori: {{ $selectedCategory->code }}. {{ $selectedCategory->name }}</p>
+        <h3 id="add-question-title">Tambah Pertanyaan</h3>
+        <p class="ccfg-modal-subtext" id="add-question-context">
+            Kategori: {{ $selectedCategory->code }}. {{ $selectedCategory->name }}
+        </p>
         <form action="{{ route('checklist-questions.store', $selectedCategory) }}" method="POST">
             @csrf
+            <input type="hidden" id="add-question-parent-id" name="parent_id" value="">
             <div class="ccfg-field">
                 <label for="add-question">Pertanyaan</label>
                 <textarea id="add-question" name="question" rows="3" required></textarea>

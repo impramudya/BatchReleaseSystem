@@ -15,7 +15,6 @@
         if (opener) {
             const targetId = opener.getAttribute("data-modal-target");
 
-            // Isi form "Edit Kategori" dari data-attribute tombol yang diklik
             if (targetId === "modal-edit-category") {
                 const form = document.getElementById("form-edit-category");
                 form.action = opener.getAttribute("data-action");
@@ -32,6 +31,31 @@
                     opener.getAttribute("data-question") || "";
                 form.querySelector("#edit-question-status").value =
                     opener.getAttribute("data-status") || "active";
+            }
+
+            if (targetId === "modal-add-question") {
+                const parentId = opener.getAttribute("data-parent-id") || "";
+                const parentLabel =
+                    opener.getAttribute("data-parent-label") || "";
+
+                document.getElementById("add-question-parent-id").value =
+                    parentId;
+
+                const title = document.getElementById("add-question-title");
+                const context = document.getElementById("add-question-context");
+
+                if (parentId) {
+                    title.textContent = "Tambah Sub-Pertanyaan";
+                    context.textContent = "Sub dari: " + parentLabel;
+                } else {
+                    title.textContent = "Tambah Pertanyaan";
+                    context.textContent =
+                        context.getAttribute("data-default-text") ||
+                        context.textContent;
+                }
+
+                document.getElementById("add-question").value = "";
+                document.getElementById("add-question-status").value = "active";
             }
 
             openModal(targetId);
@@ -53,6 +77,13 @@
             if (e.target.id === "modal-confirm-delete") {
                 pendingDeleteForm = null;
             }
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const context = document.getElementById("add-question-context");
+        if (context) {
+            context.setAttribute("data-default-text", context.textContent);
         }
     });
 
