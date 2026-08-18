@@ -49,7 +49,7 @@
 
             <div class="brp-nav-group">
                 <p class="brp-nav-label">Batch Management</p>
-                <a href="#" class="brp-nav-link">
+                <a href="{{ route('batch-form.create') }}" class="brp-nav-link {{ request()->routeIs('batch-form.*') ? 'is-active' : '' }}">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3.5h12v13H4z"/><path d="M7.5 8h5M7.5 11h5M10 13.5v-3M8.5 12h3"/></svg>
                     Buat Form Baru
                 </a>
@@ -145,7 +145,7 @@
         </main>
     </div>
 
-<script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     @stack('scripts')
 

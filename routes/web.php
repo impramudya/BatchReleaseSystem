@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryMasterController;
 use App\Http\Controllers\ChecklistConfigController;
 use App\Http\Controllers\ChecklistCategoryController;
 use App\Http\Controllers\ChecklistQuestionController;
+use App\Http\Controllers\BatchFormController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -91,6 +92,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/checklist-questions/{question}/toggle-status', [ChecklistQuestionController::class, 'toggleStatus'])
         ->name('checklist-questions.toggle-status');
 
+    //form baru
+    Route::get('/batch-form/create', [BatchFormController::class, 'create'])
+    ->name('batch-form.create');
+    Route::post('/batch-form', [BatchFormController::class, 'store'])
+    ->name('batch-form.store');
 });
 
 

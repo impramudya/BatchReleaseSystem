@@ -11,7 +11,7 @@
         <select id="role" name="role" required>
             @php $selectedRole = old('role', $user->role ?? ''); @endphp
             <option value="" disabled {{ $selectedRole === '' ? 'selected' : '' }}>Pilih role</option>
-            @foreach (['Admin', 'QA Approver', 'QA Reviewer', 'Operator', 'Viewer'] as $roleOption)
+            @foreach (['Admin', 'Super Admin', 'Supervisor', 'Manager', 'Viewer'] as $roleOption)
                 <option value="{{ $roleOption }}" {{ $selectedRole === $roleOption ? 'selected' : '' }}>{{ $roleOption }}</option>
             @endforeach
         </select>

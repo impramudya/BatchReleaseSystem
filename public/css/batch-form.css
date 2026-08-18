@@ -1,0 +1,343 @@
+/* ---------- Breadcrumb ---------- */
+.bfm-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--content-text-soft);
+    margin-bottom: 1.25rem;
+}
+.bfm-breadcrumb a {
+    color: var(--teal-dark);
+    text-decoration: none;
+}
+.bfm-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Flash ---------- */
+.bfm-flash {
+    margin-bottom: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+.bfm-flash-error {
+    background: #fbeae6;
+    border: 1px solid #f0c4b8;
+    color: var(--danger);
+}
+.bfm-flash-error ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+/* ---------- Card ---------- */
+.bfm-card {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.bfm-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--content-border);
+}
+
+.bfm-card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--content-text);
+}
+
+.bfm-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--teal);
+}
+
+.bfm-badge-draft {
+    font-family: "Poppins", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--content-text-soft);
+    background: rgba(102, 112, 124, 0.12);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+.bfm-legend {
+    font-size: 0.75rem;
+    color: var(--content-text-soft);
+    white-space: nowrap;
+}
+
+/* ---------- Header form grid ---------- */
+.bfm-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem 1.5rem;
+    padding: 1.4rem;
+}
+@media (max-width: 720px) {
+    .bfm-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bfm-field-wide {
+    grid-column: 1 / -1;
+}
+
+.bfm-field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--content-text);
+    margin-bottom: 0.4rem;
+}
+
+.bfm-required {
+    color: var(--danger);
+}
+
+.bfm-field input,
+.bfm-field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.62rem 0.8rem;
+    font-size: 0.88rem;
+    font-family: "Poppins", sans-serif;
+    color: var(--content-text);
+    background: var(--content-bg);
+    border: 1px solid var(--content-border);
+    border-radius: 6px;
+    outline: none;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+.bfm-field input:focus,
+.bfm-field select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.18);
+}
+.bfm-field input[readonly] {
+    color: var(--content-text-soft);
+    cursor: not-allowed;
+}
+
+.bfm-error {
+    font-size: 0.75rem;
+    color: var(--danger);
+    margin: 0.35rem 0 0;
+}
+
+.bfm-hidden {
+    display: none;
+}
+
+/* ---------- Category bar ---------- */
+.bfm-category-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.4rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.bfm-category-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: rgba(247, 245, 240, 0.14);
+    font-size: 0.72rem;
+}
+
+/* ---------- Question rows ---------- */
+.bfm-question-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.4rem;
+    border-bottom: 1px solid var(--content-border);
+}
+.bfm-question-row:last-of-type {
+    border-bottom: none;
+}
+
+.bfm-question-no {
+    flex-shrink: 0;
+    width: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--content-text-soft);
+}
+
+.bfm-question-text {
+    flex: 1;
+    font-size: 0.87rem;
+    color: var(--content-text);
+}
+
+.bfm-answer-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.bfm-answer-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.6rem;
+    padding: 0.32rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--content-border);
+    font-family: "Poppins", monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--content-text-soft);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.bfm-answer-pill input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.bfm-answer-c:has(input:checked) {
+    background: #e4f3e0;
+    border-color: #8fc569;
+    color: #4a7c2f;
+}
+html.dark .bfm-answer-c:has(input:checked) {
+    background: rgba(143, 197, 105, 0.16);
+    border-color: #8fc569;
+    color: #a3d68a;
+}
+
+.bfm-answer-nc:has(input:checked) {
+    background: #fbeae6;
+    border-color: #e39a85;
+    color: var(--danger);
+}
+html.dark .bfm-answer-nc:has(input:checked) {
+    background: rgba(179, 69, 47, 0.18);
+    border-color: #c56a4f;
+    color: #e8987e;
+}
+
+.bfm-answer-na:has(input:checked) {
+    background: rgba(102, 112, 124, 0.14);
+    border-color: var(--slate-soft);
+    color: var(--content-text);
+}
+
+/* ---------- Progress ---------- */
+.bfm-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.4rem;
+}
+
+.bfm-progress-label {
+    font-size: 0.8rem;
+    color: var(--content-text-soft);
+    white-space: nowrap;
+}
+
+.bfm-progress-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(102, 112, 124, 0.16);
+    overflow: hidden;
+}
+
+.bfm-progress-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 999px;
+    transition: width 0.2s ease;
+}
+
+.bfm-progress-count {
+    font-family: "Poppins", monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    white-space: nowrap;
+}
+
+/* ---------- Empty ---------- */
+.bfm-empty {
+    padding: 1.5rem 1.4rem;
+    font-size: 0.85rem;
+    color: var(--content-text-soft);
+    text-align: center;
+}
+
+/* ---------- Actions ---------- */
+.bfm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.bfm-btn-secondary,
+.bfm-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 6px;
+    padding: 0.65rem 1.1rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.bfm-btn-secondary {
+    background: transparent;
+    border: 1px solid var(--content-border);
+    color: var(--content-text);
+}
+.bfm-btn-secondary:hover {
+    border-color: var(--teal);
+}
+
+.bfm-btn-primary {
+    background: var(--teal);
+    border: 1px solid var(--teal);
+    color: #fff;
+}
+.bfm-btn-primary:hover {
+    background: var(--teal-dark);
+}
