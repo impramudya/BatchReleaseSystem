@@ -15,7 +15,6 @@ return new class extends Migration
             $table->enum('answer', ['C', 'NC', 'NA'])->nullable();
             $table->timestamps();
 
-            // Satu batch cuma boleh punya satu jawaban per pertanyaan
             $table->unique(['batch_id', 'checklist_question_id']);
         });
     }

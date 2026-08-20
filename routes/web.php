@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () {
         ->name('product-master.destroy');
 
 //chekslist config
-    Route::get('/checklist-config/{category?}', [ChecklistConfigController::class, 'index'])
+    Route::get('/checklist-config/{line?}/{category?}', [ChecklistConfigController::class, 'index'])
         ->name('checklist-config.index');
 
     // CRUD Kategori Evaluasi

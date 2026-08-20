@@ -40,8 +40,10 @@ class ChecklistQuestionController extends Controller
 
         $message = $parentId ? 'Sub-pertanyaan berhasil ditambahkan.' : 'Pertanyaan berhasil ditambahkan.';
 
+        $category->load('productionLine');
+
         return redirect()
-            ->route('checklist-config.index', $category)
+            ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
             ->with('status', $message);
     }
 
@@ -54,18 +56,20 @@ class ChecklistQuestionController extends Controller
 
         $question->update($validated);
 
+        $category = $question->category()->with('productionLine')->first();
+
         return redirect()
-            ->route('checklist-config.index', $question->checklist_category_id)
+            ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
             ->with('status', 'Pertanyaan berhasil diperbarui.');
     }
 
     public function destroy(ChecklistQuestion $question): RedirectResponse
     {
-        $categoryId = $question->checklist_category_id;
+        $category = $question->category()->with('productionLine')->first();
         $question->delete();
 
         return redirect()
-            ->route('checklist-config.index', $categoryId)
+            ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
             ->with('status', 'Pertanyaan berhasil dihapus.');
     }
 
@@ -75,8 +79,10 @@ class ChecklistQuestionController extends Controller
             'status' => $question->status === 'active' ? 'inactive' : 'active',
         ]);
 
+        $category = $question->category()->with('productionLine')->first();
+
         return redirect()
-            ->route('checklist-config.index', $question->checklist_category_id)
+            ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
             ->with('status', 'Status pertanyaan berhasil diperbarui.');
     }
 }

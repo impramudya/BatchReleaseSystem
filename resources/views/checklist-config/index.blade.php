@@ -23,6 +23,10 @@
         </div>
     @endif
 
+    @if ($selectedLine)
+        <p class="ccfg-breadcrumb">{{ $selectedLine->label }}</p>
+    @endif
+
     <div class="ccfg-layout">
         @include('checklist-config.partials.category-panel')
         @include('checklist-config.partials.question-panel')

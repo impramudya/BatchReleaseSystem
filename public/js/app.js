@@ -61,3 +61,13 @@
         if (window.innerWidth > 900) closeSidebar();
     });
 })();
+
+(function () {
+    document.querySelectorAll("[data-nav-toggle]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const parent = btn.closest(".brp-nav-parent");
+            if (parent) parent.classList.toggle("is-open");
+        });
+    });
+})();

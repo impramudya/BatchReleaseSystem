@@ -2,7 +2,8 @@
 <div class="ccfg-panel ccfg-panel-categories">
     <div class="ccfg-panel-header">
         <h3>Kategori Evaluasi</h3>
-        <button type="button" class="ccfg-btn-primary" data-modal-target="modal-add-category">
+        <button type="button" class="ccfg-btn-primary" data-modal-target="modal-add-category"
+            @if (!$selectedLine) disabled @endif>
             <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
             Tambah
         </button>
@@ -11,7 +12,7 @@
     <div class="ccfg-category-list">
         @forelse ($categories as $cat)
             <div class="ccfg-category-item {{ $selectedCategory && $selectedCategory->id === $cat->id ? 'is-active' : '' }}">
-                <a href="{{ route('checklist-config.index', $cat) }}" class="ccfg-category-link">
+                <a href="{{ route('checklist-config.index', [$selectedLine, $cat]) }}" class="ccfg-category-link">
                     {{ $cat->code }}. {{ $cat->name }}
                 </a>
                 <div class="ccfg-category-actions">
@@ -34,7 +35,11 @@
                 </div>
             </div>
         @empty
-            <p class="ccfg-empty">Belum ada kategori evaluasi. Klik "Tambah" untuk membuat kategori pertama.</p>
+            <p class="ccfg-empty">
+                @if ($selectedLine)
+                    Belum ada kategori evaluasi untuk {{ $selectedLine->label }}. Klik "Tambah" untuk membuat kategori pertama.
+                @endif
+            </p>
         @endforelse
     </div>
 </div>

@@ -71,10 +71,44 @@
                     </svg>
                     Category Master
                 </a>
-                <a href="{{ route('checklist-config.index') }}" class="brp-nav-link {{ request()->routeIs('checklist-config.*') ? 'is-active' : '' }}">
-                    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5h.01M5 10h.01M5 15h.01"/><path d="M8.5 5h8M8.5 10h8M8.5 15h8"/></svg>
-                    Checklist Config
-                </a>
+
+                @php
+                    $currentLineCode = optional(request()->route('line'))->code;
+                    $isChecklistRoute = request()->routeIs('checklist-config.*');
+                    $isInhouseGroupOpen = in_array($currentLineCode, ['inhouse_stripping', 'inhouse_bottling']);
+                @endphp
+
+                <div class="brp-nav-parent {{ $isChecklistRoute ? 'is-open' : '' }}">
+                    <button type="button" class="brp-nav-link brp-nav-toggle" data-nav-toggle>
+                        <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5h.01M5 10h.01M5 15h.01"/><path d="M8.5 5h8M8.5 10h8M8.5 15h8"/></svg>
+                        <span class="brp-nav-text">Checklist Config</span>
+                        <svg class="brp-icon brp-nav-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 6l4 4-4 4"/></svg>
+                    </button>
+
+                    <div class="brp-nav-submenu">
+                        <div class="brp-nav-parent brp-nav-parent-nested {{ $isInhouseGroupOpen ? 'is-open' : '' }}">
+                            <button type="button" class="brp-nav-link brp-nav-sublink brp-nav-toggle" data-nav-toggle>
+                                <span class="brp-nav-text">Inhouse</span>
+                                <svg class="brp-icon brp-nav-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 6l4 4-4 4"/></svg>
+                            </button>
+                            <div class="brp-nav-submenu brp-nav-submenu-nested">
+                                <a href="{{ route('checklist-config.index', 'inhouse_stripping') }}"
+                                   class="brp-nav-link brp-nav-subsublink {{ $currentLineCode === 'inhouse_stripping' ? 'is-active' : '' }}">
+                                    Stripping
+                                </a>
+                                <a href="{{ route('checklist-config.index', 'inhouse_bottling') }}"
+                                   class="brp-nav-link brp-nav-subsublink {{ $currentLineCode === 'inhouse_bottling' ? 'is-active' : '' }}">
+                                    Bottling
+                                </a>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('checklist-config.index', 'toll_out') }}"
+                           class="brp-nav-link brp-nav-sublink {{ $currentLineCode === 'toll_out' ? 'is-active' : '' }}">
+                            Toll Out
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="brp-nav-group">
@@ -90,11 +124,6 @@
             </div>
 
         </nav>
-
-        {{-- <div class="brp-status-line">
-            <span class="brp-status-dot" aria-hidden="true"></span>
-            Sistem aktif &mdash; tersinkron
-        </div> --}}
 
         <div class="brp-user-wrap" id="user-menu-wrap">
             <div class="brp-user-menu">

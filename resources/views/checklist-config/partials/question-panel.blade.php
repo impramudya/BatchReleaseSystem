@@ -31,7 +31,9 @@
                 </tbody>
             </table>
         </div>
+    @elseif ($selectedLine)
+        <p class="ccfg-empty">Belum ada kategori di {{ $selectedLine->label }}. Tambahkan kategori dulu di panel sebelah kiri.</p>
     @else
-        <p class="ccfg-empty">Silakan tambahkan kategori evaluasi terlebih dahulu di panel sebelah kiri.</p>
+        <p class="ccfg-empty">Silakan pilih line produksi di sidebar terlebih dahulu.</p>
     @endif
 </div>

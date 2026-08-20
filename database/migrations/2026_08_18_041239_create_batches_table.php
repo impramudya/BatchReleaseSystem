@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
 
-            // Sesuaikan nama tabel products kalau model Product Master kamu beda
             $table->foreignId('product_id')->constrained('products');
 
             $table->string('batch_number')->unique();
@@ -19,7 +18,6 @@ return new class extends Migration
             $table->enum('production_type', ['in_house', 'toll_out']);
             $table->date('batch_date');
 
-            // Sesuaikan kalau supervisor bukan disimpan di tabel users
             $table->foreignId('supervisor_id')->nullable()->constrained('users');
 
             $table->text('keterangan')->nullable();
