@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'BatchReleasePro')</title>
-
-    {{-- Cegah flicker: set tema sebelum CSS/JS load. Sengaja tetap inline
-         (bukan file eksternal) karena harus jalan synchronous sebelum
-         paint pertama, kalau dipisah akan ada flash tema salah sesaat. --}}
     <script>
         (function () {
             const saved = localStorage.getItem('theme');
@@ -30,7 +26,7 @@
 <body class="brp-body">
 
     {{-- SIDEBAR --}}
-    <aside class="brp-sidebar">
+    <aside class="brp-sidebar" id="brp-sidebar">
 
         <div class="brp-logo-block">
             <p class="brp-logo"><span>BatchRelease</span><span class="accent">Pro</span></p>
@@ -122,11 +118,19 @@
         </div>
     </aside>
 
+    {{-- OVERLAY untuk mobile (klik area gelap = tutup sidebar) --}}
+    <div class="brp-sidebar-overlay" id="sidebar-overlay"></div>
+
     {{-- MAIN CONTENT --}}
     <div class="brp-main">
 
         <header class="brp-header">
-            <h2 class="brp-page-title">@yield('page-title', 'Dashboard')</h2>
+            <div class="brp-header-left">
+                <button class="brp-hamburger" id="sidebar-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="brp-sidebar">
+                    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg>
+                </button>
+                <h2 class="brp-page-title">@yield('page-title', 'Dashboard')</h2>
+            </div>
             <div class="brp-header-actions">
                 @yield('header-actions')
                 <button class="brp-bell" type="button" aria-label="Notifikasi">

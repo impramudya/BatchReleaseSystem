@@ -46,7 +46,6 @@ body.brp-body {
     flex-shrink: 0;
 }
 
-/* ---------- Sidebar: always the "ink" instrument panel ---------- */
 .brp-sidebar {
     width: 15.5rem;
     position: fixed;
@@ -335,6 +334,12 @@ html.dark .icon-moon {
     justify-content: space-between;
 }
 
+.brp-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
 .brp-page-title {
     font-family: "Poppins", sans-serif;
     font-size: 1.15rem;
@@ -394,11 +399,57 @@ html.dark .icon-moon {
     padding: 1.75rem;
 }
 
+/* ---------- Mobile hamburger + off-canvas sidebar ---------- */
+.brp-hamburger {
+    display: none;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid var(--content-border);
+    background: transparent;
+    color: var(--content-text-soft);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.brp-hamburger:hover {
+    color: var(--content-text);
+    border-color: var(--teal);
+}
+.brp-hamburger:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+
+.brp-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 28, 44, 0.55);
+    z-index: 40;
+}
+
 @media (max-width: 900px) {
     .brp-sidebar {
-        display: none;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
     }
+    .brp-sidebar.is-open {
+        transform: translateX(0);
+        box-shadow: 12px 0 32px rgba(0, 0, 0, 0.35);
+    }
+
     .brp-main {
         margin-left: 0;
+    }
+
+    .brp-hamburger {
+        display: flex;
+    }
+
+    .brp-sidebar-overlay.is-open {
+        display: block;
     }
 }
