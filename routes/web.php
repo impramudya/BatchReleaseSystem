@@ -93,7 +93,7 @@ Route::middleware('auth')->group(function () {
         ->name('checklist-questions.toggle-status');
 
     //form baru
-    Route::get('/batch-form/create', [BatchFormController::class, 'create'])
+    Route::get('/batch-form/create/{line?}', [BatchFormController::class, 'create'])
     ->name('batch-form.create');
     Route::post('/batch-form', [BatchFormController::class, 'store'])
     ->name('batch-form.store');

@@ -16,6 +16,7 @@ class Batch extends Model
         'batch_number',
         'manufacturer',
         'production_type',
+        'production_line_id',
         'batch_date',
         'supervisor_id',
         'keterangan',
@@ -30,6 +31,11 @@ class Batch extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function productionLine(): BelongsTo
+    {
+        return $this->belongsTo(ProductionLine::class);
     }
 
     public function supervisor(): BelongsTo

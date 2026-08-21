@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'BatchReleasePro')</title>
+
     <script>
         (function () {
             const saved = localStorage.getItem('theme');
@@ -45,10 +46,45 @@
 
             <div class="brp-nav-group">
                 <p class="brp-nav-label">Batch Management</p>
-                <a href="{{ route('batch-form.create') }}" class="brp-nav-link {{ request()->routeIs('batch-form.*') ? 'is-active' : '' }}">
-                    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3.5h12v13H4z"/><path d="M7.5 8h5M7.5 11h5M10 13.5v-3M8.5 12h3"/></svg>
-                    Buat Form Baru
-                </a>
+
+                @php
+                    $batchLineCode = optional(request()->route('line'))->code;
+                    $isBatchFormRoute = request()->routeIs('batch-form.create');
+                    $isBatchInhouseOpen = $isBatchFormRoute && in_array($batchLineCode, ['inhouse_stripping', 'inhouse_bottling']);
+                @endphp
+
+                <div class="brp-nav-parent {{ $isBatchFormRoute ? 'is-open' : '' }}">
+                    <button type="button" class="brp-nav-link brp-nav-toggle" data-nav-toggle>
+                        <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3.5h12v13H4z"/><path d="M7.5 8h5M7.5 11h5M10 13.5v-3M8.5 12h3"/></svg>
+                        <span class="brp-nav-text">Buat Form Baru</span>
+                        <svg class="brp-icon brp-nav-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 6l4 4-4 4"/></svg>
+                    </button>
+
+                    <div class="brp-nav-submenu">
+                        <div class="brp-nav-parent brp-nav-parent-nested {{ $isBatchInhouseOpen ? 'is-open' : '' }}">
+                            <button type="button" class="brp-nav-link brp-nav-sublink brp-nav-toggle" data-nav-toggle>
+                                <span class="brp-nav-text">Inhouse</span>
+                                <svg class="brp-icon brp-nav-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 6l4 4-4 4"/></svg>
+                            </button>
+                            <div class="brp-nav-submenu brp-nav-submenu-nested">
+                                <a href="{{ route('batch-form.create', 'inhouse_stripping') }}"
+                                   class="brp-nav-link brp-nav-subsublink {{ $isBatchFormRoute && $batchLineCode === 'inhouse_stripping' ? 'is-active' : '' }}">
+                                    Stripping
+                                </a>
+                                <a href="{{ route('batch-form.create', 'inhouse_bottling') }}"
+                                   class="brp-nav-link brp-nav-subsublink {{ $isBatchFormRoute && $batchLineCode === 'inhouse_bottling' ? 'is-active' : '' }}">
+                                    Bottling
+                                </a>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('batch-form.create', 'toll_out') }}"
+                           class="brp-nav-link brp-nav-sublink {{ $isBatchFormRoute && $batchLineCode === 'toll_out' ? 'is-active' : '' }}">
+                            Toll Out
+                        </a>
+                    </div>
+                </div>
+
                 <a href="#" class="brp-nav-link">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="3.5" width="15" height="3.5" rx="0.8"/><path d="M3.5 7v8.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V7"/><path d="M8 10.5h4"/></svg>
                     Batch Repository
@@ -75,7 +111,7 @@
                 @php
                     $currentLineCode = optional(request()->route('line'))->code;
                     $isChecklistRoute = request()->routeIs('checklist-config.*');
-                    $isInhouseGroupOpen = in_array($currentLineCode, ['inhouse_stripping', 'inhouse_bottling']);
+                    $isInhouseGroupOpen = $isChecklistRoute && in_array($currentLineCode, ['inhouse_stripping', 'inhouse_bottling']);
                 @endphp
 
                 <div class="brp-nav-parent {{ $isChecklistRoute ? 'is-open' : '' }}">
@@ -93,18 +129,18 @@
                             </button>
                             <div class="brp-nav-submenu brp-nav-submenu-nested">
                                 <a href="{{ route('checklist-config.index', 'inhouse_stripping') }}"
-                                   class="brp-nav-link brp-nav-subsublink {{ $currentLineCode === 'inhouse_stripping' ? 'is-active' : '' }}">
+                                   class="brp-nav-link brp-nav-subsublink {{ $isChecklistRoute && $currentLineCode === 'inhouse_stripping' ? 'is-active' : '' }}">
                                     Stripping
                                 </a>
                                 <a href="{{ route('checklist-config.index', 'inhouse_bottling') }}"
-                                   class="brp-nav-link brp-nav-subsublink {{ $currentLineCode === 'inhouse_bottling' ? 'is-active' : '' }}">
+                                   class="brp-nav-link brp-nav-subsublink {{ $isChecklistRoute && $currentLineCode === 'inhouse_bottling' ? 'is-active' : '' }}">
                                     Bottling
                                 </a>
                             </div>
                         </div>
 
                         <a href="{{ route('checklist-config.index', 'toll_out') }}"
-                           class="brp-nav-link brp-nav-sublink {{ $currentLineCode === 'toll_out' ? 'is-active' : '' }}">
+                           class="brp-nav-link brp-nav-sublink {{ $isChecklistRoute && $currentLineCode === 'toll_out' ? 'is-active' : '' }}">
                             Toll Out
                         </a>
                     </div>

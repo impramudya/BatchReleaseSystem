@@ -302,6 +302,34 @@ html.dark .bfm-answer-nc:has(input:checked) {
     text-align: center;
 }
 
+/* ---------- Tag line produksi aktif (di atas breadcrumb) ---------- */
+.bfm-line-tag {
+    display: inline-flex;
+    align-items: center;
+    font-family: "Poppins", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    background: var(--teal-tint);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+}
+html.dark .bfm-line-tag {
+    background: rgba(14, 124, 123, 0.16);
+    color: #6fc7ac;
+}
+
+.bfm-field-hint {
+    font-size: 0.75rem;
+    color: var(--content-text-soft);
+    margin: 0.4rem 0 0;
+}
+.bfm-field-hint a {
+    color: var(--teal-dark);
+}
+
 /* ---------- Actions ---------- */
 .bfm-actions {
     display: flex;

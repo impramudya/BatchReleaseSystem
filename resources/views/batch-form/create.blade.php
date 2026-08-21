@@ -15,6 +15,8 @@
         <span>Form Evaluasi Pelulusan Produk Jadi</span>
     </nav>
 
+    <p class="bfm-line-tag">{{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}</p>
+
     @if ($errors->any())
         <div class="bfm-flash bfm-flash-error">
             <ul>
@@ -27,6 +29,7 @@
 
     <form action="{{ route('batch-form.store') }}" method="POST" id="batch-form">
         @csrf
+        <input type="hidden" name="production_line_id" value="{{ $line->id }}">
 
         {{-- ================= HEADER FORM ================= --}}
         <div class="bfm-card">
@@ -46,7 +49,7 @@
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" data-name="{{ $product->name }}"
                                 {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                                {{ $product->code }} &mdash; {{ $product->name }}
+                                {{ $product->product_code }} &mdash; {{ $product->name }}
                             </option>
                         @endforeach
                     </select>
@@ -70,18 +73,6 @@
                     <input type="text" id="manufacturer" name="manufacturer" value="{{ old('manufacturer') }}"
                         placeholder="Misal: PT Saka Farma, Tbk" required>
                     @error('manufacturer') <p class="bfm-error">{{ $message }}</p> @enderror
-                </div>
-
-                <div class="bfm-field">
-                    <label for="production_type">Tipe Produksi <span class="bfm-required">*</span></label>
-                    <select id="production_type" name="production_type" required>
-                        <option value="" disabled {{ old('production_type') ? '' : 'selected' }}>&mdash; Pilih Tipe &mdash;</option>
-                        <option value="in_house" {{ old('production_type') === 'in_house' ? 'selected' : '' }}>In House</option>
-                        <option value="toll_out" {{ old('production_type') === 'toll_out' ? 'selected' : '' }}>Toll Out</option>
-                    </select>
-                    @error('production_type') <p class="bfm-error">{{ $message }}</p> @enderror
-                    {{-- Placeholder untuk field tambahan khusus Toll Out di masa depan --}}
-                    <div id="toll-out-extra-fields" class="bfm-hidden"></div>
                 </div>
 
                 <div class="bfm-field">
@@ -122,7 +113,7 @@
 
             @php $globalNo = 0; @endphp
 
-            @forelse ($categories as $category)
+            @forelse ($line->categories as $category)
                 @if ($category->questions->isNotEmpty())
                     <div class="bfm-category-bar">
                         <span class="bfm-category-code">{{ $category->code }}</span>
@@ -155,7 +146,7 @@
                     @endforeach
                 @endif
             @empty
-                <p class="bfm-empty">Belum ada kategori checklist aktif. Tambahkan dulu di menu Checklist Config.</p>
+                <p class="bfm-empty">Belum ada kategori checklist aktif untuk {{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}. Tambahkan dulu di menu Checklist Config.</p>
             @endforelse
 
             @if ($globalNo > 0)
