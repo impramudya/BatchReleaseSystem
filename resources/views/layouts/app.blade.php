@@ -34,7 +34,7 @@
         $isSupervisor = $userRole === 'Supervisor';
         $isManager = $userRole === 'Manager';
 
-        $canSeeDashboard = $isSuperAdmin;
+        $canSeeDashboard = $isSuperAdmin || $isAdmin || $isSupervisor || $isManager;
         $canSeeBuatForm = $isSuperAdmin || $isAdmin;
         $canSeeBatchRepository = $isSuperAdmin || $isAdmin || $isSupervisor || $isManager;
         $canSeeTaskApproval = $isSuperAdmin || $isSupervisor || $isManager;
