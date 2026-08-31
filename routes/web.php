@@ -15,6 +15,7 @@ use App\Http\Controllers\ChecklistQuestionController;
 use App\Http\Controllers\BatchFormController;
 use App\Http\Controllers\BatchRepositoryController;
 use App\Http\Controllers\TaskApprovalController;
+use App\Http\Controllers\AuditTrailController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -125,8 +126,15 @@ Route::middleware('auth')->group(function () {
         ->name('task-approval.approve');
     Route::post('/task-approval/{batch}/reject', [TaskApprovalController::class, 'reject'])
         ->name('task-approval.reject');
-});
 
+     // Audit Trail
+    Route::get('/audit-trail', [AuditTrailController::class, 'index'])
+        ->name('audit-trail.index');
+    Route::get('/audit-trail/export/excel', [AuditTrailController::class, 'exportExcel'])
+        ->name('audit-trail.export-excel');
+    Route::get('/audit-trail/export/pdf', [AuditTrailController::class, 'exportPdf'])
+        ->name('audit-trail.export-pdf');
+});
 
 Route::get('/', function () {
     return redirect()->route('login');
