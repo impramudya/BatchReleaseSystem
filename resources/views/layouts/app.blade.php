@@ -85,13 +85,16 @@
                     </div>
                 </div>
 
-                <a href="#" class="brp-nav-link">
+                <a href="{{ route('batch-repository.index') }}" class="brp-nav-link {{ request()->routeIs('batch-repository.*') ? 'is-active' : '' }}">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="3.5" width="15" height="3.5" rx="0.8"/><path d="M3.5 7v8.5a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V7"/><path d="M8 10.5h4"/></svg>
                     Batch Repository
                 </a>
-                <a href="#" class="brp-nav-link">
+                <a href="{{ route('task-approval.index') }}" class="brp-nav-link {{ request()->routeIs('task-approval.*') ? 'is-active' : '' }}">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M7 10.2l2 2 4-4.3"/></svg>
                     Task Approval
+                    @if (isset($sidebarPendingApprovalCount) && $sidebarPendingApprovalCount > 0)
+                        <span class="brp-nav-badge">{{ $sidebarPendingApprovalCount }}</span>
+                    @endif
                 </a>
             </div>
 

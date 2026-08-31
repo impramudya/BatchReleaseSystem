@@ -1,0 +1,204 @@
+/* ---------- Flash ---------- */
+.tap-flash {
+    margin-bottom: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: rgba(143, 197, 105, 0.16);
+    border: 1px solid #8fc569;
+    color: #4a7c2f;
+}
+
+/* ---------- Stat cards ---------- */
+.tap-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+@media (max-width: 720px) {
+    .tap-stats {
+        grid-template-columns: 1fr;
+    }
+}
+.tap-stat-card {
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 10px;
+    padding: 1.1rem 1.4rem;
+}
+.tap-stat-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--content-text-soft);
+    margin-bottom: 0.4rem;
+}
+.tap-stat-value {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--content-text);
+}
+.tap-stat-sub {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--teal-dark);
+    margin-top: 0.2rem;
+}
+.tap-stat-approved {
+    background: #e4f3e0;
+    border-color: #8fc569;
+}
+.tap-stat-approved .tap-stat-value,
+.tap-stat-approved .tap-stat-label {
+    color: #4a7c2f;
+}
+.tap-stat-rejected {
+    background: #fbeae6;
+    border-color: #e39a85;
+}
+.tap-stat-rejected .tap-stat-value,
+.tap-stat-rejected .tap-stat-label {
+    color: var(--danger);
+}
+html.dark .tap-stat-approved {
+    background: rgba(143, 197, 105, 0.14);
+}
+html.dark .tap-stat-approved .tap-stat-value,
+html.dark .tap-stat-approved .tap-stat-label {
+    color: #a3d68a;
+}
+html.dark .tap-stat-rejected {
+    background: rgba(179, 69, 47, 0.14);
+}
+html.dark .tap-stat-rejected .tap-stat-value,
+html.dark .tap-stat-rejected .tap-stat-label {
+    color: #e8987e;
+}
+
+/* ---------- Priority pill (opsional, dipakai jika ditambahkan kolom prioritas) ---------- */
+.tap-priority {
+    display: inline-flex;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(102, 112, 124, 0.14);
+    color: var(--content-text-soft);
+}
+
+/* ---------- Action buttons ---------- */
+.tap-actions {
+    display: flex;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+.tap-btn-outline,
+.tap-btn-approve,
+.tap-btn-reject {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 0.45rem 0.8rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--content-border);
+    transition: all 0.15s ease;
+}
+.tap-btn-outline {
+    background: transparent;
+    color: var(--content-text);
+}
+.tap-btn-outline:hover {
+    border-color: var(--teal);
+}
+.tap-btn-approve {
+    background: #4a7c2f;
+    border-color: #4a7c2f;
+    color: #fff;
+}
+.tap-btn-approve:hover {
+    background: #3d6626;
+}
+.tap-btn-reject {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+.tap-btn-reject:hover {
+    filter: brightness(0.92);
+}
+
+/* ---------- Modal ---------- */
+.tap-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 18, 22, 0.55);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.tap-modal-backdrop.open {
+    display: flex;
+}
+.tap-modal {
+    width: 100%;
+    max-width: 420px;
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-radius: 10px;
+    padding: 1.4rem;
+}
+.tap-modal h4 {
+    margin: 0 0 0.3rem;
+    font-family: "Poppins", sans-serif;
+    color: var(--content-text);
+}
+.tap-modal-batch {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    color: var(--content-text-soft);
+}
+.tap-modal label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--content-text);
+    margin-bottom: 0.4rem;
+}
+.tap-modal textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    font-family: "Poppins", sans-serif;
+    color: var(--content-text);
+    background: var(--content-bg);
+    border: 1px solid var(--content-border);
+    border-radius: 6px;
+    outline: none;
+    resize: vertical;
+}
+.tap-modal textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.18);
+}
+.tap-modal-error {
+    color: var(--danger);
+    font-size: 0.78rem;
+    margin: 0.4rem 0 0;
+    display: none;
+}
+.tap-modal-error.show {
+    display: block;
+}
+.tap-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.1rem;
+}

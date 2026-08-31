@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Form Evaluasi Pelulusan Produk Jadi')
-@section('page-title', 'Form Evaluasi Pelulusan Produk Jadi')
+@section('title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Form Evaluasi Pelulusan Produk Jadi')
+@section('page-title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Form Evaluasi Pelulusan Produk Jadi')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}">
@@ -27,8 +27,11 @@
         </div>
     @endif
 
-    <form action="{{ route('batch-form.store') }}" method="POST" id="batch-form">
+    <form action="{{ isset($batch) ? route('batch-form.update', $batch) : route('batch-form.store') }}" method="POST" id="batch-form">
         @csrf
+        @if (isset($batch))
+            @method('PUT')
+        @endif
         <input type="hidden" name="production_line_id" value="{{ $line->id }}">
 
         {{-- ================= HEADER FORM ================= --}}
@@ -48,7 +51,7 @@
                         <option value="" disabled selected>&mdash; Pilih Produk &mdash;</option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" data-name="{{ $product->name }}"
-                                {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                {{ old('product_id', $batch->product_id ?? null) == $product->id ? 'selected' : '' }}>
                                 {{ $product->product_code }} &mdash; {{ $product->name }}
                             </option>
                         @endforeach
@@ -63,21 +66,21 @@
 
                 <div class="bfm-field">
                     <label for="batch_number">Batch Number <span class="bfm-required">*</span></label>
-                    <input type="text" id="batch_number" name="batch_number" value="{{ old('batch_number') }}"
+                    <input type="text" id="batch_number" name="batch_number" value="{{ old('batch_number', $batch->batch_number ?? '') }}"
                         placeholder="Misal: BATCH-2026-048" required>
                     @error('batch_number') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bfm-field">
                     <label for="manufacturer">Manufacturer <span class="bfm-required">*</span></label>
-                    <input type="text" id="manufacturer" name="manufacturer" value="{{ old('manufacturer') }}"
+                    <input type="text" id="manufacturer" name="manufacturer" value="{{ old('manufacturer', $batch->manufacturer ?? '') }}"
                         placeholder="Misal: PT Saka Farma, Tbk" required>
                     @error('manufacturer') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bfm-field">
                     <label for="batch_date">Date <span class="bfm-required">*</span></label>
-                    <input type="date" id="batch_date" name="batch_date" value="{{ old('batch_date', now()->toDateString()) }}" required>
+                    <input type="date" id="batch_date" name="batch_date" value="{{ old('batch_date', isset($batch) ? $batch->batch_date?->toDateString() : now()->toDateString()) }}" required>
                     @error('batch_date') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
@@ -86,7 +89,7 @@
                     <select id="supervisor_id" name="supervisor_id" required>
                         <option value="" disabled selected>&mdash; Pilih Supervisor &mdash;</option>
                         @foreach ($supervisors as $supervisor)
-                            <option value="{{ $supervisor->id }}" {{ old('supervisor_id') == $supervisor->id ? 'selected' : '' }}>
+                            <option value="{{ $supervisor->id }}" {{ old('supervisor_id', $batch->supervisor_id ?? null) == $supervisor->id ? 'selected' : '' }}>
                                 {{ $supervisor->name }}
                             </option>
                         @endforeach
@@ -94,9 +97,22 @@
                     @error('supervisor_id') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
+                <div class="bfm-field">
+                    <label for="manager_id">Assign Manager <span class="bfm-required">*</span></label>
+                    <select id="manager_id" name="manager_id" required>
+                        <option value="" disabled selected>&mdash; Pilih Manager &mdash;</option>
+                        @foreach ($managers as $manager)
+                            <option value="{{ $manager->id }}" {{ old('manager_id', $batch->manager_id ?? null) == $manager->id ? 'selected' : '' }}>
+                                {{ $manager->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('manager_id') <p class="bfm-error">{{ $message }}</p> @enderror
+                </div>
+
                 <div class="bfm-field bfm-field-wide">
                     <label for="keterangan">Keterangan</label>
-                    <input type="text" id="keterangan" name="keterangan" value="{{ old('keterangan') }}" placeholder="Opsional...">
+                    <input type="text" id="keterangan" name="keterangan" value="{{ old('keterangan', $batch->keterangan ?? '') }}" placeholder="Opsional...">
                 </div>
             </div>
         </div>
@@ -121,24 +137,27 @@
                     </div>
 
                     @foreach ($category->questions as $question)
-                        @php $globalNo++; @endphp
+                        @php
+                            $globalNo++;
+                            $answerValue = old("answers.{$question->id}", $existingAnswers[$question->id] ?? null);
+                        @endphp
                         <div class="bfm-question-row">
                             <span class="bfm-question-no">{{ $globalNo }}</span>
                             <span class="bfm-question-text">{{ $question->question }}</span>
                             <div class="bfm-answer-group" data-answer-group>
                                 <label class="bfm-answer-pill bfm-answer-c">
                                     <input type="radio" name="answers[{{ $question->id }}]" value="C"
-                                        {{ old("answers.{$question->id}") === 'C' ? 'checked' : '' }}>
+                                        {{ $answerValue === 'C' ? 'checked' : '' }}>
                                     C
                                 </label>
                                 <label class="bfm-answer-pill bfm-answer-nc">
                                     <input type="radio" name="answers[{{ $question->id }}]" value="NC"
-                                        {{ old("answers.{$question->id}") === 'NC' ? 'checked' : '' }}>
+                                        {{ $answerValue === 'NC' ? 'checked' : '' }}>
                                     NC
                                 </label>
                                 <label class="bfm-answer-pill bfm-answer-na">
                                     <input type="radio" name="answers[{{ $question->id }}]" value="NA"
-                                        {{ old("answers.{$question->id}") === 'NA' ? 'checked' : '' }}>
+                                        {{ $answerValue === 'NA' ? 'checked' : '' }}>
                                     N/A
                                 </label>
                             </div>
@@ -162,9 +181,12 @@
 
         {{-- ================= ACTIONS ================= --}}
         <div class="bfm-actions">
+            @if (isset($batch))
+                <a href="{{ route('batch-repository.index') }}" class="bfm-btn-secondary">Batal</a>
+            @endif
             <button type="submit" name="action" value="draft" class="bfm-btn-secondary">
                 <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h9l3 3v9H4z"/><path d="M7 4v4h6V4M7 12h6"/></svg>
-                Simpan Draft
+                {{ isset($batch) ? 'Simpan Perubahan' : 'Simpan Draft' }}
             </button>
             <button type="submit" name="action" value="submit" class="bfm-btn-primary">
                 <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10l14-6-6 14-2-6-6-2z"/></svg>

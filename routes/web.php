@@ -13,6 +13,8 @@ use App\Http\Controllers\ChecklistConfigController;
 use App\Http\Controllers\ChecklistCategoryController;
 use App\Http\Controllers\ChecklistQuestionController;
 use App\Http\Controllers\BatchFormController;
+use App\Http\Controllers\BatchRepositoryController;
+use App\Http\Controllers\TaskApprovalController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -97,6 +99,32 @@ Route::middleware('auth')->group(function () {
     ->name('batch-form.create');
     Route::post('/batch-form', [BatchFormController::class, 'store'])
     ->name('batch-form.store');
+    Route::get('/batch-form/{batch}/edit', [BatchFormController::class, 'edit'])
+        ->name('batch-form.edit');
+    Route::put('/batch-form/{batch}', [BatchFormController::class, 'update'])
+        ->name('batch-form.update');
+
+    // Batch Repository
+    Route::get('/batch-repository', [BatchRepositoryController::class, 'index'])
+        ->name('batch-repository.index');
+    Route::get('/batch-repository/export/excel', [BatchRepositoryController::class, 'exportExcel'])
+        ->name('batch-repository.export-excel');
+    Route::get('/batch-repository/export/pdf', [BatchRepositoryController::class, 'exportPdf'])
+        ->name('batch-repository.export-pdf');
+    Route::get('/batch-repository/{batch}', [BatchRepositoryController::class, 'show'])
+        ->name('batch-repository.show');
+    Route::get('/batch-repository/{batch}/pdf', [BatchRepositoryController::class, 'pdf'])
+        ->name('batch-repository.pdf');
+    Route::get('/batch-repository/{batch}/pdf/download', [BatchRepositoryController::class, 'pdfDownload'])
+        ->name('batch-repository.pdf-download');
+
+    // Task Approval
+    Route::get('/task-approval', [TaskApprovalController::class, 'index'])
+        ->name('task-approval.index');
+    Route::post('/task-approval/{batch}/approve', [TaskApprovalController::class, 'approve'])
+        ->name('task-approval.approve');
+    Route::post('/task-approval/{batch}/reject', [TaskApprovalController::class, 'reject'])
+        ->name('task-approval.reject');
 });
 
 
