@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use App\Models\BatchApproval;
+use App\Notifications\BatchStatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -84,8 +85,28 @@ class TaskApprovalController extends Controller
 
             if ($step === 'supervisor') {
                 $batch->update(['status' => 'waiting_manager']);
+
+                // Naik ke tahap Manager -> notif ke manager yang dipilih di batch ini
+                if ($manager = $batch->manager) {
+                    $manager->notify(new BatchStatusNotification(
+                        $batch,
+                        "Batch #{$batch->batch_number} butuh approval kamu",
+                        "Batch #{$batch->batch_number} sudah disetujui Supervisor, menunggu approval Manager.",
+                        route('task-approval.index')
+                    ));
+                }
             } elseif ($step === 'manager') {
                 $batch->update(['status' => 'released', 'released_at' => now()]);
+
+                // Selesai semua approval -> notif ke pembuat batch
+                if ($creator = $batch->creator) {
+                    $creator->notify(new BatchStatusNotification(
+                        $batch,
+                        "Batch #{$batch->batch_number} sudah di-release",
+                        "Batch #{$batch->batch_number} disetujui Manager dan sudah released.",
+                        route('batch-repository.show', $batch)
+                    ));
+                }
             }
         });
 
@@ -114,6 +135,16 @@ class TaskApprovalController extends Controller
                 ]);
 
             $batch->update(['status' => 'rejected']);
+
+            // Ditolak di step manapun -> notif ke pembuat batch
+            if ($creator = $batch->creator) {
+                $creator->notify(new BatchStatusNotification(
+                    $batch,
+                    "Batch #{$batch->batch_number} ditolak",
+                    "Batch #{$batch->batch_number} ditolak pada tahap {$step}. Alasan: {$validated['note']}",
+                    route('batch-form.edit', $batch)
+                ));
+            }
         });
 
         return back()->with('status', 'Batch ditolak.');

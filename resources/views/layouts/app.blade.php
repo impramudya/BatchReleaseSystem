@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'BatchReleasePro')</title>
 
     <script>
@@ -223,7 +224,6 @@
         </div>
     </aside>
 
-    {{-- OVERLAY untuk mobile (klik area gelap = tutup sidebar) --}}
     <div class="brp-sidebar-overlay" id="sidebar-overlay"></div>
 
     {{-- MAIN CONTENT --}}
@@ -238,10 +238,22 @@
             </div>
             <div class="brp-header-actions">
                 @yield('header-actions')
-                <button class="brp-bell" type="button" aria-label="Notifikasi">
-                    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0 1 10 0c0 3.2 1 4.3 1 4.3H4S5 11.2 5 8z"/><path d="M8.2 15.3a1.8 1.8 0 0 0 3.6 0"/></svg>
-                    <span class="brp-bell-dot" aria-hidden="true"></span>
-                </button>
+                <div class="brp-notif-wrap" id="notif-wrap">
+                    <button class="brp-bell" type="button" id="notif-trigger" aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false">
+                        <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0 1 10 0c0 3.2 1 4.3 1 4.3H4S5 11.2 5 8z"/><path d="M8.2 15.3a1.8 1.8 0 0 0 3.6 0"/></svg>
+                        <span class="brp-bell-dot" id="notif-dot" aria-hidden="true" style="display: none;"></span>
+                    </button>
+
+                    <div class="brp-notif-dropdown" id="notif-dropdown">
+                        <div class="brp-notif-header">
+                            <span>Notifikasi</span>
+                            <button type="button" id="notif-mark-all">Tandai semua dibaca</button>
+                        </div>
+                        <div class="brp-notif-list" id="notif-list">
+                            <p class="brp-notif-empty">Memuat...</p>
+                        </div>
+                    </div>
+                </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="brp-logout">Logout</button>
@@ -255,6 +267,126 @@
     </div>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <script>
+        (function () {
+            const trigger = document.getElementById('notif-trigger');
+            const dropdown = document.getElementById('notif-dropdown');
+            const list = document.getElementById('notif-list');
+            const dot = document.getElementById('notif-dot');
+            const markAllBtn = document.getElementById('notif-mark-all');
+            if (!trigger) return;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function renderNotifications(notifications) {
+                if (!notifications.length) {
+                    list.innerHTML = '<p class="brp-notif-empty">Belum ada notifikasi.</p>';
+                    return;
+                }
+                list.innerHTML = notifications.map(function (n) {
+                    return '<a href="' + n.url + '" data-id="' + n.id + '" class="brp-notif-item' + (n.is_read ? '' : ' is-unread') + '">' +
+                        '<p class="brp-notif-title">' + escapeHtml(n.title) + '</p>' +
+                        '<p class="brp-notif-message">' + escapeHtml(n.message) + '</p>' +
+                        '<p class="brp-notif-time">' + escapeHtml(n.time) + '</p>' +
+                        '</a>';
+                }).join('');
+            }
+
+            function loadNotifications() {
+                fetch('{{ route('notifications.index') }}', {
+                    headers: { 'Accept': 'application/json' }
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        renderNotifications(data.notifications);
+                        dot.style.display = data.unread_count > 0 ? 'block' : 'none';
+                    })
+                    .catch(function () {
+                        list.innerHTML = '<p class="brp-notif-empty">Gagal memuat notifikasi.</p>';
+                    });
+            }
+
+            trigger.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isOpen = dropdown.classList.toggle('is-open');
+                trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                if (isOpen) loadNotifications();
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!dropdown.contains(e.target) && e.target !== trigger) {
+                    dropdown.classList.remove('is-open');
+                }
+            });
+
+            list.addEventListener('click', function (e) {
+                const item = e.target.closest('.brp-notif-item');
+                if (!item) return;
+                fetch('/notifications/' + item.dataset.id + '/read', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                });
+            });
+
+            markAllBtn?.addEventListener('click', function () {
+                fetch('{{ route('notifications.read-all') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                }).then(loadNotifications);
+            });
+
+
+            loadNotifications();
+            setInterval(loadNotifications, 30000);
+        })();
+    </script>
+
+    <style>
+        .brp-notif-wrap { position: relative; }
+        .brp-notif-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 320px;
+            max-height: 380px;
+            background: var(--content-surface);
+            border: 1px solid var(--content-border);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            z-index: 50;
+            overflow: hidden;
+        }
+        .brp-notif-dropdown.is-open { display: flex; flex-direction: column; }
+        .brp-notif-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.7rem 1rem; border-bottom: 1px solid var(--content-border);
+            font-family: "Poppins", sans-serif; font-size: 0.82rem; font-weight: 600;
+            color: var(--content-text);
+        }
+        .brp-notif-header button {
+            background: none; border: none; color: var(--teal-dark);
+            font-size: 0.72rem; font-weight: 600; cursor: pointer;
+        }
+        .brp-notif-list { overflow-y: auto; }
+        .brp-notif-item {
+            display: block; padding: 0.7rem 1rem; text-decoration: none;
+            border-bottom: 1px solid var(--content-border);
+        }
+        .brp-notif-item:hover { background: rgba(102,112,124,0.06); }
+        .brp-notif-item.is-unread { background: rgba(79,134,198,0.08); }
+        .brp-notif-title { margin: 0; font-size: 0.82rem; font-weight: 600; color: var(--content-text); }
+        .brp-notif-message { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--content-text-soft); }
+        .brp-notif-time { margin: 0.25rem 0 0; font-size: 0.7rem; color: var(--content-text-soft); }
+        .brp-notif-empty { padding: 1rem; text-align: center; font-size: 0.8rem; color: var(--content-text-soft); }
+    </style>
 
     @stack('scripts')
 

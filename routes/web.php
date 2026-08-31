@@ -16,6 +16,7 @@ use App\Http\Controllers\BatchFormController;
 use App\Http\Controllers\BatchRepositoryController;
 use App\Http\Controllers\TaskApprovalController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\NotificationController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -134,6 +135,13 @@ Route::middleware('auth')->group(function () {
         ->name('audit-trail.export-excel');
     Route::get('/audit-trail/export/pdf', [AuditTrailController::class, 'exportPdf'])
         ->name('audit-trail.export-pdf');
+// Notifications (dipanggil AJAX dari bell icon)
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.read-all');
 });
 
 Route::get('/', function () {

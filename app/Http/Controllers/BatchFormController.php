@@ -8,6 +8,7 @@ use App\Models\ChecklistCategory;
 use App\Models\Product;
 use App\Models\ProductionLine;
 use App\Models\User;
+use App\Notifications\BatchStatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -180,6 +181,16 @@ class BatchFormController extends Controller
                         'updated_at' => $now,
                     ],
                 ]);
+
+                // Notif ke supervisor yang dipilih di form ini
+                if ($supervisor = User::find($validated['supervisor_id'])) {
+                    $supervisor->notify(new BatchStatusNotification(
+                        $batch,
+                        "Batch #{$batch->batch_number} butuh approval kamu",
+                        "Batch #{$batch->batch_number} baru disubmit dan menunggu approval Supervisor.",
+                        route('task-approval.index')
+                    ));
+                }
             }
         });
 
@@ -291,6 +302,16 @@ class BatchFormController extends Controller
                         'updated_at' => $now,
                     ],
                 ]);
+
+                // Notif ke supervisor yang dipilih di form ini
+                if ($supervisor = User::find($validated['supervisor_id'])) {
+                    $supervisor->notify(new BatchStatusNotification(
+                        $batch,
+                        "Batch #{$batch->batch_number} butuh approval kamu",
+                        "Batch #{$batch->batch_number} baru disubmit dan menunggu approval Supervisor.",
+                        route('task-approval.index')
+                    ));
+                }
             }
 
             return $batch;
