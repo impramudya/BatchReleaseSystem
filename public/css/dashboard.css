@@ -288,24 +288,28 @@
 }
 
 .brp-stat-dark {
-    background: #2a2a2a;
-    color: #fff;
+    background: #292D2B;
+    color: #FFFFFF;
 }
 .brp-stat-cream {
-    background: #d9d5c8;
-    color: #3a372f;
+    background: #F0F2F0;
+    color: #292D2B;
+    border: 1px solid #E3E7E3;
 }
 .brp-stat-orange {
-    background: #f5c176;
-    color: #4a3410;
+    background: #FFFBEB;
+    color: #92400E;
+    border: 1px solid #FDE68A;
 }
 .brp-stat-blue {
-    background: #a9cced;
-    color: #17365e;
+    background: #F0F9FF;
+    color: #0369A1;
+    border: 1px solid #BAE6FD;
 }
 .brp-stat-green {
-    background: #c2dd8f;
-    color: #2f4713;
+    background: #EDF5E9;
+    color: #2D5A27;
+    border: 1px solid #D4E7CD;
 }
 
 @media (max-width: 480px) {
@@ -370,19 +374,19 @@
 }
 
 .seg-draft {
-    background: #cfc9b8;
+    background: #94A3B8;
 }
 .seg-spv {
-    background: #f0b566;
+    background: #F59E0B;
 }
 .seg-manager {
-    background: #8fb8e6;
+    background: #0284C7;
 }
 .seg-released {
-    background: #a3c46b;
+    background: #4C8A41;
 }
 .seg-rejected {
-    background: #d97a6b;
+    background: #DC2626;
 }
 
 .brp-summary-legend {
@@ -410,19 +414,19 @@
 }
 
 .brp-legend-dot.seg-draft {
-    background: #cfc9b8;
+    background: #94A3B8;
 }
 .brp-legend-dot.seg-spv {
-    background: #f0b566;
+    background: #F59E0B;
 }
 .brp-legend-dot.seg-manager {
-    background: #8fb8e6;
+    background: #0284C7;
 }
 .brp-legend-dot.seg-released {
-    background: #a3c46b;
+    background: #4C8A41;
 }
 .brp-legend-dot.seg-rejected {
-    background: #d97a6b;
+    background: #DC2626;
 }
 
 @media (max-width: 480px) {

@@ -4,8 +4,8 @@
 @section('page-title', 'Task Approval')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/task-approval.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
+    <link rel="stylesheet" href="{{ asset('css/task-approval.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -18,7 +18,7 @@
         <div class="tap-stat-card">
             <span class="tap-stat-label">Pending Review</span>
             <span class="tap-stat-value">{{ $pendingBatches->count() }}</span>
-            <span class="tap-stat-sub">Task hari ini</span>
+            <span class="tap-stat-sub">Tasks today</span>
         </div>
         <div class="tap-stat-card tap-stat-approved">
             <span class="tap-stat-label">Approved</span>
@@ -32,7 +32,7 @@
 
     <div class="brp-card">
         <div class="brp-card-header">
-            <h3>{{ $canAct ? 'Task Approval Saya' : 'Batch Menunggu Approval (Pantauan Admin)' }}</h3>
+            <h3>{{ $canAct ? 'My Approval Tasks' : 'Batches Awaiting Approval (Admin Monitoring)' }}</h3>
         </div>
 
         <div class="brp-table-wrap">
@@ -41,7 +41,7 @@
                     <tr>
                         <th>Batch No</th>
                         <th>Line</th>
-                        <th>Produk</th>
+                        <th>Product</th>
                         <th>Submitted By</th>
                         <th>Submitted At</th>
                         <th>Status</th>
@@ -58,7 +58,7 @@
                             <td>{{ $batch->created_at?->format('d M Y, H:i') }}</td>
                             <td><span class="{{ $batch->statusBadgeClass() }}">{{ $batch->statusLabel() }}</span></td>
                             <td class="tap-actions">
-                                <a href="{{ route('batch-repository.show', $batch) }}" class="tap-btn-outline">Detail</a>
+                                <a href="{{ route('batch-repository.show', $batch) }}" class="tap-btn-outline">Details</a>
                                 @if ($canAct)
                                     <button type="button" class="tap-btn-approve"
                                         data-action="approve"
@@ -77,7 +77,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="brp-empty">Tidak ada batch yang menunggu approval saat ini.</td>
+                            <td colspan="7" class="brp-empty">No batches currently awaiting approval.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -93,13 +93,13 @@
 
             <form method="POST" id="tap-modal-form">
                 @csrf
-                <label for="tap-modal-note" id="tap-modal-note-label">Catatan (opsional)</label>
-                <textarea id="tap-modal-note" name="note" rows="3" placeholder="Tulis catatan di sini..."></textarea>
+                <label for="tap-modal-note" id="tap-modal-note-label">Remarks (optional)</label>
+                <textarea id="tap-modal-note" name="note" rows="3" placeholder="Enter remarks or reason here..."></textarea>
                 <p class="tap-modal-error" id="tap-modal-error"></p>
 
                 <div class="tap-modal-actions">
-                    <button type="button" class="brp-btn-outline" id="tap-modal-cancel">Batal</button>
-                    <button type="submit" class="brp-btn-primary" id="tap-modal-submit">Approve</button>
+                    <button type="button" class="tap-btn-outline" id="tap-modal-cancel">Cancel</button>
+                    <button type="submit" class="brp-btn-primary" id="tap-modal-submit">Confirm</button>
                 </div>
             </form>
         </div>
@@ -108,5 +108,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/task-approval.js') }}" defer></script>
+    <script src="{{ asset('js/task-approval.js') }}?v=4" defer></script>
 @endpush

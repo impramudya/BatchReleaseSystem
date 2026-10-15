@@ -1,8 +1,7 @@
-{{-- product-master/edit.blade.php --}}
 @extends('layouts.app')
-<link rel="stylesheet" href="{{ asset('css/product-master.css') }}">
-@section('title', 'Edit Produk')
-@section('page-title', 'Edit Produk')
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v=4">
+@section('title', 'Edit Product')
+@section('page-title', 'Edit Product')
 
 @section('content')
     @include('product-master._form', [
@@ -10,6 +9,6 @@
         'method' => 'PUT',
         'product' => $product,
         'categories' => $categories,
-        'submitLabel' => 'Simpan Perubahan',
+        'submitLabel' => 'Save Changes',
     ])
 @endsection

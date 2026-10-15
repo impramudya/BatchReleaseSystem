@@ -4,7 +4,7 @@
 @section('page-title', 'Batch Repository')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -22,7 +22,7 @@
             <input type="text" name="batch_number" value="{{ $filters['batch_number'] ?? '' }}" placeholder="Batch Number...">
             <input type="text" name="product_code" value="{{ $filters['product_code'] ?? '' }}" placeholder="Product Code...">
             <select name="status">
-                <option value="">Semua Status</option>
+                <option value="">All Statuses</option>
                 <option value="draft" {{ ($filters['status'] ?? '') === 'draft' ? 'selected' : '' }} @if(optional(auth()->user())->role !== 'Admin') style="display:none;" @endif>Draft</option>
                 <option value="submitted" {{ ($filters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>Waiting Supervisor</option>
                 <option value="waiting_manager" {{ ($filters['status'] ?? '') === 'waiting_manager' ? 'selected' : '' }}>Waiting Manager</option>
@@ -30,7 +30,7 @@
                 <option value="rejected" {{ ($filters['status'] ?? '') === 'rejected' ? 'selected' : '' }}>Rejected</option>
             </select>
             <select name="line_code">
-                <option value="">Semua Line</option>
+                <option value="">All Lines</option>
                 <option value="inhouse_stripping" {{ ($filters['line_code'] ?? '') === 'inhouse_stripping' ? 'selected' : '' }}>Inhouse / Stripping</option>
                 <option value="inhouse_bottling" {{ ($filters['line_code'] ?? '') === 'inhouse_bottling' ? 'selected' : '' }}>Inhouse / Bottling</option>
                 <option value="toll_out" {{ ($filters['line_code'] ?? '') === 'toll_out' ? 'selected' : '' }}>Toll Out</option>
@@ -76,7 +76,7 @@
                                         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.3 3.3a1.5 1.5 0 0 1 2.1 2.1L6 15.1l-2.8.7.7-2.8L13.3 3.3Z"/></svg>
                                     </a>
                                 @else
-                                    <a href="{{ route('batch-repository.show', $batch) }}" class="brp-icon-btn" title="Lihat Detail">
+                                    <a href="{{ route('batch-repository.show', $batch) }}" class="brp-icon-btn" title="View Details">
                                         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z"/><circle cx="10" cy="10" r="2.25"/></svg>
                                     </a>
                                 @endif
@@ -84,7 +84,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="11" class="brp-empty">Belum ada batch yang tercatat.</td>
+                            <td colspan="11" class="brp-empty">No batches recorded yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Form Evaluasi Pelulusan Produk Jadi')
-@section('page-title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Form Evaluasi Pelulusan Produk Jadi')
+@section('title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Finished Product Release Evaluation Form')
+@section('page-title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Finished Product Release Evaluation Form')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -12,7 +12,7 @@
     <nav class="bfm-breadcrumb">
         <a href="{{ route('dashboard') }}">Dashboard</a>
         <span>&rsaquo;</span>
-        <span>Form Evaluasi Pelulusan Produk Jadi</span>
+        <span>Finished Product Release Evaluation Form</span>
     </nav>
 
     <p class="bfm-line-tag">{{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}</p>
@@ -39,7 +39,7 @@
             <div class="bfm-card-header">
                 <h3>
                     <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3.5h10v13H5z"/><path d="M7.5 7h5M7.5 10h5M7.5 13h3"/></svg>
-                    Header Form &mdash; Informasi Batch
+                    Form Header &mdash; Batch Information
                 </h3>
                 <span class="bfm-badge-draft">Draft</span>
             </div>
@@ -48,7 +48,7 @@
                 <div class="bfm-field">
                     <label for="product_id">Product Code <span class="bfm-required">*</span></label>
                     <select id="product_id" name="product_id" required>
-                        <option value="" disabled selected>&mdash; Pilih Produk &mdash;</option>
+                        <option value="" disabled selected>&mdash; Select Product &mdash;</option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" data-name="{{ $product->name }}"
                                 {{ old('product_id', $batch->product_id ?? null) == $product->id ? 'selected' : '' }}>
@@ -61,25 +61,25 @@
 
                 <div class="bfm-field">
                     <label for="product_name_display">Product Name</label>
-                    <input type="text" id="product_name_display" readonly placeholder="Otomatis terisi setelah pilih Product Code">
+                    <input type="text" id="product_name_display" readonly placeholder="Auto-populated upon selecting Product Code">
                 </div>
 
                 <div class="bfm-field">
                     <label for="batch_number">Batch Number <span class="bfm-required">*</span></label>
                     <input type="text" id="batch_number" name="batch_number" value="{{ old('batch_number', $batch->batch_number ?? '') }}"
-                        placeholder="Misal: BATCH-2026-048" required>
+                        placeholder="e.g., BATCH-2026-048" required>
                     @error('batch_number') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bfm-field">
                     <label for="manufacturer">Manufacturer <span class="bfm-required">*</span></label>
                     <input type="text" id="manufacturer" name="manufacturer" value="{{ old('manufacturer', $batch->manufacturer ?? '') }}"
-                        placeholder="Misal: PT Saka Farma, Tbk" required>
+                        placeholder="e.g., PT Saka Farma Laboratories" required>
                     @error('manufacturer') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="bfm-field">
-                    <label for="batch_date">Date <span class="bfm-required">*</span></label>
+                    <label for="batch_date">Manufacturing Date <span class="bfm-required">*</span></label>
                     <input type="date" id="batch_date" name="batch_date" value="{{ old('batch_date', isset($batch) ? $batch->batch_date?->toDateString() : now()->toDateString()) }}" required>
                     @error('batch_date') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
@@ -87,7 +87,7 @@
                 <div class="bfm-field">
                     <label for="supervisor_id">Assign Supervisor <span class="bfm-required">*</span></label>
                     <select id="supervisor_id" name="supervisor_id" required>
-                        <option value="" disabled selected>&mdash; Pilih Supervisor &mdash;</option>
+                        <option value="" disabled selected>&mdash; Select Supervisor &mdash;</option>
                         @foreach ($supervisors as $supervisor)
                             <option value="{{ $supervisor->id }}" {{ old('supervisor_id', $batch->supervisor_id ?? null) == $supervisor->id ? 'selected' : '' }}>
                                 {{ $supervisor->name }}
@@ -100,7 +100,7 @@
                 <div class="bfm-field">
                     <label for="manager_id">Assign Manager <span class="bfm-required">*</span></label>
                     <select id="manager_id" name="manager_id" required>
-                        <option value="" disabled selected>&mdash; Pilih Manager &mdash;</option>
+                        <option value="" disabled selected>&mdash; Select Manager &mdash;</option>
                         @foreach ($managers as $manager)
                             <option value="{{ $manager->id }}" {{ old('manager_id', $batch->manager_id ?? null) == $manager->id ? 'selected' : '' }}>
                                 {{ $manager->name }}
@@ -111,18 +111,18 @@
                 </div>
 
                 <div class="bfm-field bfm-field-wide">
-                    <label for="keterangan">Keterangan</label>
-                    <input type="text" id="keterangan" name="keterangan" value="{{ old('keterangan', $batch->keterangan ?? '') }}" placeholder="Opsional...">
+                    <label for="keterangan">Remarks</label>
+                    <input type="text" id="keterangan" name="keterangan" value="{{ old('keterangan', $batch->keterangan ?? '') }}" placeholder="Optional notes or observations...">
                 </div>
             </div>
         </div>
 
-        {{-- ================= CHECKLIST EVALUASI ================= --}}
+        {{-- ================= EVALUATION CHECKLIST ================= --}}
         <div class="bfm-card">
             <div class="bfm-card-header">
                 <h3>
                     <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5h.01M5 10h.01M5 15h.01"/><path d="M8.5 5h8M8.5 10h8M8.5 15h8"/></svg>
-                    Checklist Evaluasi
+                    Evaluation Checklist
                 </h3>
                 <span class="bfm-legend">C = Complies &middot; NC = Not Complies &middot; N/A = Not Applicable</span>
             </div>
@@ -165,12 +165,12 @@
                     @endforeach
                 @endif
             @empty
-                <p class="bfm-empty">Belum ada kategori checklist aktif untuk {{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}. Tambahkan dulu di menu Checklist Config.</p>
+                <p class="bfm-empty">No active checklist categories configured for {{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}. Please configure categories in the Checklist Config menu.</p>
             @endforelse
 
             @if ($globalNo > 0)
                 <div class="bfm-progress-wrap">
-                    <span class="bfm-progress-label">Progress Pengisian</span>
+                    <span class="bfm-progress-label">Completion Progress</span>
                     <div class="bfm-progress-track">
                         <div class="bfm-progress-fill" id="progress-fill" style="width: 0%"></div>
                     </div>
@@ -182,15 +182,15 @@
         {{-- ================= ACTIONS ================= --}}
         <div class="bfm-actions">
             @if (isset($batch))
-                <a href="{{ route('batch-repository.index') }}" class="bfm-btn-secondary">Batal</a>
+                <a href="{{ route('batch-repository.index') }}" class="bfm-btn-secondary">Cancel</a>
             @endif
             <button type="submit" name="action" value="draft" class="bfm-btn-secondary">
                 <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h9l3 3v9H4z"/><path d="M7 4v4h6V4M7 12h6"/></svg>
-                {{ isset($batch) ? 'Simpan Perubahan' : 'Simpan Draft' }}
+                {{ isset($batch) ? 'Save Changes' : 'Save Draft' }}
             </button>
             <button type="submit" name="action" value="submit" class="bfm-btn-primary">
                 <svg class="bfm-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10l14-6-6 14-2-6-6-2z"/></svg>
-                Submit &amp; Kirim ke Supervisor
+                Submit for Supervisor Review
             </button>
         </div>
 

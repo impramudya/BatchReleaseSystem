@@ -48,7 +48,7 @@
 
         <div class="brp-logo-block">
             <p class="brp-logo"><span>BatchRelease</span><span class="accent">Pro</span></p>
-            <p class="brp-logo-sub">Sistem Rilis Batch &mdash; QA</p>
+            <p class="brp-logo-sub">Batch Release System &mdash; QA</p>
         </div>
 
         <nav class="brp-nav">
@@ -77,7 +77,7 @@
                         <div class="brp-nav-parent {{ $isBatchFormRoute ? 'is-open' : '' }}">
                             <button type="button" class="brp-nav-link brp-nav-toggle" data-nav-toggle>
                                 <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3.5h12v13H4z"/><path d="M7.5 8h5M7.5 11h5M10 13.5v-3M8.5 12h3"/></svg>
-                                <span class="brp-nav-text">Buat Form Baru</span>
+                                <span class="brp-nav-text">Create New Form</span>
                                 <svg class="brp-icon brp-nav-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 6l4 4-4 4"/></svg>
                             </button>
 
@@ -205,7 +205,7 @@
         <div class="brp-user-wrap" id="user-menu-wrap">
             <div class="brp-user-menu">
                 <button id="theme-toggle" type="button" class="brp-theme-toggle">
-                    <span>Mode Tampilan</span>
+                    <span>Theme Mode</span>
                     <span id="theme-icon" class="brp-theme-icons">
                         <svg class="brp-icon icon-sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="3.3"/><path d="M10 2.5v2M10 15.5v2M17.5 10h-2M4.5 10h-2M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4M15.3 15.3l-1.4-1.4M6.1 6.1L4.7 4.7"/></svg>
                         <svg class="brp-icon icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16.5 12.3A6.8 6.8 0 0 1 7.7 3.5a6.8 6.8 0 1 0 8.8 8.8z"/></svg>
@@ -231,7 +231,7 @@
 
         <header class="brp-header">
             <div class="brp-header-left">
-                <button class="brp-hamburger" id="sidebar-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="brp-sidebar">
+                <button class="brp-hamburger" id="sidebar-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="brp-sidebar">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg>
                 </button>
                 <h2 class="brp-page-title">@yield('page-title', 'Dashboard')</h2>
@@ -239,18 +239,18 @@
             <div class="brp-header-actions">
                 @yield('header-actions')
                 <div class="brp-notif-wrap" id="notif-wrap">
-                    <button class="brp-bell" type="button" id="notif-trigger" aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false">
+                    <button class="brp-bell" type="button" id="notif-trigger" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
                         <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0 1 10 0c0 3.2 1 4.3 1 4.3H4S5 11.2 5 8z"/><path d="M8.2 15.3a1.8 1.8 0 0 0 3.6 0"/></svg>
                         <span class="brp-bell-dot" id="notif-dot" aria-hidden="true" style="display: none;"></span>
                     </button>
 
                     <div class="brp-notif-dropdown" id="notif-dropdown">
                         <div class="brp-notif-header">
-                            <span>Notifikasi</span>
-                            <button type="button" id="notif-mark-all">Tandai semua dibaca</button>
+                            <span>Notifications</span>
+                            <button type="button" id="notif-mark-all">Mark all as read</button>
                         </div>
                         <div class="brp-notif-list" id="notif-list">
-                            <p class="brp-notif-empty">Memuat...</p>
+                            <p class="brp-notif-empty">Loading...</p>
                         </div>
                     </div>
                 </div>
@@ -287,7 +287,7 @@
 
             function renderNotifications(notifications) {
                 if (!notifications.length) {
-                    list.innerHTML = '<p class="brp-notif-empty">Belum ada notifikasi.</p>';
+                    list.innerHTML = '<p class="brp-notif-empty">No notifications yet.</p>';
                     return;
                 }
                 list.innerHTML = notifications.map(function (n) {
@@ -309,7 +309,7 @@
                         dot.style.display = data.unread_count > 0 ? 'block' : 'none';
                     })
                     .catch(function () {
-                        list.innerHTML = '<p class="brp-notif-empty">Gagal memuat notifikasi.</p>';
+                        list.innerHTML = '<p class="brp-notif-empty">Failed to load notifications.</p>';
                     });
             }
 

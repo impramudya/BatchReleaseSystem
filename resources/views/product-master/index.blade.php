@@ -5,7 +5,7 @@
 
 @section('content')
 
-<link rel="stylesheet" href="{{ asset('css/product-master.css') }}">
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v=4">
 
 <div id="pm-toast" class="pm-toast">
         <svg id="pm-toast-icon" class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"></svg>
@@ -19,13 +19,13 @@
                     <path d="M4.5 6h11M8 6V4.5h4V6M6 6l.6 9.5h6.8L14 6" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h3 class="pm-modal-title" id="pm-modal-title">Hapus produk ini?</h3>
+            <h3 class="pm-modal-title" id="pm-modal-title">Delete this product?</h3>
             <p class="pm-modal-text">
-                <strong id="pm-modal-name"></strong> akan dihapus permanen dari sistem.
+                <strong id="pm-modal-name"></strong> will be permanently removed from the system.
             </p>
             <div class="pm-modal-actions">
-                <button type="button" class="pm-modal-cancel" id="pm-modal-cancel">Batal</button>
-                <button type="button" class="pm-modal-confirm" id="pm-modal-confirm">Hapus produk</button>
+                <button type="button" class="pm-modal-cancel" id="pm-modal-cancel">Cancel</button>
+                <button type="button" class="pm-modal-confirm" id="pm-modal-confirm">Delete Product</button>
             </div>
         </div>
     </div>
@@ -34,16 +34,16 @@
         <div class="pm-card-head">
             <div>
                 <h3 class="pm-card-title">Product Master</h3>
-                <p class="pm-card-sub">{{ $products->total() }} produk terdaftar di sistem QA</p>
+                <p class="pm-card-sub">{{ $products->total() }} products registered in QA system</p>
             </div>
             <div class="pm-head-right">
                 <div class="pm-search">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M16 16l-3.3-3.3"/></svg>
-                    <input type="text" id="pm-search-input" placeholder="Cari produk / kode / kategori...">
+                    <input type="text" id="pm-search-input" placeholder="Search product / code / category...">
                 </div>
                 <a href="{{ route('product-master.create') }}" class="pm-add-btn">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4.5v11M4.5 10h11"/></svg>
-                    Tambah Produk
+                    Add Product
                 </a>
             </div>
         </div>
@@ -71,13 +71,13 @@
                         </td>
                         <td>
                             <div class="pm-actions">
-                                <a href="{{ route('product-master.edit', $product->id) }}" class="pm-icon-btn" title="Edit produk">
+                                <a href="{{ route('product-master.edit', $product->id) }}" class="pm-icon-btn" title="Edit product">
                                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 3.5l3 3L7 16H4v-3z"/></svg>
                                 </a>
                                 <form action="{{ route('product-master.destroy', $product->id) }}" method="POST" class="pm-delete-form" data-name="{{ $product->name }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="pm-icon-btn danger pm-delete-trigger" title="Hapus produk">
+                                    <button type="button" class="pm-icon-btn danger pm-delete-trigger" title="Delete product">
                                         <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 6h11M8 6V4.5h4V6M6 6l.6 9.5h6.8L14 6"/></svg>
                                     </button>
                                 </form>
@@ -87,7 +87,7 @@
                 @empty
                     <tr>
                         <td colspan="5">
-                            <div class="pm-empty">Belum ada produk. Klik "Tambah Produk" untuk menambahkan.</div>
+                            <div class="pm-empty">No products found. Click "Add Product" to create one.</div>
                         </td>
                     </tr>
                 @endforelse
@@ -106,6 +106,6 @@
             validationError: @json($errors->any() ? $errors->first() : null),
         };
     </script>
-    <script src="{{ asset('js/product-master.js') }}"></script>
+    <script src="{{ asset('js/product-master.js') }}?v=4"></script>
 
 @endsection

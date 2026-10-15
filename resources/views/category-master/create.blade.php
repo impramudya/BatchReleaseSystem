@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-<link rel="stylesheet" href="{{ asset('css/category-master.css') }}">
+<link rel="stylesheet" href="{{ asset('css/category-master.css') }}?v=4">
 
-@section('title', 'Tambah Kategori Produk')
-@section('page-title', 'Tambah Kategori Produk')
+@section('title', 'Add Product Category')
+@section('page-title', 'Add Product Category')
 
 @section('content')
     @include('category-master._form', [
         'action' => route('category-master.store'),
         'method' => 'POST',
         'category' => null,
-        'submitLabel' => 'Simpan Kategori',
+        'submitLabel' => 'Save Category',
     ])
 @endsection

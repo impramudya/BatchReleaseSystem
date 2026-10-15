@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password - BatchReleasePro</title>
-    <link rel="stylesheet" href="{{ asset('css/forgot-password.css') }}">
+    <title>Forgot Password - BatchReleasePro</title>
+    <link rel="stylesheet" href="{{ asset('css/forgot-password.css') }}?v=4">
 </head>
 <body>
 
@@ -21,8 +21,8 @@
         <div class="card">
 
             <div class="card-header">
-                <h1>Lupa password?</h1>
-                <p>Masukkan email yang terdaftar, kami akan kirimkan tautan untuk atur ulang password kamu.</p>
+                <h1>Forgot Password?</h1>
+                <p>Enter your registered email address and we will send you a link to reset your password.</p>
             </div>
 
             @if (session('status'))
@@ -35,21 +35,21 @@
                 @csrf
 
                 <div class="field">
-                    <label for="email">Alamat email</label>
+                    <label for="email">Corporate Email Address</label>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                        placeholder="nama@perusahaan.com">
+                        placeholder="name@company.com">
                     @error('email')
                         <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <button type="submit">Kirim link reset</button>
+                <button type="submit">Send Reset Link</button>
             </form>
 
         </div>
 
         <div class="back-link">
-            <a href="{{ route('login') }}">← Kembali ke halaman login</a>
+            <a href="{{ route('login') }}">&larr; Back to Sign In</a>
         </div>
 
     </div>

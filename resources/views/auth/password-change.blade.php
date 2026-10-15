@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ganti Password - BatchReleasePro</title>
-    <link rel="stylesheet" href="{{ asset('css/change-password.css') }}">
+    <title>Change Password - BatchReleasePro</title>
+    <link rel="stylesheet" href="{{ asset('css/change-password.css') }}?v=4">
 </head>
 <body>
 
@@ -21,8 +21,8 @@
         <div class="card">
 
             <div class="card-header">
-                <h1>Ganti password</h1>
-                <p>Pastikan password baru kamu kuat dan belum pernah dipakai sebelumnya.</p>
+                <h1>Change Password</h1>
+                <p>Ensure your new password is strong and has not been used previously.</p>
             </div>
 
             @if (session('status'))
@@ -35,7 +35,7 @@
                 @csrf
 
                 <div class="field">
-                    <label for="current_password">Password lama</label>
+                    <label for="current_password">Current Password</label>
                     <input id="current_password" type="password" name="current_password" required
                         placeholder="••••••••">
                     @error('current_password')
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="field">
-                    <label for="password">Password baru</label>
+                    <label for="password">New Password</label>
                     <input id="password" type="password" name="password" required
                         placeholder="••••••••">
                     @error('password')
@@ -53,12 +53,12 @@
                 </div>
 
                 <div class="field">
-                    <label for="password_confirmation">Konfirmasi password baru</label>
+                    <label for="password_confirmation">Confirm New Password</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" required
                         placeholder="••••••••">
                 </div>
 
-                <button type="submit">Simpan password baru</button>
+                <button type="submit">Update Password</button>
             </form>
 
         </div>

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title', 'Checklist Config')
-@section('page-title', 'Konfigurasi Checklist')
+@section('page-title', 'Checklist Configuration')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/checklist-config.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/checklist-config.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -45,5 +45,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/checklist-config.js') }}" defer></script>
+    <script src="{{ asset('js/checklist-config.js') }}?v=4" defer></script>
 @endpush

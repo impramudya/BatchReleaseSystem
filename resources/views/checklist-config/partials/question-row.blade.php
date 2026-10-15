@@ -22,7 +22,7 @@
             @csrf
             @method('PATCH')
             <button type="submit" class="ccfg-status-pill ccfg-status-{{ $question->status }}"
-                title="Klik untuk ganti status">
+                title="Click to toggle status">
                 {{ ucfirst($question->status) }}
             </button>
         </form>
@@ -33,7 +33,7 @@
                 data-modal-target="modal-add-question"
                 data-parent-id="{{ $question->id }}"
                 data-parent-label="{{ \Illuminate\Support\Str::limit($question->question, 60) }}"
-                aria-label="Tambah sub-pertanyaan" title="Tambah sub-pertanyaan">
+                aria-label="Add sub-question" title="Add sub-question">
                 <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
             </button>
             <button type="button" class="ccfg-icon-btn"
@@ -41,14 +41,14 @@
                 data-action="{{ route('checklist-questions.update', $question) }}"
                 data-question="{{ $question->question }}"
                 data-status="{{ $question->status }}"
-                aria-label="Edit pertanyaan">
+                aria-label="Edit question" title="Edit question">
                 <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.9 3.9l3.2 3.2L6.5 16.7 3 17.5l.8-3.5 9.1-9.1z"/></svg>
             </button>
             <form action="{{ route('checklist-questions.destroy', $question) }}" method="POST"
-                class="ccfg-delete-form" data-confirm-message="Hapus pertanyaan ini beserta semua sub-nya?">
+                class="ccfg-delete-form" data-confirm-message="Delete this question along with all its sub-questions?">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="ccfg-icon-btn ccfg-icon-btn-danger" aria-label="Hapus pertanyaan">
+                <button type="submit" class="ccfg-icon-btn ccfg-icon-btn-danger" aria-label="Delete question" title="Delete question">
                     <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h12M8 6V4.5a1 1 0 011-1h2a1 1 0 011 1V6m2 0-.6 10a1.5 1.5 0 01-1.5 1.4H7.1a1.5 1.5 0 01-1.5-1.4L5 6"/></svg>
                 </button>
             </form>

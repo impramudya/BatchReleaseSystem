@@ -4,8 +4,8 @@
 @section('page-title', 'Dashboard')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=4">
+    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
 @endpush
 
 @section('header-actions')
@@ -13,7 +13,7 @@
         <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="8.5" cy="8.5" r="5.5"/><path d="M17 17l-4.3-4.3"/>
         </svg>
-        Cari Batch
+        Search Batches
     </a>
 
     @if (in_array(auth()->user()->role ?? null, ['Super Admin', 'Admin']))
@@ -21,7 +21,7 @@
             <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M10 4v12M4 10h12"/>
             </svg>
-            Form Baru
+            Create Form
         </a>
     @endif
 @endsection
@@ -38,17 +38,16 @@
         ];
     @endphp
 
-    {{-- ============ FILTER TAHUN (untuk stat cards) ============ --}}
+    {{-- ============ YEAR FILTER ============ --}}
     <form method="GET" action="{{ route('dashboard') }}" class="brp-filter-bar" style="border-bottom:none; padding: 0 0 0.9rem;">
         <label for="year-select" style="display:flex; align-items:center; font-family:'Poppins', sans-serif; font-size:0.85rem; color: var(--content-text-soft); gap: 0.5rem;">
-            Statistik Tahun
+            Year Statistics
         </label>
         <select id="year-select" name="year" onchange="this.form.submit()">
             @foreach ($availableYears as $y)
                 <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
             @endforeach
         </select>
-        {{-- preserve quick filters kalau ada, biar gak ke-reset pas ganti tahun --}}
         <input type="hidden" name="q" value="{{ $quickFilters['q'] ?? '' }}">
         <input type="hidden" name="status" value="{{ $quickFilters['status'] ?? '' }}">
         <input type="hidden" name="date_from" value="{{ $quickFilters['date_from'] ?? '' }}">
@@ -63,10 +62,10 @@
                 <span class="brp-stat-icon">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3.5h7l3 3v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1z"/><path d="M12 3.5V7h3"/><path d="M6.8 11h6.4M6.8 13.5h6.4M6.8 8.5h3"/></svg>
                 </span>
-                <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['total_form_this_month'] }} bulan ini</span>
+                <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['total_form_this_month'] }} this month</span>
             </div>
             <p class="brp-stat-value">{{ $stats['total_form'] }}</p>
-            <p class="brp-stat-label">Total Form</p>
+            <p class="brp-stat-label">Total Forms</p>
         </div>
 
         <div class="brp-stat-card brp-stat-cream">
@@ -74,7 +73,7 @@
                 <span class="brp-stat-icon">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13.5 3.5l3 3-8.3 8.3-3.8.8.8-3.8 8.3-8.3z"/></svg>
                 </span>
-                <span class="brp-stat-trend brp-trend-neutral">Belum disubmit</span>
+                <span class="brp-stat-trend brp-trend-neutral">Not submitted</span>
             </div>
             <p class="brp-stat-value">{{ $stats['draft'] }}</p>
             <p class="brp-stat-label">Draft</p>
@@ -85,10 +84,10 @@
                 <span class="brp-stat-icon">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.7 1.6"/></svg>
                 </span>
-                <span class="brp-stat-trend brp-trend-neutral">Menunggu review</span>
+                <span class="brp-stat-trend brp-trend-neutral">Pending review</span>
             </div>
             <p class="brp-stat-value">{{ $stats['waiting_spv'] }}</p>
-            <p class="brp-stat-label">Waiting SPV</p>
+            <p class="brp-stat-label">Waiting Supervisor</p>
         </div>
 
         <div class="brp-stat-card brp-stat-blue">
@@ -107,7 +106,7 @@
                 <span class="brp-stat-icon">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M7 10.2l2 2 4-4.3"/></svg>
                 </span>
-                <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['released_recent'] }} baru</span>
+                <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['released_recent'] }} recent</span>
             </div>
             <p class="brp-stat-value">{{ $stats['released'] }}</p>
             <p class="brp-stat-label">Released</p>
@@ -115,15 +114,15 @@
 
     </div>
 
-    {{-- ============ RINGKASAN STATUS BATCH ============ --}}
+    {{-- ============ BATCH STATUS SUMMARY ============ --}}
     @php
         $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
     @endphp
 
     <div class="brp-summary-card">
         <div class="brp-summary-head">
-            <h4>Ringkasan Status Batch</h4>
-            <span class="brp-summary-total">{{ $stats['total_form'] }} total form</span>
+            <h4>Batch Status Summary</h4>
+            <span class="brp-summary-total">{{ $stats['total_form'] }} total forms</span>
         </div>
 
         <div class="brp-summary-bar">
@@ -155,7 +154,7 @@
             <div class="brp-header-actions">
                 <a href="{{ route('batch-repository.index') }}" class="brp-btn-outline">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;"><path d="M6 4h9v9M15 4L4 15"/></svg>
-                    Lihat Semua
+                    View All
                 </a>
                 <a href="{{ route('batch-repository.export-excel', $quickFilters) }}" class="brp-btn-primary">
                     <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M4 2.5A1.5 1.5 0 0 1 5.5 1h5.6L15 4.9v11.6A1.5 1.5 0 0 1 13.5 18h-8A1.5 1.5 0 0 1 4 16.5v-14Z" opacity=".35"/><path d="M7.3 9.2 9.6 12l2.3-2.8"/><path d="M9.6 12V6.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
@@ -165,9 +164,9 @@
         </div>
 
         <form method="GET" action="{{ route('dashboard') }}" class="brp-filter-bar">
-            <input type="text" name="q" value="{{ $quickFilters['q'] ?? '' }}" placeholder="Cari batch no / produk...">
+            <input type="text" name="q" value="{{ $quickFilters['q'] ?? '' }}" placeholder="Search batch no / product...">
             <select name="status">
-                <option value="">Semua Status</option>
+                <option value="">All Statuses</option>
                 <option value="draft" {{ ($quickFilters['status'] ?? '') === 'draft' ? 'selected' : '' }}>Draft</option>
                 <option value="submitted" {{ ($quickFilters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>Waiting Supervisor</option>
                 <option value="waiting_manager" {{ ($quickFilters['status'] ?? '') === 'waiting_manager' ? 'selected' : '' }}>Waiting Manager</option>
@@ -212,7 +211,7 @@
                                     </a>
                                 @else
                                     <a href="{{ route('batch-repository.show', $batch) }}" class="brp-btn-outline">
-                                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z"/><circle cx="10" cy="10" r="2.25"/></svg>
+                                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6z"/><circle cx="10" cy="10" r="2.25"/></svg>
                                         View
                                     </a>
                                 @endif
@@ -220,7 +219,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="brp-empty">Belum ada batch yang tercatat.</td>
+                            <td colspan="7" class="brp-empty">No batches recorded yet.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -232,15 +231,15 @@
         <div id="password-modal" class="brp-modal-overlay">
             <div class="brp-modal-box">
                 @if (session('password_change_reason') === 'first_login')
-                    <h3>Ganti Password Anda</h3>
-                    <p>Ini adalah login pertama Anda. Untuk keamanan, silakan ganti password default Anda.</p>
+                    <h3>Change Your Password</h3>
+                    <p>This is your first login. For security compliance, please change your default password.</p>
                 @else
-                    <h3>Password Anda Sudah Kedaluwarsa</h3>
-                    <p>Password Anda sudah digunakan lebih dari 90 hari. Silakan ganti password untuk melanjutkan.</p>
+                    <h3>Your Password Has Expired</h3>
+                    <p>Your password has been used for more than 90 days. Please change your password to continue.</p>
                 @endif
 
                 <a href="{{ route('password.change') }}" class="brp-modal-btn">
-                    Ganti Password Sekarang
+                    Change Password Now
                 </a>
             </div>
         </div>

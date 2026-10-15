@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password - BatchReleasePro</title>
-    <link rel="stylesheet" href="{{ asset('css/reset-password.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/reset-password.css') }}?v=4">
 </head>
 <body>
 
@@ -21,8 +21,8 @@
         <div class="card">
 
             <div class="card-header">
-                <h1>Atur ulang password</h1>
-                <p>Buat password baru untuk akun kamu. Pastikan mudah diingat, tapi tetap aman.</p>
+                <h1>Reset Password</h1>
+                <p>Create a new password for your account. Ensure it is secure and meets company policy.</p>
             </div>
 
             <form method="POST" action="{{ route('password.store') }}">
@@ -31,16 +31,16 @@
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="field">
-                    <label for="email">Alamat email</label>
+                    <label for="email">Corporate Email Address</label>
                     <input id="email" type="email" name="email" value="{{ old('email', $email) }}" required autofocus
-                        placeholder="nama@perusahaan.com">
+                        placeholder="name@company.com">
                     @error('email')
                         <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="field">
-                    <label for="password">Password baru</label>
+                    <label for="password">New Password</label>
                     <input id="password" type="password" name="password" required
                         placeholder="••••••••">
                     @error('password')
@@ -49,18 +49,18 @@
                 </div>
 
                 <div class="field">
-                    <label for="password_confirmation">Konfirmasi password</label>
+                    <label for="password_confirmation">Confirm New Password</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" required
                         placeholder="••••••••">
                 </div>
 
-                <button type="submit">Reset password</button>
+                <button type="submit">Reset Password</button>
             </form>
 
         </div>
 
         <div class="back-link">
-            <a href="{{ route('login') }}">← Kembali ke halaman login</a>
+            <a href="{{ route('login') }}">&larr; Back to Sign In</a>
         </div>
 
     </div>

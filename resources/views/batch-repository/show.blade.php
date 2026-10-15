@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Batch — ' . $batch->batch_number)
-@section('page-title', 'Detail Form — ' . $batch->batch_number)
+@section('title', 'Batch Details — ' . $batch->batch_number)
+@section('page-title', 'Form Details — ' . $batch->batch_number)
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}?v=4">
+    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -32,8 +32,8 @@
 
     <div class="brp-card">
         <div class="brp-tabs" data-tabs>
-            <button type="button" class="brp-tab active" data-tab-btn="form-evaluasi">Form Evaluasi</button>
-            <button type="button" class="brp-tab" data-tab-btn="history-approval">History Approval</button>
+            <button type="button" class="brp-tab active" data-tab-btn="form-evaluasi">Evaluation Form</button>
+            <button type="button" class="brp-tab" data-tab-btn="history-approval">Approval History</button>
             <button type="button" class="brp-tab" data-tab-btn="audit-trail">Audit Trail</button>
         </div>
 
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        {{-- ============ TAB: FORM EVALUASI ============ --}}
+        {{-- ============ TAB: EVALUATION FORM ============ --}}
         <div class="brp-tab-panel active" data-tab-panel="form-evaluasi">
             @php $no = 0; @endphp
             @forelse ($checklistRows as $categoryCode => $rows)
@@ -73,14 +73,14 @@
                     </div>
                 @endforeach
             @empty
-                <p class="bfm-empty">Belum ada jawaban checklist untuk batch ini (masih draft).</p>
+                <p class="bfm-empty">No checklist answers recorded for this batch (still in draft).</p>
             @endforelse
         </div>
 
-        {{-- ============ TAB: HISTORY APPROVAL ============ --}}
+        {{-- ============ TAB: APPROVAL HISTORY ============ --}}
         <div class="brp-tab-panel" data-tab-panel="history-approval">
             @if ($batch->approvals->isEmpty())
-                <p class="bfm-empty">Batch ini masih draft dan belum masuk proses approval.</p>
+                <p class="bfm-empty">This batch is currently in draft and has not entered the approval workflow.</p>
             @else
                 <div class="brp-approval-cards">
                     @foreach ($batch->approvals as $approval)
@@ -98,7 +98,7 @@
                             </span>
                             @if ($approval->note)
                                 <div class="brp-approval-note">
-                                    <strong>Catatan {{ $approval->stepLabel() }}</strong>
+                                    <strong>Remarks by {{ $approval->stepLabel() }}</strong>
                                     <p>{{ $approval->note }}</p>
                                 </div>
                             @endif
@@ -114,7 +114,7 @@
                 <li>
                     <span class="brp-timeline-dot"></span>
                     <div>
-                        <p class="brp-timeline-title">Batch dibuat oleh {{ $batch->creator->name ?? '-' }}</p>
+                        <p class="brp-timeline-title">Batch initiated by {{ $batch->creator->name ?? '-' }}</p>
                         <p class="brp-timeline-time">{{ $batch->created_at?->format('d M Y, H:i') }}</p>
                     </div>
                 </li>
@@ -125,8 +125,8 @@
                             <div>
                                 <p class="brp-timeline-title">
                                     {{ $approval->stepLabel() }}
-                                    @if ($approval->status === 'approved') meng-approve batch ini
-                                    @elseif ($approval->status === 'rejected') menolak batch ini
+                                    @if ($approval->status === 'approved') approved this batch
+                                    @elseif ($approval->status === 'rejected') rejected this batch
                                     @endif
                                     ({{ $approval->user->name ?? '-' }})
                                 </p>
@@ -142,7 +142,7 @@
                     <li>
                         <span class="brp-timeline-dot brp-timeline-approved"></span>
                         <div>
-                            <p class="brp-timeline-title">Batch resmi Released</p>
+                            <p class="brp-timeline-title">Batch officially Released</p>
                             <p class="brp-timeline-time">{{ $batch->released_at?->format('d M Y, H:i') }}</p>
                         </div>
                     </li>

@@ -1,9 +1,8 @@
-{{-- product-master/create.blade.php --}}
 @extends('layouts.app')
-<link rel="stylesheet" href="{{ asset('css/product-master.css') }}">
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v=4">
 
-@section('title', 'Tambah Produk')
-@section('page-title', 'Tambah Produk')
+@section('title', 'Add Product')
+@section('page-title', 'Add Product')
 
 @section('content')
     @include('product-master._form', [
@@ -11,6 +10,6 @@
         'method' => 'POST',
         'product' => null,
         'categories' => $categories,
-        'submitLabel' => 'Simpan Produk',
+        'submitLabel' => 'Save Product',
     ])
 @endsection
