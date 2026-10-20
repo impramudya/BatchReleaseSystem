@@ -12,7 +12,7 @@
             @php $selectedRole = old('role', $user->role ?? ''); @endphp
             <option value="" disabled {{ $selectedRole === '' ? 'selected' : '' }}>Pilih role</option>
             @foreach (['Admin', 'Super Admin', 'Supervisor', 'Manager', 'Viewer'] as $roleOption)
-                <option value="{{ $roleOption }}" {{ $selectedRole === $roleOption ? 'selected' : '' }}>{{ $roleOption }}</option>
+            <option value="{{ $roleOption }}" {{ $selectedRole === $roleOption ? 'selected' : '' }}>{{ $roleOption }}</option>
             @endforeach
         </select>
         @error('role') <p class="um-error">{{ $message }}</p> @enderror
@@ -30,7 +30,7 @@
         <label for="password">{{ isset($user) ? 'Password Baru' : 'Password' }}</label>
         <input id="password" type="password" name="password" {{ isset($user) ? '' : 'required' }} autocomplete="new-password">
         @if (isset($user))
-            <span class="hint">Kosongkan jika tidak ingin mengubah password.</span>
+        <span class="hint">Kosongkan jika tidak ingin mengubah password.</span>
         @endif
         @error('password') <p class="um-error">{{ $message }}</p> @enderror
     </div>

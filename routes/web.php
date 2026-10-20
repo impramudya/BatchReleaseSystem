@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/user-management/{user}', [UserManagementController::class, 'destroy'])->name('user-management.destroy');
     Route::post('/user-management/{user}/reset-password', [UserManagementController::class, 'resetPassword'])->name('user-management.reset-password');
 
-// Category Master
+    // Category Master
     Route::get('/category-master', [CategoryMasterController::class, 'index'])
         ->name('category-master.index');
     Route::get('/category-master/create', [CategoryMasterController::class, 'create'])
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/category-master/{category}', [CategoryMasterController::class, 'destroy'])
         ->name('category-master.destroy');
 
-//product master
+    //product master
     Route::get('/product-master', [ProductMasterController::class, 'index'])
         ->name('product-master.index');
     Route::get('/product-master/create', [ProductMasterController::class, 'create'])
@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/product-master/{product}', [ProductMasterController::class, 'destroy'])
         ->name('product-master.destroy');
 
-//chekslist config
+    //chekslist config
     Route::get('/checklist-config/{line?}/{category?}', [ChecklistConfigController::class, 'index'])
         ->name('checklist-config.index');
 
@@ -98,9 +98,9 @@ Route::middleware('auth')->group(function () {
 
     //form baru
     Route::get('/batch-form/create/{line?}', [BatchFormController::class, 'create'])
-    ->name('batch-form.create');
+        ->name('batch-form.create');
     Route::post('/batch-form', [BatchFormController::class, 'store'])
-    ->name('batch-form.store');
+        ->name('batch-form.store');
     Route::get('/batch-form/{batch}/edit', [BatchFormController::class, 'edit'])
         ->name('batch-form.edit');
     Route::put('/batch-form/{batch}', [BatchFormController::class, 'update'])
@@ -128,14 +128,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/task-approval/{batch}/reject', [TaskApprovalController::class, 'reject'])
         ->name('task-approval.reject');
 
-     // Audit Trail
+    // Audit Trail
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])
         ->name('audit-trail.index');
     Route::get('/audit-trail/export/excel', [AuditTrailController::class, 'exportExcel'])
         ->name('audit-trail.export-excel');
     Route::get('/audit-trail/export/pdf', [AuditTrailController::class, 'exportPdf'])
         ->name('audit-trail.export-pdf');
-// Notifications (dipanggil AJAX dari bell icon)
+    // Notifications (dipanggil AJAX dari bell icon)
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
