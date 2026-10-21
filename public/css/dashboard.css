@@ -152,9 +152,18 @@
 .brp-btn-primary {
     background: var(--teal);
     color: var(--paper);
+    text-decoration: none !important;
 }
+
 .brp-btn-primary:hover {
     background: var(--teal-dark);
+    text-decoration: none !important;
+}
+
+.brp-btn-primary:focus,
+.brp-btn-primary:active,
+.brp-btn-primary:visited {
+    text-decoration: none !important;
 }
 
 /* header-actions section (biasanya di-render di layout, tapi kalau ada
@@ -230,25 +239,44 @@
     height: 16px;
 }
 
-.brp-stat-dark .brp-stat-icon {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+/* ---------- Uniform Stat Card Colors ---------- */
+.brp-stat-dark,
+.brp-stat-cream,
+.brp-stat-orange,
+.brp-stat-blue,
+.brp-stat-green {
+    background: #f0f2f0;
+    color: #292d2b;
+    border: 1px solid #e3e7e3;
+    box-shadow: none;
 }
-.brp-stat-cream .brp-stat-icon {
-    background: rgba(255, 255, 255, 0.55);
-    color: #3a372f;
-}
-.brp-stat-orange .brp-stat-icon {
-    background: rgba(255, 255, 255, 0.4);
-    color: #4a3410;
-}
-.brp-stat-blue .brp-stat-icon {
-    background: rgba(255, 255, 255, 0.45);
-    color: #17365e;
-}
+
+/* Samakan warna ikon seluruh kartu */
+.brp-stat-dark .brp-stat-icon,
+.brp-stat-cream .brp-stat-icon,
+.brp-stat-orange .brp-stat-icon,
+.brp-stat-blue .brp-stat-icon,
 .brp-stat-green .brp-stat-icon {
-    background: rgba(255, 255, 255, 0.4);
-    color: #2f4713;
+    background: #ffffff;
+    color: #292d2b;
+}
+
+/* Samakan warna label dan angka */
+.brp-stat-dark .brp-stat-value,
+.brp-stat-cream .brp-stat-value,
+.brp-stat-orange .brp-stat-value,
+.brp-stat-blue .brp-stat-value,
+.brp-stat-green .brp-stat-value {
+    color: #292d2b;
+}
+
+.brp-stat-dark .brp-stat-label,
+.brp-stat-cream .brp-stat-label,
+.brp-stat-orange .brp-stat-label,
+.brp-stat-blue .brp-stat-label,
+.brp-stat-green .brp-stat-label {
+    color: #292d2b;
+    opacity: 1;
 }
 
 .brp-stat-trend {
@@ -288,28 +316,28 @@
 }
 
 .brp-stat-dark {
-    background: #292D2B;
-    color: #FFFFFF;
+    background: #292d2b;
+    color: #ffffff;
 }
 .brp-stat-cream {
-    background: #F0F2F0;
-    color: #292D2B;
-    border: 1px solid #E3E7E3;
+    background: #f0f2f0;
+    color: #292d2b;
+    border: 1px solid #e3e7e3;
 }
 .brp-stat-orange {
-    background: #FFFBEB;
-    color: #92400E;
-    border: 1px solid #FDE68A;
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
 }
 .brp-stat-blue {
-    background: #F0F9FF;
-    color: #0369A1;
-    border: 1px solid #BAE6FD;
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
 }
 .brp-stat-green {
-    background: #EDF5E9;
-    color: #2D5A27;
-    border: 1px solid #D4E7CD;
+    background: #edf5e9;
+    color: #2d5a27;
+    border: 1px solid #d4e7cd;
 }
 
 @media (max-width: 480px) {
@@ -374,19 +402,19 @@
 }
 
 .seg-draft {
-    background: #94A3B8;
+    background: #94a3b8;
 }
 .seg-spv {
-    background: #F59E0B;
+    background: #f59e0b;
 }
 .seg-manager {
-    background: #0284C7;
+    background: #0284c7;
 }
 .seg-released {
-    background: #4C8A41;
+    background: #4c8a41;
 }
 .seg-rejected {
-    background: #DC2626;
+    background: #dc2626;
 }
 
 .brp-summary-legend {
@@ -414,19 +442,19 @@
 }
 
 .brp-legend-dot.seg-draft {
-    background: #94A3B8;
+    background: #94a3b8;
 }
 .brp-legend-dot.seg-spv {
-    background: #F59E0B;
+    background: #f59e0b;
 }
 .brp-legend-dot.seg-manager {
-    background: #0284C7;
+    background: #0284c7;
 }
 .brp-legend-dot.seg-released {
-    background: #4C8A41;
+    background: #4c8a41;
 }
 .brp-legend-dot.seg-rejected {
-    background: #DC2626;
+    background: #dc2626;
 }
 
 @media (max-width: 480px) {
@@ -451,4 +479,82 @@
     .brp-filter-bar select#year-select {
         width: 100%;
     }
+}
+
+/* ---------- Solid Batch Status Badges ---------- */
+.brp-table .brp-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid transparent !important;
+    border-radius: 999px;
+    font-weight: 600;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* Draft */
+.brp-table .brp-status-badge.brp-status-draft {
+    background: #64748b !important;
+    color: #ffffff !important;
+    border-color: #64748b !important;
+}
+
+/* Waiting Supervisor */
+.brp-table .brp-status-badge.brp-status-submitted {
+    background: #b7790b !important;
+    color: #ffffff !important;
+    border-color: #b7790b !important;
+}
+
+/* Waiting Manager */
+.brp-table .brp-status-badge.brp-status-waiting_manager {
+    background: #b7790b !important;
+    color: #ffffff !important;
+    border-color: #b7790b !important;
+}
+
+/* Rejected */
+.brp-table .brp-status-badge.brp-status-rejected {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    border-color: #dc2626 !important;
+}
+
+/* Released */
+.brp-table .brp-status-badge.brp-status-released {
+    background: #367c32 !important;
+    color: #ffffff !important;
+    border-color: #367c32 !important;
+}
+
+/* ---------- Uniform White Dashboard Stat Cards ---------- */
+.brp-stat-grid .brp-stat-card {
+    background: #ffffff !important;
+    color: #292d2b !important;
+    border: 1px solid #e3e7e3 !important;
+    box-shadow: none !important;
+}
+
+/* Angka dan label */
+.brp-stat-grid .brp-stat-card .brp-stat-value,
+.brp-stat-grid .brp-stat-card .brp-stat-label {
+    color: #292d2b !important;
+    opacity: 1 !important;
+}
+
+/* Ikon */
+.brp-stat-grid .brp-stat-card .brp-stat-icon {
+    background: #f0f2f0 !important;
+    color: #292d2b !important;
+}
+
+/* Badge kecil di atas kartu */
+.brp-stat-grid .brp-stat-card .brp-stat-trend {
+    background: #f0f2f0 !important;
+    color: #555d57 !important;
+    opacity: 1 !important;
 }

@@ -5,34 +5,34 @@
 
 :root {
     /* Kalbe-Inspired Corporate Green Palette */
-    --primary: #4C8A41;
-    --primary-dark: #3D7034;
-    --secondary: #87BD40;
-    --primary-light: #EDF5E9;
-    --primary-border: #D4E7CD;
+    --primary: #4c8a41;
+    --primary-dark: #3d7034;
+    --secondary: #87bd40;
+    --primary-light: #edf5e9;
+    --primary-border: #d4e7cd;
 
     /* Neutrals & Clean Surface */
-    --bg-main: #F7F8F7;
-    --surface: #FFFFFF;
-    --surface-hover: #F2F5F2;
-    --border: #E3E7E3;
-    --border-light: #ECEFEC;
+    --bg-main: #f7f8f7;
+    --surface: #ffffff;
+    --surface-hover: #f2f5f2;
+    --border: #e3e7e3;
+    --border-light: #ecefec;
 
     /* Typography */
-    --text-primary: #292D2B;
-    --text-secondary: #6B726D;
-    --text-muted: #8E9690;
-    --text-white: #FFFFFF;
+    --text-primary: #292d2b;
+    --text-secondary: #6b726d;
+    --text-muted: #8e9690;
+    --text-white: #ffffff;
 
     /* Semantic Statuses */
-    --status-draft: #6B726D;
-    --status-draft-bg: #F0F2F0;
-    --status-waiting: #D97706;
-    --status-waiting-bg: #FEF3C7;
-    --status-released: #4C8A41;
-    --status-released-bg: #EDF5E9;
-    --status-rejected: #C53030;
-    --status-rejected-bg: #FEE2E2;
+    --status-draft: #6b726d;
+    --status-draft-bg: #f0f2f0;
+    --status-waiting: #d97706;
+    --status-waiting-bg: #fef3c7;
+    --status-released: #4c8a41;
+    --status-released-bg: #edf5e9;
+    --status-rejected: #c53030;
+    --status-rejected-bg: #fee2e2;
 
     /* Legacy Map for Compatibility */
     --content-bg: var(--bg-main);
@@ -46,18 +46,18 @@
     --amber: var(--secondary);
     --slate: var(--text-primary);
     --slate-soft: var(--text-secondary);
-    --danger: #C53030;
+    --danger: #c53030;
 }
 
 html.dark {
     --bg-main: #141815;
-    --surface: #1E2320;
-    --surface-hover: #272E2A;
-    --border: #2F3832;
-    --border-light: #38423B;
-    --text-primary: #E8EDE9;
-    --text-secondary: #9FAAA1;
-    --text-muted: #737D75;
+    --surface: #1e2320;
+    --surface-hover: #272e2a;
+    --border: #2f3832;
+    --border-light: #38423b;
+    --text-primary: #e8ede9;
+    --text-secondary: #9faaa1;
+    --text-muted: #737d75;
     --primary-light: rgba(76, 138, 65, 0.2);
     --primary-border: rgba(76, 138, 65, 0.35);
 
@@ -68,7 +68,9 @@ html.dark {
     --content-border: var(--border);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -76,7 +78,13 @@ body.brp-body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family:
+        "Poppins",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
     background: var(--content-bg);
     color: var(--content-text);
     -webkit-font-smoothing: antialiased;
@@ -199,11 +207,29 @@ body.brp-body {
     color: var(--primary-dark);
 }
 
+/* Active sidebar menu — solid corporate green */
 .brp-nav-link.is-active {
-    background: var(--primary-light);
-    border-left-color: var(--primary);
-    color: var(--primary);
+    background: var(--primary) !important;
+    border-left-color: var(--primary-dark) !important;
+    color: #ffffff !important;
     font-weight: 600;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.brp-nav-link.is-active svg {
+    color: #ffffff !important;
+}
+
+/* Hover menu yang belum aktif */
+.brp-nav-link:not(.is-active):hover {
+    background: #edf5e9 !important;
+    color: #4b8742 !important;
+    border-radius: 6px;
+}
+
+.brp-nav-link:not(.is-active):hover svg {
+    color: #4b8742 !important;
 }
 
 .brp-nav-badge {
@@ -373,9 +399,16 @@ body.brp-body {
     display: flex;
     align-items: center;
 }
-.icon-sun, .icon-moon { display: none; }
-html:not(.dark) .icon-sun { display: block; }
-html.dark .icon-moon { display: block; }
+.icon-sun,
+.icon-moon {
+    display: none;
+}
+html:not(.dark) .icon-sun {
+    display: block;
+}
+html.dark .icon-moon {
+    display: block;
+}
 
 /* ==========================================================================
    MAIN CONTENT AREA & TOPBAR
@@ -445,7 +478,7 @@ html.dark .icon-moon { display: block; }
     right: 7px;
     width: 6px;
     height: 6px;
-    background: #E53E3E;
+    background: #e53e3e;
     border-radius: 999px;
 }
 
@@ -462,9 +495,9 @@ html.dark .icon-moon { display: block; }
     transition: all 0.15s ease;
 }
 .brp-logout:hover {
-    color: #C53030;
-    border-color: #FEB2B2;
-    background: #FFF5F5;
+    color: #c53030;
+    border-color: #feb2b2;
+    background: #fff5f5;
 }
 
 .brp-content {
@@ -557,10 +590,22 @@ html.dark .icon-moon { display: block; }
     text-transform: capitalize;
 }
 
-.brp-badge-draft { background: var(--status-draft-bg); color: var(--status-draft); }
-.brp-badge-waiting { background: var(--status-waiting-bg); color: var(--status-waiting); }
-.brp-badge-released { background: var(--status-released-bg); color: var(--status-released); }
-.brp-badge-rejected { background: var(--status-rejected-bg); color: var(--status-rejected); }
+.brp-badge-draft {
+    background: var(--status-draft-bg);
+    color: var(--status-draft);
+}
+.brp-badge-waiting {
+    background: var(--status-waiting-bg);
+    color: var(--status-waiting);
+}
+.brp-badge-released {
+    background: var(--status-released-bg);
+    color: var(--status-released);
+}
+.brp-badge-rejected {
+    background: var(--status-rejected-bg);
+    color: var(--status-rejected);
+}
 
 /* Production Line Badges */
 .brp-line {

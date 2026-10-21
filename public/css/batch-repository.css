@@ -65,10 +65,14 @@
     background: transparent;
     border: 1px solid var(--content-border);
     color: var(--content-text);
+    text-decoration: none;
 }
+
 .brp-btn-outline:hover {
     border-color: var(--teal);
+    text-decoration: none;
 }
+
 .brp-btn-outline:disabled {
     opacity: 0.5;
     cursor: not-allowed;
