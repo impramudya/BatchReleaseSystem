@@ -109,11 +109,6 @@
                     </select>
                     @error('manager_id') <p class="bfm-error">{{ $message }}</p> @enderror
                 </div>
-
-                <div class="bfm-field bfm-field-wide">
-                    <label for="keterangan">Remarks</label>
-                    <input type="text" id="keterangan" name="keterangan" value="{{ old('keterangan', $batch->keterangan ?? '') }}" placeholder="Optional notes or observations...">
-                </div>
             </div>
         </div>
 

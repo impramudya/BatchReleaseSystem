@@ -188,7 +188,7 @@ class BatchFormController extends Controller
                 'batch_date' => $validated['batch_date'],
                 'supervisor_id' => $validated['supervisor_id'],
                 'manager_id' => $validated['manager_id'],
-                'keterangan' => $validated['keterangan'] ?? null,
+                'keterangan' => $validated['keterangan'] ?? $batch->keterangan ?? null,
                 'batch_validasi' => $isBatchValidasi,
                 'laporan_validasi' => $laporanValidasi,
                 'nomor_laporan_validasi' => $nomorLaporan,

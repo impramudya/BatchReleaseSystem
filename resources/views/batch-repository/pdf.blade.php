@@ -11,11 +11,11 @@
         header { position: fixed; top: -70px; left: 0; right: 0; height: 70px; }
         footer { position: fixed; bottom: -45px; left: 0; right: 0; height: 30px; font-size: 8px; color: #444; }
 
-        .header-table { width: 100%; border-bottom: 2px solid #000; padding-bottom: 6px; }
-        .header-table td { vertical-align: top; }
+        .header-table { width: 100%; border-bottom: 2px solid #000; padding-bottom: 5px; }
+        .header-table td { vertical-align: middle; }
         .company-name { font-weight: bold; font-size: 12px; }
         .company-sub { font-size: 8px; }
-        .form-title { text-align: center; font-size: 13px; font-weight: bold; padding-top: 6px; }
+        .form-title { text-align: center; font-size: 13px; font-weight: bold; }
 
         .meta-table { width: 100%; margin: 8px 0 10px; }
         .meta-table td { padding: 1.5px 4px; font-size: 9.5px; }
@@ -185,14 +185,15 @@
     <header>
         <table class="header-table">
             <tr>
-                <td width="55%">
+                <td style="width: 20%; vertical-align: middle;">
                     <span class="company-name">PT. SAKA FARMA</span><br>
                     <span class="company-sub">LABORATORIES</span><br>
                     <span class="company-sub">A Kalbe Company</span>
                 </td>
-                <td width="45%">
+                <td style="width: 60%; text-align: center; vertical-align: middle;">
                     <div class="form-title">{{ $formTitle }}</div>
                 </td>
+                <td style="width: 20%; vertical-align: middle;"></td>
             </tr>
         </table>
     </header>
