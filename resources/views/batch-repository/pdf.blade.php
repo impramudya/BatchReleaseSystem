@@ -239,15 +239,44 @@
         <tbody>
             @php $no = 0; @endphp
             @forelse ($checklistRows as $categoryCode => $rows)
+                @php
+                    $emptyBlocks = [];
+                    $currentBlock = [];
+                    foreach ($rows as $idx => $r) {
+                        $hasText = !empty(trim($r->keterangan ?? ''));
+                        if (!$hasText) {
+                            $currentBlock[] = $idx;
+                        } else {
+                            if (!empty($currentBlock)) {
+                                $emptyBlocks[] = $currentBlock;
+                                $currentBlock = [];
+                            }
+                        }
+                    }
+                    if (!empty($currentBlock)) {
+                        $emptyBlocks[] = $currentBlock;
+                    }
+
+                    $blockStarts = [];
+                    $blockEnds = [];
+                    foreach ($emptyBlocks as $bIdx => $bRows) {
+                        $bTag = preg_replace('/[^a-zA-Z0-9_]/', '_', $categoryCode) . '_' . $bIdx;
+                        $blockStarts[$bRows[0]] = $bTag;
+                        $blockEnds[end($bRows)] = $bTag;
+                    }
+                @endphp
                 <tr class="category-row">
                     <td class="col-no point-letter">{{ $categoryCode }}</td>
                     <td colspan="5">{{ $rows->first()->category_name }}</td>
                 </tr>
-                @foreach ($rows as $row)
+                @foreach ($rows as $idx => $row)
                     @php
                         $depth = $row->depth ?? 0;
                         $hasCheckmark = !empty($row->is_checkable);
                         $indent = $depth === 2 ? 'padding-left: 20px;' : ($depth === 1 ? 'padding-left: 10px;' : '');
+                        $hasTextKet = !empty(trim($row->keterangan ?? ''));
+                        $bStartTag = isset($blockStarts[$idx]) ? 'diag-start-' . $blockStarts[$idx] : '';
+                        $bEndTag = isset($blockEnds[$idx]) ? 'diag-end-' . $blockEnds[$idx] : '';
                     @endphp
                     <tr>
                         <td class="col-no">{{ $row->parent_no ?? '' }}</td>
@@ -274,9 +303,9 @@
                                 <span class="box {{ $row->answer === 'NA' ? 'box-checked' : '' }}">{{ $row->answer === 'NA' ? 'X' : '' }}</span>
                             @endif
                         </td>
-                        <td class="col-ket {{ $hasCheckmark ? 'col-ket-has-line' : '' }}">
+                        <td class="col-ket {{ $hasCheckmark ? 'col-ket-has-line' : '' }} {{ $bStartTag }} {{ $bEndTag }}">
                             @if ($hasCheckmark)
-                                @if (!empty($row->keterangan))
+                                @if ($hasTextKet)
                                     <div style="padding-left: 4px; padding-right: 4px; font-size: 8px; line-height: 1.1;">
                                         {!! nl2br(e($row->keterangan)) !!}
                                     </div>
@@ -284,6 +313,34 @@
                                 @else
                                     <div class="ket-line-inner"></div>
                                 @endif
+                            @endif
+                            @if (isset($blockEnds[$idx]))
+                                @php $activeEndTag = $blockEnds[$idx]; @endphp
+                                <script type="text/php">
+                                    $sBox = null;
+                                    $eBox = null;
+                                    $find = function($f) use (&$find, &$sBox, &$eBox) {
+                                        $node = $f->get_node();
+                                        if ($node && $node->nodeType === XML_ELEMENT_NODE) {
+                                            $cls = $node->getAttribute("class");
+                                            if (strpos($cls, "diag-start-{{ $activeEndTag }}") !== false) $sBox = $f->get_border_box();
+                                            if (strpos($cls, "diag-end-{{ $activeEndTag }}") !== false) $eBox = $f->get_border_box();
+                                        }
+                                        if ($sBox && $eBox) return;
+                                        foreach ($f->get_children() as $c) {
+                                            $find($c);
+                                            if ($sBox && $eBox) return;
+                                        }
+                                    };
+                                    $find($pdf->get_dompdf()->getTree()->get_root());
+                                    if ($sBox && $eBox) {
+                                        $x1 = $sBox["x"];
+                                        $y1 = $sBox["y"];
+                                        $x2 = $eBox["x"] + $eBox["w"];
+                                        $y2 = $eBox["y"] + $eBox["h"];
+                                        $pdf->line($x1, $y1, $x2, $y2, [0, 0, 0], 0.8);
+                                    }
+                                </script>
                             @endif
                         </td>
                     </tr>

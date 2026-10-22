@@ -154,6 +154,6 @@ class BatchRepositoryController extends Controller
             'checklistRows' => $this->checklistRowsFor($batch),
             'sopCode' => $sopCode,
             'formTitle' => $formTitle,
-        ])->setPaper('a4');
+        ])->setPaper('a4')->setOption('isPhpEnabled', true);
     }
 }
