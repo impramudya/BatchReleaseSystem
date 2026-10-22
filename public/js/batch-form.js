@@ -39,4 +39,34 @@
     });
 
     updateProgress();
+
+    // Toggle sub-validasi Point G
+    const radioValidasiYa = document.getElementById("batch_validasi_ya");
+    const radioValidasiTidak = document.getElementById("batch_validasi_tidak");
+    const subValidasiContainer = document.getElementById("sub-validasi-container");
+    const radioLaporanTidak = document.getElementById("laporan_validasi_tidak");
+    const radioLaporanAda = document.getElementById("laporan_validasi_ada");
+    const inputNomorLaporan = document.getElementById("nomor_laporan_validasi");
+
+    function toggleSubValidasi() {
+        if (!subValidasiContainer) return;
+        if (radioValidasiYa && radioValidasiYa.checked) {
+            subValidasiContainer.style.display = "block";
+            if (inputNomorLaporan && inputNomorLaporan.value === "N/A") {
+                inputNomorLaporan.value = "";
+            }
+        } else {
+            subValidasiContainer.style.display = "none";
+            if (radioValidasiTidak && radioValidasiTidak.checked) {
+                if (radioLaporanTidak) radioLaporanTidak.checked = true;
+                if (inputNomorLaporan) inputNomorLaporan.value = "N/A";
+            }
+        }
+    }
+
+    if (radioValidasiYa && radioValidasiTidak) {
+        radioValidasiYa.addEventListener("change", toggleSubValidasi);
+        radioValidasiTidak.addEventListener("change", toggleSubValidasi);
+        toggleSubValidasi();
+    }
 })();

@@ -21,6 +21,14 @@ class Batch extends Model
         'supervisor_id',
         'manager_id',
         'keterangan',
+        'batch_validasi',
+        'laporan_validasi',
+        'nomor_laporan_validasi',
+        'laporan_penyimpangan',
+        'penyimpangan_items',
+        'change_control',
+        'change_control_items',
+        'checklist_snapshot',
         'status',
         'released_at',
         'created_by',
@@ -29,6 +37,9 @@ class Batch extends Model
     protected $casts = [
         'batch_date' => 'date',
         'released_at' => 'datetime',
+        'checklist_snapshot' => 'array',
+        'penyimpangan_items' => 'array',
+        'change_control_items' => 'array',
     ];
 
     public function product(): BelongsTo
@@ -139,5 +150,105 @@ class Batch extends Model
             'toll_out' => 'brp-line brp-line-tollout',
             default => 'brp-line',
         };
+    }
+
+    /**
+     * Membekukan (snapshot) susunan checklist pada saat submit agar permanen & tidak terpengaruh
+     * oleh penambahan/perubahan/penghapusan master Checklist Config di masa depan.
+     */
+    public function generateChecklistSnapshot(?array $answers = null, ?array $notes = null): array
+    {
+        $lineId = $this->production_line_id;
+        if (! $lineId) {
+            return [];
+        }
+
+        if ($answers === null) {
+            $answers = $this->answers()->pluck('answer', 'checklist_question_id')->toArray();
+        }
+        if ($notes === null) {
+            $notes = $this->answers()->pluck('keterangan', 'checklist_question_id')->toArray();
+        }
+
+        $categories = ChecklistCategory::where('production_line_id', $lineId)
+            ->orderBy('code')
+            ->with(['questions' => function ($q) {
+                $q->whereNull('parent_id')
+                    ->where('status', 'active')
+                    ->orderBy('order_no')
+                    ->with(['children' => function ($c) {
+                        $c->where('status', 'active')
+                            ->orderBy('order_no')
+                            ->with(['children' => function ($g) {
+                                $g->where('status', 'active')->orderBy('order_no');
+                            }]);
+                    }]);
+            }])
+            ->get();
+
+        $snapshot = [];
+
+        foreach ($categories as $cat) {
+            $categoryRows = [];
+            $parentNo = 0;
+
+            foreach ($cat->questions as $parent) {
+                $parentNo++;
+                $hasChildren = $parent->children->isNotEmpty();
+                $ans = $answers[$parent->id] ?? null;
+                $note = $notes[$parent->id] ?? null;
+
+                $categoryRows[] = [
+                    'id' => $parent->id,
+                    'question' => $parent->question,
+                    'details' => $parent->details ?? null,
+                    'depth' => 0,
+                    'parent_no' => $parentNo,
+                    'is_checkable' => ! $hasChildren,
+                    'answer' => ! $hasChildren ? $ans : null,
+                    'keterangan' => ! $hasChildren ? $note : null,
+                    'category_code' => $cat->code,
+                    'category_name' => $cat->name,
+                ];
+
+                foreach ($parent->children as $child) {
+                    $childAns = $answers[$child->id] ?? null;
+                    $childNote = $notes[$child->id] ?? null;
+
+                    $categoryRows[] = [
+                        'id' => $child->id,
+                        'question' => $child->question,
+                        'details' => $child->details ?? null,
+                        'depth' => 1,
+                        'parent_no' => null,
+                        'is_checkable' => true,
+                        'answer' => $childAns,
+                        'keterangan' => $childNote,
+                        'category_code' => $cat->code,
+                        'category_name' => $cat->name,
+                    ];
+
+                    foreach ($child->children as $grandson) {
+                        $categoryRows[] = [
+                            'id' => $grandson->id,
+                            'question' => $grandson->question,
+                            'depth' => 2,
+                            'parent_no' => null,
+                            'is_checkable' => false,
+                            'answer' => null,
+                            'keterangan' => null,
+                            'category_code' => $cat->code,
+                            'category_name' => $cat->name,
+                        ];
+                    }
+                }
+            }
+
+            if (! empty($categoryRows)) {
+                $snapshot[$cat->code] = $categoryRows;
+            }
+        }
+
+        return $snapshot;
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\BatchRepositoryExport;
 use App\Models\Batch;
+use App\Models\ChecklistCategory;
+use App\Models\ChecklistQuestion;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,15 +109,24 @@ class BatchRepositoryController extends Controller
      */
     private function checklistRowsFor(Batch $batch)
     {
-        return DB::table('batch_evaluation_answers as bea')
-            ->join('checklist_questions as q', 'q.id', '=', 'bea.checklist_question_id')
-            ->join('checklist_categories as c', 'c.id', '=', 'q.checklist_category_id')
-            ->where('bea.batch_id', $batch->id)
-            ->orderBy('c.code')
-            ->orderBy('q.order_no')
-            ->select('c.code as category_code', 'c.name as category_name', 'q.question', 'bea.answer')
-            ->get()
-            ->groupBy('category_code');
+        // 1. Jika batch sudah memiliki checklist_snapshot (terkunci permanen):
+        // Selalu gunakan snapshot ini sehingga kebal dari perubahan master checklist config!
+        if (! empty($batch->checklist_snapshot)) {
+            return collect($batch->checklist_snapshot)->map(function ($rows) {
+                return collect($rows)->map(fn ($r) => (object) $r);
+            });
+        }
+
+        // 2. Jika batch berstatus submitted/waiting/released tapi belum memiliki snapshot (data lama):
+        // Buatkan snapshot permanen dan simpan ke database sekarang agar langsung terkunci!
+        $snapshot = $batch->generateChecklistSnapshot();
+        if ($batch->status !== 'draft' && ! empty($snapshot)) {
+            $batch->update(['checklist_snapshot' => $snapshot]);
+        }
+
+        return collect($snapshot)->map(function ($rows) {
+            return collect($rows)->map(fn ($r) => (object) $r);
+        });
     }
 
     private function buildBatchPdf(Batch $batch)

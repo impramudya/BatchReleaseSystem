@@ -16,6 +16,12 @@
                 {{ $line }}
             </div>
         @endforeach
+
+        @if (!empty($question->details))
+            <div class="ccfg-question-details" style="margin-top: 0.35rem; padding-left: 0.8rem; font-size: 0.82rem; color: var(--content-text-soft); line-height: 1.4; border-left: 2px solid var(--border); margin-left: 0.2rem;">
+                {!! nl2br(e($question->details)) !!}
+            </div>
+        @endif
     </td>
     <td class="ccfg-col-status">
         <form action="{{ route('checklist-questions.toggle-status', $question) }}" method="POST">
@@ -29,17 +35,22 @@
     </td>
     <td class="ccfg-col-action">
         <div class="ccfg-row-actions">
-            <button type="button" class="ccfg-icon-btn"
-                data-modal-target="modal-add-question"
-                data-parent-id="{{ $question->id }}"
-                data-parent-label="{{ \Illuminate\Support\Str::limit($question->question, 60) }}"
-                aria-label="Add sub-question" title="Add sub-question">
-                <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
-            </button>
+            @if ($depth === 0)
+                <button type="button" class="ccfg-icon-btn"
+                    data-modal-target="modal-add-question"
+                    data-parent-id="{{ $question->id }}"
+                    data-parent-label="{{ \Illuminate\Support\Str::limit($question->question, 60) }}"
+                    data-depth="{{ $depth }}"
+                    aria-label="Add sub-question" title="Add sub-question">
+                    <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
+                </button>
+            @endif
             <button type="button" class="ccfg-icon-btn"
                 data-modal-target="modal-edit-question"
                 data-action="{{ route('checklist-questions.update', $question) }}"
                 data-question="{{ $question->question }}"
+                data-details="{{ $question->details ?? '' }}"
+                data-depth="{{ $depth }}"
                 data-status="{{ $question->status }}"
                 aria-label="Edit question" title="Edit question">
                 <svg class="ccfg-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.9 3.9l3.2 3.2L6.5 16.7 3 17.5l.8-3.5 9.1-9.1z"/></svg>

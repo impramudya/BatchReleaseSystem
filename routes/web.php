@@ -46,20 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/user-management/{user}', [UserManagementController::class, 'destroy'])->name('user-management.destroy');
     Route::post('/user-management/{user}/reset-password', [UserManagementController::class, 'resetPassword'])->name('user-management.reset-password');
 
-    // Category Master
-    Route::get('/category-master', [CategoryMasterController::class, 'index'])
-        ->name('category-master.index');
-    Route::get('/category-master/create', [CategoryMasterController::class, 'create'])
-        ->name('category-master.create');
-    Route::post('/category-master', [CategoryMasterController::class, 'store'])
-        ->name('category-master.store');
-    Route::get('/category-master/{category}/edit', [CategoryMasterController::class, 'edit'])
-        ->name('category-master.edit');
-    Route::put('/category-master/{category}', [CategoryMasterController::class, 'update'])
-        ->name('category-master.update');
-    Route::delete('/category-master/{category}', [CategoryMasterController::class, 'destroy'])
-        ->name('category-master.destroy');
-
     //product master
     Route::get('/product-master', [ProductMasterController::class, 'index'])
         ->name('product-master.index');

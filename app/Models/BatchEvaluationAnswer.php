@@ -14,6 +14,7 @@ class BatchEvaluationAnswer extends Model
         'batch_id',
         'checklist_question_id',
         'answer',
+        'keterangan',
     ];
 
     public function batch(): BelongsTo

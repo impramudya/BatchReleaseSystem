@@ -13,13 +13,10 @@ class ProductMasterController extends Controller
     {
         $search = $request->query('search');
 
-        $products = Product::with('category')
+        $products = Product::query()
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('product_code', 'like', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%");
-                    });
+                    ->orWhere('product_code', 'like', "%{$search}%");
             })
             ->orderByDesc('id')
             ->paginate(10)
@@ -30,9 +27,7 @@ class ProductMasterController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->get();
-
-        return view('product-master.create', compact('categories'));
+        return view('product-master.create');
     }
 
     public function store(Request $request)
@@ -40,7 +35,6 @@ class ProductMasterController extends Controller
         $validated = $request->validate([
             'product_code' => ['required', 'string', 'max:50', 'unique:products,product_code'],
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
@@ -54,9 +48,7 @@ class ProductMasterController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::orderBy('name')->get();
-
-        return view('product-master.edit', compact('product', 'categories'));
+        return view('product-master.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
@@ -67,7 +59,6 @@ class ProductMasterController extends Controller
                 Rule::unique('products', 'product_code')->ignore($product->id),
             ],
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'exists:categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);

@@ -12,6 +12,11 @@
                 <label for="add-question">Pertanyaan</label>
                 <textarea id="add-question" name="question" rows="3" required></textarea>
             </div>
+            <div class="ccfg-field" id="wrap-add-question-details" style="display: none;">
+                <label for="add-question-details">Poin-poin / Rincian List (Opsional)</label>
+                <textarea id="add-question-details" name="details" rows="3" placeholder="Contoh:&#10;- Identitas dokumen (No.Batch, No. Dokumen Produksi Induk)&#10;- Checklist pemeriksaan kelengkapan dokumen&#10;- Paraf produksi&#10;- Catatan (bila ada)"></textarea>
+                <span style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; display: block;">Masukkan poin-poin bertanda strip (-) jika pertanyaan ini memiliki rincian. Kosongkan jika tidak ada.</span>
+            </div>
             <div class="ccfg-field">
                 <label for="add-question-status">Status</label>
                 <select id="add-question-status" name="status">

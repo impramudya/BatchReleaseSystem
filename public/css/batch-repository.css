@@ -343,6 +343,31 @@ html.dark .brp-answer-nc {
     color: var(--text-secondary);
 }
 
+.brp-question-keterangan {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: #f7f8f7;
+    border: 1px solid #e3e7e3;
+    border-radius: 6px;
+    padding: 0.35rem 0.65rem;
+    margin-top: 0.35rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+html.dark .brp-question-keterangan {
+    background: #1e2420;
+    border-color: #2e3831;
+    color: #cbd5cb;
+}
+.brp-keterangan-label {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-right: 0.35rem;
+}
+html.dark .brp-keterangan-label {
+    color: #87bd40;
+}
+
 /* ---------- Approval cards (History Approval tab) ---------- */
 .brp-approval-cards {
     display: grid;

@@ -39,7 +39,7 @@
             <div class="pm-head-right">
                 <div class="pm-search">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M16 16l-3.3-3.3"/></svg>
-                    <input type="text" id="pm-search-input" placeholder="Search product / code / category...">
+                    <input type="text" id="pm-search-input" placeholder="Search product / code...">
                 </div>
                 <a href="{{ route('product-master.create') }}" class="pm-add-btn">
                     <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4.5v11M4.5 10h11"/></svg>
@@ -53,7 +53,6 @@
                 <tr>
                     <th>Product Code</th>
                     <th>Product Name</th>
-                    <th>Category</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -63,7 +62,6 @@
                     <tr>
                         <td class="pm-code" title="{{ $product->product_code }}">{{ $product->product_code }}</td>
                         <td class="pm-name" title="{{ $product->name }}">{{ $product->name }}</td>
-                        <td class="pm-cat" title="{{ $product->category->name ?? '' }}">{{ $product->category->name ?? '—' }}</td>
                         <td>
                             <span class="pm-badge {{ $product->status }}">
                                 {{ ucfirst($product->status) }}
@@ -86,7 +84,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">
+                        <td colspan="4">
                             <div class="pm-empty">No products found. Click "Add Product" to create one.</div>
                         </td>
                     </tr>

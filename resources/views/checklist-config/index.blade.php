@@ -45,5 +45,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/checklist-config.js') }}?v=4" defer></script>
+    <script src="{{ asset('js/checklist-config.js') }}?v=5" defer></script>
 @endpush

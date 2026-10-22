@@ -68,11 +68,69 @@ class TaskApprovalController extends Controller
         $step = $this->currentStepFor($batch);
         $this->authorizeAction($batch, $user, $step);
 
-        $validated = $request->validate([
+        $validationRules = [
             'note' => ['nullable', 'string'],
-        ]);
+        ];
 
-        DB::transaction(function () use ($batch, $user, $step, $validated) {
+        if ($step === 'supervisor') {
+            $validationRules['laporan_penyimpangan'] = ['required', 'in:ada,tidak'];
+            $validationRules['change_control'] = ['required', 'in:ada,tidak'];
+            $validationRules['penyimpangan_nomor'] = ['nullable', 'array'];
+            $validationRules['penyimpangan_status'] = ['nullable', 'array'];
+            $validationRules['change_control_nomor'] = ['nullable', 'array'];
+            $validationRules['change_control_status'] = ['nullable', 'array'];
+        }
+
+        $validated = $request->validate($validationRules);
+
+        $penyimpanganItems = null;
+        $changeControlItems = null;
+
+        if ($step === 'supervisor') {
+            if ($validated['laporan_penyimpangan'] === 'tidak') {
+                $penyimpanganItems = [['nomor' => 'N/A', 'status' => 'N/A']];
+            } else {
+                $penyimpanganItems = [];
+                $nomorArr = $request->input('penyimpangan_nomor', []);
+                $statusArr = $request->input('penyimpangan_status', []);
+                foreach ($nomorArr as $idx => $nomor) {
+                    $nomorVal = trim((string) $nomor);
+                    $statusVal = trim((string) ($statusArr[$idx] ?? ''));
+                    if ($nomorVal !== '' || $statusVal !== '') {
+                        $penyimpanganItems[] = [
+                            'nomor' => $nomorVal !== '' ? $nomorVal : 'N/A',
+                            'status' => $statusVal !== '' ? $statusVal : 'N/A',
+                        ];
+                    }
+                }
+                if (empty($penyimpanganItems)) {
+                    $penyimpanganItems = [['nomor' => 'N/A', 'status' => 'N/A']];
+                }
+            }
+
+            if ($validated['change_control'] === 'tidak') {
+                $changeControlItems = [['nomor' => 'N/A', 'status' => 'N/A']];
+            } else {
+                $changeControlItems = [];
+                $fupNomorArr = $request->input('change_control_nomor', []);
+                $fupStatusArr = $request->input('change_control_status', []);
+                foreach ($fupNomorArr as $idx => $nomor) {
+                    $nomorVal = trim((string) $nomor);
+                    $statusVal = trim((string) ($fupStatusArr[$idx] ?? ''));
+                    if ($nomorVal !== '' || $statusVal !== '') {
+                        $changeControlItems[] = [
+                            'nomor' => $nomorVal !== '' ? $nomorVal : 'N/A',
+                            'status' => $statusVal !== '' ? $statusVal : 'N/A',
+                        ];
+                    }
+                }
+                if (empty($changeControlItems)) {
+                    $changeControlItems = [['nomor' => 'N/A', 'status' => 'N/A']];
+                }
+            }
+        }
+
+        DB::transaction(function () use ($batch, $user, $step, $validated, $penyimpanganItems, $changeControlItems) {
             BatchApproval::where('batch_id', $batch->id)
                 ->where('step', $step)
                 ->where('status', 'pending')
@@ -84,7 +142,13 @@ class TaskApprovalController extends Controller
                 ]);
 
             if ($step === 'supervisor') {
-                $batch->update(['status' => 'waiting_manager']);
+                $batch->update([
+                    'status' => 'waiting_manager',
+                    'laporan_penyimpangan' => $validated['laporan_penyimpangan'],
+                    'penyimpangan_items' => $penyimpanganItems,
+                    'change_control' => $validated['change_control'],
+                    'change_control_items' => $changeControlItems,
+                ]);
 
                 // Naik ke tahap Manager -> notif ke manager yang dipilih di batch ini
                 if ($manager = $batch->manager) {

@@ -14,6 +14,7 @@ class ChecklistQuestionController extends Controller
     {
         $validated = $request->validate([
             'question' => ['required', 'string'],
+            'details' => ['nullable', 'string'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
             'parent_id' => ['nullable', 'integer', 'exists:checklist_questions,id'],
         ]);
@@ -21,9 +22,15 @@ class ChecklistQuestionController extends Controller
         $parentId = $validated['parent_id'] ?? null;
 
         if ($parentId) {
-            $parentExists = $category->questions()->where('id', $parentId)->exists();
-            if (! $parentExists) {
+            $parent = $category->questions()->find($parentId);
+            if (! $parent) {
                 return back()->withErrors(['parent_id' => 'Pertanyaan induk tidak valid.']);
+            }
+
+            // Batas maksimal hirarki: 2 tingkat (Parent -> Child).
+            // Poin-poin strip (-) dimasukkan langsung pada field Rincian Child.
+            if ($parent->parent_id !== null) {
+                return back()->withErrors(['parent_id' => 'Maksimal hirarki adalah 2 tingkat (Parent dan Child). Poin rincian strip (-) dimasukkan langsung pada field Rincian Child.']);
             }
         }
 
@@ -35,6 +42,7 @@ class ChecklistQuestionController extends Controller
             'parent_id' => $parentId,
             'order_no' => $nextOrderNo,
             'question' => $validated['question'],
+            'details' => $parentId ? ($validated['details'] ?? null) : null,
             'status' => $validated['status'],
         ]);
 
@@ -51,10 +59,15 @@ class ChecklistQuestionController extends Controller
     {
         $validated = $request->validate([
             'question' => ['required', 'string'],
+            'details' => ['nullable', 'string'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
-        $question->update($validated);
+        $question->update([
+            'question' => $validated['question'],
+            'details' => $question->parent_id !== null ? ($validated['details'] ?? null) : null,
+            'status' => $validated['status'],
+        ]);
 
         $category = $question->category()->with('productionLine')->first();
 

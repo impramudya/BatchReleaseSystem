@@ -8,7 +8,6 @@
         'action' => route('product-master.update', $product->id),
         'method' => 'PUT',
         'product' => $product,
-        'categories' => $categories,
         'submitLabel' => 'Save Changes',
     ])
 @endsection

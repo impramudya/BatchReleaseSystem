@@ -9,7 +9,6 @@
         'action' => route('product-master.store'),
         'method' => 'POST',
         'product' => null,
-        'categories' => $categories,
         'submitLabel' => 'Save Product',
     ])
 @endsection

@@ -149,7 +149,9 @@ html.dark .tap-stat-rejected .tap-stat-value {
 }
 .tap-modal {
     width: 100%;
-    max-width: 420px;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -206,4 +208,117 @@ html.dark .tap-stat-rejected .tap-stat-value {
     justify-content: flex-end;
     gap: 0.6rem;
     margin-top: 1.1rem;
+}
+
+/* ---------- SPV Approval Fields ---------- */
+.tap-field-group {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem;
+}
+html.dark .tap-field-group {
+    background: #1e293b;
+}
+.tap-label-strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+.tap-sub-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0.4rem 0 0.3rem 0;
+}
+.tap-radio-group {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+.tap-radio-label {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+    color: var(--text-primary);
+}
+.tap-radio-label input[type="radio"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+.tap-inner-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0.5rem;
+}
+.tap-inner-table th {
+    background: #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid #cbd5e1;
+    color: var(--text-primary);
+}
+html.dark .tap-inner-table th {
+    background: #334155;
+    border-color: #475569;
+}
+.tap-inner-table td {
+    padding: 0.3rem 0.3rem;
+    border: 1px solid #cbd5e1;
+}
+html.dark .tap-inner-table td {
+    border-color: #475569;
+}
+.tap-input-sm {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text-primary);
+    outline: none;
+}
+.tap-input-sm:focus {
+    border-color: var(--primary);
+}
+.tap-btn-add-row {
+    background: transparent;
+    border: 1px dashed var(--primary);
+    color: var(--primary);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tap-btn-add-row:hover {
+    background: rgba(76, 138, 65, 0.08);
+}
+.tap-btn-remove-row {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.tap-btn-remove-row:hover {
+    background: #fecaca;
 }

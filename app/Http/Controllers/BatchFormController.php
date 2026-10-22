@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Batch;
 use App\Models\BatchEvaluationAnswer;
 use App\Models\ChecklistCategory;
+use App\Models\ChecklistQuestion;
 use App\Models\Product;
 use App\Models\ProductionLine;
 use App\Models\User;
@@ -32,7 +33,16 @@ class BatchFormController extends Controller
             'parent',
             'categories' => function ($query) {
                 $query->orderBy('code')->with(['questions' => function ($q) {
-                    $q->where('status', 'active')->orderBy('order_no');
+                    $q->whereNull('parent_id')
+                        ->where('status', 'active')
+                        ->orderBy('order_no')
+                        ->with(['children' => function ($c) {
+                            $c->where('status', 'active')
+                                ->orderBy('order_no')
+                                ->with(['children' => function ($g) {
+                                    $g->where('status', 'active')->orderBy('order_no');
+                                }]);
+                        }]);
                 }]);
             },
         ]);
@@ -47,6 +57,7 @@ class BatchFormController extends Controller
             'managers' => $managers,
             'line' => $line,
             'existingAnswers' => collect(),
+            'existingNotes' => collect(),
         ]);
     }
 
@@ -58,7 +69,16 @@ class BatchFormController extends Controller
             'parent',
             'categories' => function ($query) {
                 $query->orderBy('code')->with(['questions' => function ($q) {
-                    $q->where('status', 'active')->orderBy('order_no');
+                    $q->whereNull('parent_id')
+                        ->where('status', 'active')
+                        ->orderBy('order_no')
+                        ->with(['children' => function ($c) {
+                            $c->where('status', 'active')
+                                ->orderBy('order_no')
+                                ->with(['children' => function ($g) {
+                                    $g->where('status', 'active')->orderBy('order_no');
+                                }]);
+                        }]);
                 }]);
             },
         ])->findOrFail($batch->production_line_id);
@@ -68,6 +88,7 @@ class BatchFormController extends Controller
         $managers = User::where('role', 'Manager')->orderBy('name')->get(['id', 'name']);
 
         $existingAnswers = $batch->answers()->pluck('answer', 'checklist_question_id');
+        $existingNotes = $batch->answers()->pluck('keterangan', 'checklist_question_id');
 
         return view('batch-form.create', [
             'products' => $products,
@@ -76,6 +97,7 @@ class BatchFormController extends Controller
             'line' => $line,
             'batch' => $batch,
             'existingAnswers' => $existingAnswers,
+            'existingNotes' => $existingNotes,
         ]);
     }
 
@@ -92,9 +114,21 @@ class BatchFormController extends Controller
             'supervisor_id' => ['required', 'exists:users,id'],
             'manager_id' => ['required', 'exists:users,id'],
             'keterangan' => ['nullable', 'string'],
+            'batch_validasi' => [$request->input('action') === 'submit' ? 'required' : 'nullable', Rule::in(['ya', 'tidak'])],
+            'laporan_validasi' => [
+                Rule::requiredIf(fn () => $request->input('action') === 'submit' && $request->input('batch_validasi') === 'ya'),
+                'nullable',
+                Rule::in(['ada', 'tidak']),
+            ],
+            'nomor_laporan_validasi' => ['nullable', 'string', 'max:255'],
             'action' => ['required', Rule::in(['draft', 'submit'])],
-            'answers' => ['array'],
+            'answers' => ['nullable', 'array'],
             'answers.*' => [Rule::in(['C', 'NC', 'NA'])],
+            'notes' => ['nullable', 'array'],
+            'notes.*' => ['nullable', 'string', 'max:65535'],
+        ], [
+            'batch_validasi.required' => 'Pilihan Batch Validasi wajib dipilih sebelum submit.',
+            'laporan_validasi.required' => 'Status Laporan Validasi wajib dipilih jika Batch Validasi bernilai Ya.',
         ]);
 
         $line = ProductionLine::findOrFail($validated['production_line_id']);
@@ -102,15 +136,30 @@ class BatchFormController extends Controller
         $productionType = str_starts_with($line->code, 'inhouse') ? 'in_house' : 'toll_out';
 
         if ($validated['action'] === 'submit') {
-            $activeQuestionIds = ChecklistCategory::query()
-                ->where('production_line_id', $line->id)
-                ->join('checklist_questions', 'checklist_questions.checklist_category_id', '=', 'checklist_categories.id')
-                ->where('checklist_questions.status', 'active')
-                ->pluck('checklist_questions.id');
+            $categoryIds = ChecklistCategory::where('production_line_id', $line->id)->pluck('id');
+
+            $activeCheckableQuestionIds = ChecklistQuestion::query()
+                ->whereIn('checklist_category_id', $categoryIds)
+                ->where('status', 'active')
+                ->where(function ($q) {
+                    $q->where(function ($sub) {
+                        $sub->whereNotNull('parent_id')
+                            ->whereIn('parent_id', function ($p) {
+                                $p->select('id')->from('checklist_questions')->whereNull('parent_id');
+                            });
+                    })
+                    ->orWhere(function ($sub) {
+                        $sub->whereNull('parent_id')
+                            ->whereNotIn('id', function ($c) {
+                                $c->select('parent_id')->from('checklist_questions')->whereNotNull('parent_id');
+                            });
+                    });
+                })
+                ->pluck('id');
 
             $answered = collect($validated['answers'] ?? [])->keys()->map(fn ($id) => (int) $id);
 
-            if ($activeQuestionIds->diff($answered)->isNotEmpty()) {
+            if ($activeCheckableQuestionIds->diff($answered)->isNotEmpty()) {
                 return back()
                     ->withInput()
                     ->withErrors(['answers' => 'Semua pertanyaan checklist untuk line ini wajib dijawab sebelum submit.']);
@@ -118,6 +167,18 @@ class BatchFormController extends Controller
         }
 
         DB::transaction(function () use ($validated, $request, $productionType, $batch) {
+            $isBatchValidasi = $validated['batch_validasi'] ?? null;
+            if ($isBatchValidasi === 'tidak') {
+                $laporanValidasi = 'tidak';
+                $nomorLaporan = 'N/A';
+            } elseif ($isBatchValidasi === 'ya') {
+                $laporanValidasi = $validated['laporan_validasi'] ?? null;
+                $nomorLaporan = $validated['nomor_laporan_validasi'] ?? null;
+            } else {
+                $laporanValidasi = null;
+                $nomorLaporan = null;
+            }
+
             $batch->update([
                 'product_id' => $validated['product_id'],
                 'batch_number' => $validated['batch_number'],
@@ -128,18 +189,42 @@ class BatchFormController extends Controller
                 'supervisor_id' => $validated['supervisor_id'],
                 'manager_id' => $validated['manager_id'],
                 'keterangan' => $validated['keterangan'] ?? null,
+                'batch_validasi' => $isBatchValidasi,
+                'laporan_validasi' => $laporanValidasi,
+                'nomor_laporan_validasi' => $nomorLaporan,
+                'laporan_penyimpangan' => 'tidak',
+                'penyimpangan_items' => [['nomor' => 'N/A', 'status' => 'N/A']],
+                'change_control' => 'tidak',
+                'change_control_items' => [['nomor' => 'N/A', 'status' => 'N/A']],
                 'status' => $validated['action'] === 'submit' ? 'submitted' : 'draft',
             ]);
 
             // Jawaban lama dihapus lalu ditulis ulang, lebih aman daripada updateOrCreate satu-satu
             $batch->answers()->delete();
 
-            foreach ($validated['answers'] ?? [] as $questionId => $answer) {
-                BatchEvaluationAnswer::create([
-                    'batch_id' => $batch->id,
-                    'checklist_question_id' => $questionId,
-                    'answer' => $answer,
-                ]);
+            $notes = $validated['notes'] ?? [];
+            $allQuestionIds = collect(array_keys($validated['answers'] ?? []))
+                ->merge(array_keys($notes))
+                ->unique();
+
+            foreach ($allQuestionIds as $questionId) {
+                $ans = $validated['answers'][$questionId] ?? null;
+                $note = isset($notes[$questionId]) && trim((string) $notes[$questionId]) !== '' ? trim((string) $notes[$questionId]) : null;
+
+                if ($ans !== null || $note !== null) {
+                    BatchEvaluationAnswer::create([
+                        'batch_id' => $batch->id,
+                        'checklist_question_id' => $questionId,
+                        'answer' => $ans,
+                        'keterangan' => $note,
+                    ]);
+                }
+            }
+
+            // Saat submit, bekukan snapshot checklist permanen
+            if ($validated['action'] === 'submit') {
+                $snapshot = $batch->generateChecklistSnapshot($validated['answers'] ?? [], $notes);
+                $batch->update(['checklist_snapshot' => $snapshot]);
             }
 
             // Draft yang baru pertama kali disubmit perlu dibuatkan 3 baris approval
@@ -214,9 +299,21 @@ class BatchFormController extends Controller
             'supervisor_id' => ['required', 'exists:users,id'],
             'manager_id' => ['required', 'exists:users,id'],
             'keterangan' => ['nullable', 'string'],
+            'batch_validasi' => [$request->input('action') === 'submit' ? 'required' : 'nullable', Rule::in(['ya', 'tidak'])],
+            'laporan_validasi' => [
+                Rule::requiredIf(fn () => $request->input('action') === 'submit' && $request->input('batch_validasi') === 'ya'),
+                'nullable',
+                Rule::in(['ada', 'tidak']),
+            ],
+            'nomor_laporan_validasi' => ['nullable', 'string', 'max:255'],
             'action' => ['required', Rule::in(['draft', 'submit'])],
-            'answers' => ['array'],
+            'answers' => ['nullable', 'array'],
             'answers.*' => [Rule::in(['C', 'NC', 'NA'])],
+            'notes' => ['nullable', 'array'],
+            'notes.*' => ['nullable', 'string', 'max:65535'],
+        ], [
+            'batch_validasi.required' => 'Pilihan Batch Validasi wajib dipilih sebelum submit.',
+            'laporan_validasi.required' => 'Status Laporan Validasi wajib dipilih jika Batch Validasi bernilai Ya.',
         ]);
 
         $line = ProductionLine::findOrFail($validated['production_line_id']);
@@ -224,15 +321,30 @@ class BatchFormController extends Controller
         $productionType = str_starts_with($line->code, 'inhouse') ? 'in_house' : 'toll_out';
 
         if ($validated['action'] === 'submit') {
-            $activeQuestionIds = ChecklistCategory::query()
-                ->where('production_line_id', $line->id)
-                ->join('checklist_questions', 'checklist_questions.checklist_category_id', '=', 'checklist_categories.id')
-                ->where('checklist_questions.status', 'active')
-                ->pluck('checklist_questions.id');
+            $categoryIds = ChecklistCategory::where('production_line_id', $line->id)->pluck('id');
+
+            $activeCheckableQuestionIds = ChecklistQuestion::query()
+                ->whereIn('checklist_category_id', $categoryIds)
+                ->where('status', 'active')
+                ->where(function ($q) {
+                    $q->where(function ($sub) {
+                        $sub->whereNotNull('parent_id')
+                            ->whereIn('parent_id', function ($p) {
+                                $p->select('id')->from('checklist_questions')->whereNull('parent_id');
+                            });
+                    })
+                    ->orWhere(function ($sub) {
+                        $sub->whereNull('parent_id')
+                            ->whereNotIn('id', function ($c) {
+                                $c->select('parent_id')->from('checklist_questions')->whereNotNull('parent_id');
+                            });
+                    });
+                })
+                ->pluck('id');
 
             $answered = collect($validated['answers'] ?? [])->keys()->map(fn ($id) => (int) $id);
 
-            if ($activeQuestionIds->diff($answered)->isNotEmpty()) {
+            if ($activeCheckableQuestionIds->diff($answered)->isNotEmpty()) {
                 return back()
                     ->withInput()
                     ->withErrors(['answers' => 'Semua pertanyaan checklist untuk line ini wajib dijawab sebelum submit.']);
@@ -240,6 +352,18 @@ class BatchFormController extends Controller
         }
 
         $batch = DB::transaction(function () use ($validated, $request, $productionType) {
+            $isBatchValidasi = $validated['batch_validasi'] ?? null;
+            if ($isBatchValidasi === 'tidak') {
+                $laporanValidasi = 'tidak';
+                $nomorLaporan = 'N/A';
+            } elseif ($isBatchValidasi === 'ya') {
+                $laporanValidasi = $validated['laporan_validasi'] ?? null;
+                $nomorLaporan = $validated['nomor_laporan_validasi'] ?? null;
+            } else {
+                $laporanValidasi = null;
+                $nomorLaporan = null;
+            }
+
             $batch = Batch::create([
                 'product_id' => $validated['product_id'],
                 'batch_number' => $validated['batch_number'],
@@ -250,16 +374,40 @@ class BatchFormController extends Controller
                 'supervisor_id' => $validated['supervisor_id'],
                 'manager_id' => $validated['manager_id'],
                 'keterangan' => $validated['keterangan'] ?? null,
+                'batch_validasi' => $isBatchValidasi,
+                'laporan_validasi' => $laporanValidasi,
+                'nomor_laporan_validasi' => $nomorLaporan,
+                'laporan_penyimpangan' => 'tidak',
+                'penyimpangan_items' => [['nomor' => 'N/A', 'status' => 'N/A']],
+                'change_control' => 'tidak',
+                'change_control_items' => [['nomor' => 'N/A', 'status' => 'N/A']],
                 'status' => $validated['action'] === 'submit' ? 'submitted' : 'draft',
                 'created_by' => $request->user()?->id,
             ]);
 
-            foreach ($validated['answers'] ?? [] as $questionId => $answer) {
-                BatchEvaluationAnswer::create([
-                    'batch_id' => $batch->id,
-                    'checklist_question_id' => $questionId,
-                    'answer' => $answer,
-                ]);
+            $notes = $validated['notes'] ?? [];
+            $allQuestionIds = collect(array_keys($validated['answers'] ?? []))
+                ->merge(array_keys($notes))
+                ->unique();
+
+            foreach ($allQuestionIds as $questionId) {
+                $ans = $validated['answers'][$questionId] ?? null;
+                $note = isset($notes[$questionId]) && trim((string) $notes[$questionId]) !== '' ? trim((string) $notes[$questionId]) : null;
+
+                if ($ans !== null || $note !== null) {
+                    BatchEvaluationAnswer::create([
+                        'batch_id' => $batch->id,
+                        'checklist_question_id' => $questionId,
+                        'answer' => $ans,
+                        'keterangan' => $note,
+                    ]);
+                }
+            }
+
+            // Saat submit, bekukan snapshot checklist permanen
+            if ($validated['action'] === 'submit') {
+                $snapshot = $batch->generateChecklistSnapshot($validated['answers'] ?? [], $notes);
+                $batch->update(['checklist_snapshot' => $snapshot]);
             }
 
             // Saat submit, generate 3 tahap approval sekaligus:

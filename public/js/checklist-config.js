@@ -29,6 +29,19 @@
                 form.action = opener.getAttribute("data-action");
                 form.querySelector("#edit-question").value =
                     opener.getAttribute("data-question") || "";
+                
+                const depth = parseInt(opener.getAttribute("data-depth") || "0", 10);
+                const wrapEditDetails = document.getElementById("wrap-edit-question-details");
+                const detailsField = form.querySelector("#edit-question-details");
+
+                if (depth > 0) {
+                    if (wrapEditDetails) wrapEditDetails.style.display = "block";
+                    if (detailsField) detailsField.value = opener.getAttribute("data-details") || "";
+                } else {
+                    if (wrapEditDetails) wrapEditDetails.style.display = "none";
+                    if (detailsField) detailsField.value = "";
+                }
+
                 form.querySelector("#edit-question-status").value =
                     opener.getAttribute("data-status") || "active";
             }
@@ -43,18 +56,26 @@
 
                 const title = document.getElementById("add-question-title");
                 const context = document.getElementById("add-question-context");
+                const textarea = document.getElementById("add-question");
+                const wrapAddDetails = document.getElementById("wrap-add-question-details");
+                const detailsTextarea = document.getElementById("add-question-details");
 
                 if (parentId) {
-                    title.textContent = "Tambah Sub-Pertanyaan";
-                    context.textContent = "Sub dari: " + parentLabel;
+                    title.textContent = "Tambah Sub-Pertanyaan (Child)";
+                    context.textContent = "Sub dari (Parent): " + parentLabel;
+                    textarea.placeholder = "Contoh: a. Kelengkapan pengisian data...";
+                    if (wrapAddDetails) wrapAddDetails.style.display = "block";
                 } else {
-                    title.textContent = "Tambah Pertanyaan";
+                    title.textContent = "Tambah Pertanyaan Utama (Parent)";
                     context.textContent =
                         context.getAttribute("data-default-text") ||
                         context.textContent;
+                    textarea.placeholder = "Contoh: 1. Cover Prosedur Pengolahan Induk...";
+                    if (wrapAddDetails) wrapAddDetails.style.display = "none";
                 }
 
                 document.getElementById("add-question").value = "";
+                if (detailsTextarea) detailsTextarea.value = "";
                 document.getElementById("add-question-status").value = "active";
             }
 

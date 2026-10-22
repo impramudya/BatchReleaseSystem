@@ -127,7 +127,7 @@
                 <span class="bfm-legend">C = Complies &middot; NC = Not Complies &middot; N/A = Not Applicable</span>
             </div>
 
-            @php $globalNo = 0; @endphp
+            @php $checkableCount = 0; @endphp
 
             @forelse ($line->categories as $category)
                 @if ($category->questions->isNotEmpty())
@@ -136,47 +136,197 @@
                         {{ $category->name }}
                     </div>
 
-                    @foreach ($category->questions as $question)
+                    @php $parentNo = 0; @endphp
+
+                    @foreach ($category->questions as $parent)
                         @php
-                            $globalNo++;
-                            $answerValue = old("answers.{$question->id}", $existingAnswers[$question->id] ?? null);
+                            $parentNo++;
+                            $hasChildren = $parent->children->isNotEmpty();
                         @endphp
-                        <div class="bfm-question-row">
-                            <span class="bfm-question-no">{{ $globalNo }}</span>
-                            <span class="bfm-question-text">{{ $question->question }}</span>
-                            <div class="bfm-answer-group" data-answer-group>
-                                <label class="bfm-answer-pill bfm-answer-c">
-                                    <input type="radio" name="answers[{{ $question->id }}]" value="C"
-                                        {{ $answerValue === 'C' ? 'checked' : '' }}>
-                                    C
-                                </label>
-                                <label class="bfm-answer-pill bfm-answer-nc">
-                                    <input type="radio" name="answers[{{ $question->id }}]" value="NC"
-                                        {{ $answerValue === 'NC' ? 'checked' : '' }}>
-                                    NC
-                                </label>
-                                <label class="bfm-answer-pill bfm-answer-na">
-                                    <input type="radio" name="answers[{{ $question->id }}]" value="NA"
-                                        {{ $answerValue === 'NA' ? 'checked' : '' }}>
-                                    N/A
-                                </label>
+
+                        {{-- Parent row --}}
+                        <div class="bfm-question-row" style="{{ $hasChildren ? 'background: rgba(0,0,0,0.02);' : '' }}">
+                            <span class="bfm-question-no">{{ $parentNo }}</span>
+                            <div class="bfm-question-content">
+                                <span class="bfm-question-text" style="{{ $hasChildren ? 'font-weight: 700; color: var(--text-primary);' : '' }}">
+                                    {{ $parent->question }}
+                                </span>
+                                @if (!empty($parent->details))
+                                    <div class="bfm-question-details" style="margin-top: 0.35rem; padding-left: 0.8rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;">
+                                        {!! nl2br(e($parent->details)) !!}
+                                    </div>
+                                @endif
                             </div>
+                            @if (!$hasChildren)
+                                @php
+                                    $checkableCount++;
+                                    $answerValue = old("answers.{$parent->id}", $existingAnswers[$parent->id] ?? null);
+                                    $noteValue = old("notes.{$parent->id}", $existingNotes[$parent->id] ?? '');
+                                @endphp
+                                <div class="bfm-answer-group" data-answer-group>
+                                    <label class="bfm-answer-pill bfm-answer-c">
+                                        <input type="radio" name="answers[{{ $parent->id }}]" value="C"
+                                            {{ $answerValue === 'C' ? 'checked' : '' }}>
+                                        C
+                                    </label>
+                                    <label class="bfm-answer-pill bfm-answer-nc">
+                                        <input type="radio" name="answers[{{ $parent->id }}]" value="NC"
+                                            {{ $answerValue === 'NC' ? 'checked' : '' }}>
+                                        NC
+                                    </label>
+                                    <label class="bfm-answer-pill bfm-answer-na">
+                                        <input type="radio" name="answers[{{ $parent->id }}]" value="NA"
+                                            {{ $answerValue === 'NA' ? 'checked' : '' }}>
+                                        N/A
+                                    </label>
+                                </div>
+                                <div class="bfm-question-note-wrap">
+                                    <input type="text"
+                                           name="notes[{{ $parent->id }}]"
+                                           value="{{ $noteValue }}"
+                                           placeholder="Masukkan keterangan..."
+                                           class="bfm-question-note-input"
+                                           autocomplete="off">
+                                </div>
+                            @endif
                         </div>
+
+                        {{-- Child rows (memiliki checkmark & keterangan) --}}
+                        @foreach ($parent->children as $child)
+                            @php
+                                $checkableCount++;
+                                $childAnsValue = old("answers.{$child->id}", $existingAnswers[$child->id] ?? null);
+                                $childNoteValue = old("notes.{$child->id}", $existingNotes[$child->id] ?? '');
+                            @endphp
+                            <div class="bfm-question-row" style="padding-left: 2rem;">
+                                <span class="bfm-question-no"></span>
+                                <div class="bfm-question-content">
+                                    <span class="bfm-question-text">{{ $child->question }}</span>
+                                    @if (!empty($child->details))
+                                        <div class="bfm-question-details" style="margin-top: 0.35rem; padding-left: 0.8rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;">
+                                            {!! nl2br(e($child->details)) !!}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="bfm-answer-group" data-answer-group>
+                                    <label class="bfm-answer-pill bfm-answer-c">
+                                        <input type="radio" name="answers[{{ $child->id }}]" value="C"
+                                            {{ $childAnsValue === 'C' ? 'checked' : '' }}>
+                                        C
+                                    </label>
+                                    <label class="bfm-answer-pill bfm-answer-nc">
+                                        <input type="radio" name="answers[{{ $child->id }}]" value="NC"
+                                            {{ $childAnsValue === 'NC' ? 'checked' : '' }}>
+                                        NC
+                                    </label>
+                                    <label class="bfm-answer-pill bfm-answer-na">
+                                        <input type="radio" name="answers[{{ $child->id }}]" value="NA"
+                                            {{ $childAnsValue === 'NA' ? 'checked' : '' }}>
+                                        N/A
+                                    </label>
+                                </div>
+                                <div class="bfm-question-note-wrap">
+                                    <input type="text"
+                                           name="notes[{{ $child->id }}]"
+                                           value="{{ $childNoteValue }}"
+                                           placeholder="Masukkan keterangan..."
+                                           class="bfm-question-note-input"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+
+                            {{-- Grandson rows (TIDAK memiliki checkmark & keterangan) --}}
+                            @foreach ($child->children as $grandson)
+                                <div class="bfm-question-row" style="padding-left: 3.5rem; background: rgba(0,0,0,0.01);">
+                                    <span class="bfm-question-no"></span>
+                                    <div class="bfm-question-content">
+                                        <span class="bfm-question-text" style="color: var(--text-secondary); font-size: 0.85rem;">
+                                            {{ $grandson->question }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endforeach
                     @endforeach
                 @endif
             @empty
                 <p class="bfm-empty">No active checklist categories configured for {{ $line->parent ? $line->parent->name . ' / ' . $line->name : $line->name }}. Please configure categories in the Checklist Config menu.</p>
             @endforelse
 
-            @if ($globalNo > 0)
+            @if ($checkableCount > 0)
                 <div class="bfm-progress-wrap">
                     <span class="bfm-progress-label">Completion Progress</span>
                     <div class="bfm-progress-track">
                         <div class="bfm-progress-fill" id="progress-fill" style="width: 0%"></div>
                     </div>
-                    <span class="bfm-progress-count" id="progress-count">0/{{ $globalNo }}</span>
+                    <span class="bfm-progress-count" id="progress-count">0/{{ $checkableCount }}</span>
                 </div>
             @endif
+        </div>
+
+        {{-- ================= BATCH VALIDASI ================= --}}
+        @php
+            $lastCategory = $line->categories->filter(fn($c) => $c->questions->isNotEmpty())->last() ?? $line->categories->sortBy('code')->last();
+            $lastCode = $lastCategory ? trim($lastCategory->code) : null;
+            $validasiPointCode = ($lastCode && ctype_alpha($lastCode[0]))
+                ? chr(ord(strtoupper($lastCode[0])) + 1)
+                : 'A';
+        @endphp
+        <div class="bfm-card" id="point-validasi-card">
+            <div class="bfm-card-header">
+                <h3>
+                    <span class="bfm-category-code" style="background:var(--primary); color:#fff; font-weight:700;">{{ $validasiPointCode }}</span>
+                    Batch Validasi
+                </h3>
+            </div>
+            <div style="padding: 1.4rem;">
+                <div class="bfm-field" style="margin-bottom: 1.25rem;">
+                    <label style="margin-bottom: 0.6rem;">Batch Validasi <span class="bfm-required">*</span></label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <label class="bfm-answer-pill bfm-answer-c" style="cursor: pointer; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
+                            <input type="radio" name="batch_validasi" value="ya" id="batch_validasi_ya"
+                                {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'ya' ? 'checked' : '' }}>
+                            Ya
+                        </label>
+                        <label class="bfm-answer-pill bfm-answer-nc" style="cursor: pointer; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
+                            <input type="radio" name="batch_validasi" value="tidak" id="batch_validasi_tidak"
+                                {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'tidak' ? 'checked' : '' }}>
+                            Tidak
+                        </label>
+                    </div>
+                    @error('batch_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Sub-kondisi Jika Ya --}}
+                <div id="sub-validasi-container" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 1.2rem; display: {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'ya' ? 'block' : 'none' }};">
+                    <p style="font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0;">Jika Ya :</p>
+                    <div class="bfm-grid" style="padding: 0; gap: 1.2rem 1.5rem;">
+                        <div class="bfm-field">
+                            <label style="margin-bottom: 0.6rem;">Laporan Validasi <span class="bfm-required">*</span></label>
+                            <div style="display: flex; gap: 1rem; align-items: center; min-height: 40px;">
+                                <label class="bfm-answer-pill bfm-answer-c" style="cursor: pointer; padding: 0.45rem 1rem; font-size: 0.82rem;">
+                                    <input type="radio" name="laporan_validasi" value="ada" id="laporan_validasi_ada"
+                                        {{ old('laporan_validasi', $batch->laporan_validasi ?? '') === 'ada' ? 'checked' : '' }}>
+                                    Ada
+                                </label>
+                                <label class="bfm-answer-pill bfm-answer-nc" style="cursor: pointer; padding: 0.45rem 1rem; font-size: 0.82rem;">
+                                    <input type="radio" name="laporan_validasi" value="tidak" id="laporan_validasi_tidak"
+                                        {{ old('laporan_validasi', $batch->laporan_validasi ?? '') === 'tidak' ? 'checked' : '' }}>
+                                    Tidak
+                                </label>
+                            </div>
+                            @error('laporan_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="bfm-field">
+                            <label for="nomor_laporan_validasi">Nomor Laporan</label>
+                            <input type="text" id="nomor_laporan_validasi" name="nomor_laporan_validasi"
+                                   value="{{ old('nomor_laporan_validasi', $batch->nomor_laporan_validasi ?? '') }}"
+                                   placeholder="Contoh: VAL/2026/089...">
+                            @error('nomor_laporan_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- ================= ACTIONS ================= --}}
@@ -199,5 +349,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/batch-form.js') }}" defer></script>
+    <script src="{{ asset('js/batch-form.js') }}?v=5" defer></script>
 @endpush

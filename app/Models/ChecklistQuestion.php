@@ -16,6 +16,7 @@ class ChecklistQuestion extends Model
         'parent_id',
         'order_no',
         'question',
+        'details',
         'status',
     ];
 

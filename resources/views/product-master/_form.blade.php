@@ -51,19 +51,6 @@
             </div>
 
             <div class="pf-field">
-                <label for="category_id">Category</label>
-                <select id="category_id" name="category_id" required>
-                    <option value="">Select category</option>
-                    @foreach ($categories as $cat)
-                        <option value="{{ $cat->id }}" @selected(old('category_id', $product->category_id ?? '') == $cat->id)>
-                            {{ $cat->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('category_id') <p class="pf-error">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="pf-field">
                 <label for="description">Description (optional)</label>
                 <textarea id="description" name="description" rows="3" placeholder="Brief description of the product">{{ old('description', $product->description ?? '') }}</textarea>
                 @error('description') <p class="pf-error">{{ $message }}</p> @enderror
