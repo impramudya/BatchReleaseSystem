@@ -33,9 +33,9 @@
 }
 
 .ccfg-panel {
-    background: var(--content-surface);
-    border: 1px solid var(--content-border);
-    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -45,7 +45,8 @@
     justify-content: space-between;
     gap: 0.75rem;
     padding: 1.1rem 1.25rem;
-    border-bottom: 1px solid var(--content-border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
 }
 
 .ccfg-panel-header h3 {
@@ -53,7 +54,7 @@
     font-family: "Poppins", sans-serif;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--content-text);
+    color: var(--text-primary);
 }
 
 .ccfg-icon {
@@ -66,8 +67,9 @@
 .ccfg-btn-primary {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    background: var(--teal);
+    background: #4c8a41;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -76,35 +78,39 @@
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none !important;
     transition: background 0.15s ease;
     white-space: nowrap;
 }
 .ccfg-btn-primary:hover {
-    background: var(--teal-dark);
+    background: #3d7034;
 }
 
 .ccfg-btn-secondary {
-    background: transparent;
-    border: 1px solid var(--content-border);
-    color: var(--content-text-soft);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
     border-radius: 6px;
     padding: 0.5rem 0.9rem;
     font-family: "Poppins", sans-serif;
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none !important;
     transition: all 0.15s ease;
 }
 .ccfg-btn-secondary:hover {
-    color: var(--content-text);
-    border-color: var(--teal);
+    color: var(--primary-dark);
+    background: #f1f8f4;
+    border-color: var(--primary);
 }
 
 .ccfg-btn-danger {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    background: var(--danger);
+    background: #dc2626;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -113,10 +119,11 @@
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none !important;
     transition: filter 0.15s ease;
 }
 .ccfg-btn-danger:hover {
-    filter: brightness(0.9);
+    background: #b91c1c;
 }
 
 .ccfg-icon-btn {
@@ -126,19 +133,20 @@
     align-items: center;
     justify-content: center;
     background: transparent;
-    border: 1px solid var(--content-border);
+    border: 1px solid var(--border);
     border-radius: 6px;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     cursor: pointer;
+    text-decoration: none !important;
     transition: all 0.15s ease;
 }
 .ccfg-icon-btn:hover {
-    color: var(--content-text);
-    border-color: var(--teal);
+    color: var(--primary-dark);
+    border-color: var(--primary);
 }
 .ccfg-icon-btn-danger:hover {
-    color: var(--danger);
-    border-color: var(--danger);
+    color: #dc2626;
+    border-color: #dc2626;
 }
 
 /* ---------- Category list (left panel) ---------- */
@@ -151,8 +159,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    border-radius: 8px;
-    padding: 0.15rem 0.15rem 0.15rem 0.15rem;
+    border-radius: 6px;
+    padding: 0.15rem;
     margin-bottom: 0.35rem;
 }
 .ccfg-category-item:last-child {
@@ -160,7 +168,7 @@
 }
 
 .ccfg-category-item.is-active {
-    background: rgba(14, 124, 123, 0.12);
+    background: #edf5e9;
 }
 
 .ccfg-category-link {
@@ -168,16 +176,18 @@
     padding: 0.65rem 0.75rem;
     font-size: 0.88rem;
     font-weight: 500;
-    color: var(--content-text-soft);
-    text-decoration: none;
+    color: var(--text-secondary);
+    text-decoration: none !important;
     border-radius: 6px;
     transition: color 0.15s ease;
 }
 .ccfg-category-item.is-active .ccfg-category-link {
-    color: var(--teal-dark);
+    color: #3d7034;
     font-weight: 600;
 }
 html.dark .ccfg-category-item.is-active .ccfg-category-link {
+    color: #87bd40;
+}
     color: #6fc7ac;
 }
 .ccfg-category-link:hover {
@@ -278,8 +288,8 @@ html.dark .ccfg-row-sub td {
     display: inline-flex;
     align-items: center;
     border: none;
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
+    border-radius: 6px !important;
+    padding: 0.28rem 0.65rem;
     font-family: "Poppins", sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
@@ -291,21 +301,13 @@ html.dark .ccfg-row-sub td {
 }
 
 .ccfg-status-active {
-    background: #e4f3e0;
-    color: #4a7c2f;
-}
-html.dark .ccfg-status-active {
-    background: rgba(143, 197, 105, 0.16);
-    color: #a3d68a;
+    background: #4c8a41 !important;
+    color: #ffffff !important;
 }
 
 .ccfg-status-inactive {
-    background: #f1eeea;
-    color: var(--content-text-soft);
-}
-html.dark .ccfg-status-inactive {
-    background: rgba(247, 245, 240, 0.08);
-    color: var(--content-text-soft);
+    background: #64748b !important;
+    color: #ffffff !important;
 }
 
 .ccfg-row-actions {
@@ -321,7 +323,7 @@ html.dark .ccfg-status-inactive {
 .ccfg-empty {
     padding: 1.5rem 1.25rem;
     font-size: 0.85rem;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     text-align: center;
 }
 
@@ -341,10 +343,10 @@ html.dark .ccfg-status-inactive {
 }
 
 .ccfg-modal-box {
-    background: var(--content-surface);
-    border: 1px solid var(--content-border);
-    border-radius: 10px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 26rem;
     padding: 1.75rem;
@@ -355,13 +357,13 @@ html.dark .ccfg-status-inactive {
     font-family: "Poppins", sans-serif;
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--content-text);
+    color: var(--text-primary);
 }
 
 .ccfg-modal-subtext {
     margin: 0 0 1.25rem;
     font-size: 0.82rem;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
 }
 
 .ccfg-field {
@@ -375,7 +377,7 @@ html.dark .ccfg-status-inactive {
     display: block;
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--content-text);
+    color: var(--text-primary);
     margin-bottom: 0.4rem;
 }
 
@@ -387,9 +389,9 @@ html.dark .ccfg-status-inactive {
     padding: 0.6rem 0.75rem;
     font-size: 0.88rem;
     font-family: "Poppins", sans-serif;
-    color: var(--content-text);
-    background: var(--content-bg);
-    border: 1px solid var(--content-border);
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 6px;
     outline: none;
     resize: vertical;
@@ -400,13 +402,13 @@ html.dark .ccfg-status-inactive {
 .ccfg-field input:focus,
 .ccfg-field textarea:focus,
 .ccfg-field select:focus {
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.18);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 138, 65, 0.18);
 }
 
 .ccfg-error {
     font-size: 0.75rem;
-    color: var(--danger);
+    color: #dc2626;
     margin: 0.35rem 0 0;
 }
 

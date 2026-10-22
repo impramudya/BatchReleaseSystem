@@ -1,19 +1,13 @@
 .brp-badge-create {
-    color: #2f5f92;
-    background: rgba(79, 134, 198, 0.14);
-}
-html.dark .brp-badge-create {
-    color: #9dc3f0;
-    background: rgba(120, 170, 230, 0.16);
+    color: #ffffff !important;
+    background: #0284c7 !important;
+    border-radius: 6px !important;
 }
 
 .brp-badge-login {
-    color: #6d3f95;
-    background: rgba(155, 107, 201, 0.14);
-}
-html.dark .brp-badge-login {
-    color: #cba3e8;
-    background: rgba(190, 140, 230, 0.16);
+    color: #ffffff !important;
+    background: #7c3aed !important;
+    border-radius: 6px !important;
 }
 
 /* ---------- Pagination (override view Laravel default) ---------- */
@@ -32,26 +26,27 @@ html.dark .brp-badge-login {
     height: 34px;
     padding: 0 0.6rem;
     border-radius: 6px;
-    border: 1px solid var(--content-border);
+    border: 1px solid var(--border);
     font-family: "Poppins", sans-serif;
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--content-text);
-    text-decoration: none;
-    background: var(--content-surface);
+    color: var(--text-primary);
+    text-decoration: none !important;
+    background: var(--surface);
     transition: all 0.15s ease;
 }
 a.brp-pager-link:hover {
-    border-color: var(--teal);
-    color: var(--teal-dark);
+    border-color: var(--primary);
+    background: #f1f8f4;
+    color: var(--primary-dark);
 }
 .brp-pager-active {
-    background: var(--teal);
-    border-color: var(--teal);
-    color: #fff;
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
 }
 .brp-pager-disabled {
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     opacity: 0.5;
     cursor: not-allowed;
 }

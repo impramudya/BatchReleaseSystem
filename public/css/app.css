@@ -24,15 +24,15 @@
     --text-muted: #8e9690;
     --text-white: #ffffff;
 
-    /* Semantic Statuses */
-    --status-draft: #6b726d;
-    --status-draft-bg: #f0f2f0;
-    --status-waiting: #d97706;
-    --status-waiting-bg: #fef3c7;
-    --status-released: #4c8a41;
-    --status-released-bg: #edf5e9;
-    --status-rejected: #c53030;
-    --status-rejected-bg: #fee2e2;
+    /* Semantic Statuses (Solid Colors with High Contrast) */
+    --status-draft: #ffffff;
+    --status-draft-bg: #64748b;
+    --status-waiting: #ffffff;
+    --status-waiting-bg: #d97706;
+    --status-released: #ffffff;
+    --status-released-bg: #4c8a41;
+    --status-rejected: #ffffff;
+    --status-rejected-bg: #dc2626;
 
     /* Legacy Map for Compatibility */
     --content-bg: var(--bg-main);
@@ -166,7 +166,7 @@ body.brp-body {
 }
 .brp-nav::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 999px;
+    border-radius: 4px;
 }
 
 .brp-nav-group {
@@ -241,7 +241,7 @@ body.brp-body {
     font-weight: 600;
     line-height: 1;
     padding: 0.22rem 0.45rem;
-    border-radius: 999px;
+    border-radius: 6px;
 }
 
 /* Submenu / Accordion */
@@ -479,7 +479,7 @@ html.dark .icon-moon {
     width: 6px;
     height: 6px;
     background: #e53e3e;
-    border-radius: 999px;
+    border-radius: 50%;
 }
 
 .brp-logout {
@@ -512,48 +512,73 @@ html.dark .icon-moon {
 .brp-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 0.95rem;
     font-family: "Poppins", sans-serif;
     font-size: 0.84rem;
     font-weight: 500;
     border-radius: 6px;
-    text-decoration: none;
+    text-decoration: none !important;
     cursor: pointer;
     transition: all 0.15s ease;
     border: 1px solid transparent;
 }
+.brp-btn:hover {
+    text-decoration: none !important;
+}
 
 .brp-btn-primary {
-    background-color: var(--primary);
-    color: var(--text-white);
-    border-color: var(--primary);
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    border-color: var(--primary) !important;
+    text-decoration: none !important;
 }
 .brp-btn-primary:hover {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
-    color: var(--text-white);
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
 }
 
-.brp-btn-outline {
-    background-color: var(--surface);
-    color: var(--text-primary);
-    border-color: var(--border);
+.brp-btn-outline,
+.brp-btn-secondary {
+    background-color: var(--surface) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border) !important;
+    text-decoration: none !important;
 }
-.brp-btn-outline:hover {
-    background-color: var(--primary-light);
-    border-color: var(--primary);
-    color: var(--primary-dark);
+.brp-btn-outline:hover,
+.brp-btn-secondary:hover {
+    background-color: #f1f8f4 !important;
+    border-color: var(--primary) !important;
+    color: var(--primary-dark) !important;
+    text-decoration: none !important;
+}
+
+.brp-btn-danger {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+    border-color: #dc2626 !important;
+    text-decoration: none !important;
+}
+.brp-btn-danger:hover {
+    background-color: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
 }
 
 .brp-btn-ghost {
     background-color: transparent;
     color: var(--text-secondary);
     border-color: var(--border);
+    text-decoration: none !important;
 }
 .brp-btn-ghost:hover {
     color: var(--text-primary);
     background-color: var(--surface-hover);
+    text-decoration: none !important;
 }
 
 /* Card Container */
@@ -578,45 +603,103 @@ html.dark .icon-moon {
     color: var(--text-primary);
 }
 
-/* Badges */
+/* Badges - Solid Colors with 6px Border Radius & High Contrast */
 .brp-badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.72rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 4px;
+    border-radius: 6px;
     line-height: 1.4;
     text-transform: capitalize;
+    color: #ffffff !important;
+    border: 1px solid transparent;
 }
 
 .brp-badge-draft {
-    background: var(--status-draft-bg);
-    color: var(--status-draft);
+    background-color: #64748b !important;
+    color: #ffffff !important;
 }
-.brp-badge-waiting {
-    background: var(--status-waiting-bg);
-    color: var(--status-waiting);
+.brp-badge-waiting,
+.brp-badge-submitted,
+.brp-badge-waiting_supervisor,
+.brp-badge-waiting_manager {
+    background-color: #d97706 !important;
+    color: #ffffff !important;
 }
 .brp-badge-released {
-    background: var(--status-released-bg);
-    color: var(--status-released);
+    background-color: #4c8a41 !important;
+    color: #ffffff !important;
 }
 .brp-badge-rejected {
-    background: var(--status-rejected-bg);
-    color: var(--status-rejected);
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
 }
 
 /* Production Line Badges */
 .brp-line {
     display: inline-block;
-    padding: 0.15rem 0.5rem;
+    padding: 0.2rem 0.55rem;
     font-size: 0.72rem;
     font-weight: 500;
-    border-radius: 4px;
-    background: var(--surface-hover);
+    border-radius: 6px;
+    background: #f0f2f0;
     color: var(--text-secondary);
     border: 1px solid var(--border);
+}
+
+/* Table Standardizations */
+.brp-table,
+table {
+    border-collapse: collapse;
+}
+.brp-table thead th,
+table thead th {
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--border);
+}
+.brp-table tbody tr,
+table tbody tr {
+    transition: background-color 0.12s ease;
+}
+.brp-table tbody tr:hover,
+table tbody tr:hover {
+    background-color: #f1f8f4 !important;
+}
+.brp-table tbody td,
+table tbody td {
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+/* Form Inputs Standardizations */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(76, 138, 65, 0.18) !important;
+    outline: none;
 }
 
 /* Mobile Hamburger & Overlay */
@@ -666,4 +749,58 @@ html.dark .icon-moon {
     .brp-content {
         padding: 1.25rem;
     }
+}
+
+/* ==========================================================================
+   GLOBAL PAGINATION COMPONENT (.brp-pager)
+   ========================================================================== */
+.brp-pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+.brp-pager-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none !important;
+    background: var(--surface);
+    transition: all 0.15s ease;
+}
+a.brp-pager-link:hover {
+    border-color: var(--primary);
+    background: #f1f8f4;
+    color: var(--primary-dark);
+}
+.brp-pager-active {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
+}
+.brp-pager-disabled {
+    color: var(--text-secondary);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.brp-pager-dots {
+    border: none;
+    background: none;
+}
+.brp-pager-summary {
+    margin: 0.6rem 0 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
 }

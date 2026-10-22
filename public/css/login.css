@@ -97,11 +97,10 @@ body.brp-body {
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    background: rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 0.35rem 0.85rem;
-    border-radius: 9999px;
+    border-radius: 6px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
     font-weight: 500;
@@ -133,11 +132,12 @@ body.brp-body {
     width: 52px;
     height: 52px;
     background: var(--white);
-    border-radius: 12px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
 }
 
@@ -574,7 +574,7 @@ body.brp-body {
 
 .brp-link-forgot:hover {
     color: var(--primary-dark);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .brp-link-forgot:focus-visible {
@@ -598,22 +598,22 @@ body.brp-body {
     font-size: 0.95rem;
     font-weight: 600;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 6px;
     cursor: pointer;
-    box-shadow: var(--shadow-btn);
+    box-shadow: none;
     transition: var(--transition);
     margin-top: 0.5rem;
 }
 
 .brp-btn-submit:hover {
     background-color: var(--primary-dark);
-    box-shadow: 0 6px 16px rgba(76, 138, 65, 0.32);
-    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(76, 138, 65, 0.25);
+    transform: none;
 }
 
 .brp-btn-submit:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
+    transform: none;
+    box-shadow: none;
 }
 
 .brp-btn-submit:focus-visible {

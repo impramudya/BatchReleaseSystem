@@ -114,12 +114,12 @@
 .pf-field textarea:focus-visible,
 .pf-field select:focus-visible {
     outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 138, 65, 0.18);
 }
 
 .pf-error {
-    color: var(--danger);
+    color: #dc2626;
     font-size: 0.78rem;
     line-height: 1.4;
     margin: 0.45rem 0 0;
@@ -129,11 +129,12 @@
     display: flex;
     gap: 0.75rem;
     padding: 1.5rem 1.75rem;
-    border-top: 1px solid var(--content-border);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
 }
 
 .pf-submit {
-    background: var(--teal);
+    background: #4c8a41;
     color: #fff;
     border: none;
     padding: 0.7rem 1.4rem;
@@ -143,10 +144,11 @@
     font-weight: 600;
     line-height: 1.4;
     cursor: pointer;
+    text-decoration: none !important;
     transition: background 0.12s ease;
 }
 .pf-submit:hover {
-    background: var(--teal-dark);
+    background: #3d7034;
 }
 .pf-submit:active {
     transform: scale(0.98);
@@ -159,17 +161,19 @@
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.4;
-    color: var(--content-text-soft);
-    border: 1px solid var(--content-border);
-    background: transparent;
-    text-decoration: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    background: #ffffff;
+    text-decoration: none !important;
     transition:
         color 0.12s ease,
-        border-color 0.12s ease;
+        border-color 0.12s ease,
+        background 0.12s ease;
 }
 .pf-cancel:hover {
-    color: var(--content-text);
-    border-color: var(--teal);
+    color: var(--primary-dark);
+    background: #f1f8f4;
+    border-color: var(--primary);
 }
 
 @media (max-width: 640px) {
@@ -350,17 +354,18 @@ html.dark .pm-table tbody tr:hover {
     font-size: 0.72rem;
     font-weight: 600;
     line-height: 1.4;
-    padding: 0.25rem 0.7rem;
-    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px !important;
     white-space: nowrap;
+    border: 1px solid transparent;
 }
 .pm-badge.active {
-    background: rgba(34, 197, 94, 0.15);
-    color: #22c55e;
+    background: #4c8a41 !important;
+    color: #ffffff !important;
 }
 .pm-badge.inactive {
-    background: color-mix(in srgb, var(--content-text-soft) 18%, transparent);
-    color: var(--content-text-soft);
+    background: #64748b !important;
+    color: #ffffff !important;
 }
 
 .pm-actions {
@@ -375,28 +380,28 @@ html.dark .pm-table tbody tr:hover {
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    border: 1px solid var(--content-border);
+    border: 1px solid var(--border);
     background: transparent;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: none !important;
     transition:
         color 0.12s ease,
         border-color 0.12s ease;
 }
 .pm-icon-btn:hover {
-    color: var(--content-text);
-    border-color: var(--teal);
+    color: var(--primary-dark);
+    border-color: var(--primary);
 }
 .pm-icon-btn.danger:hover {
-    color: var(--danger);
-    border-color: var(--danger);
+    color: #dc2626;
+    border-color: #dc2626;
 }
 
 .pm-empty {
     padding: 3.5rem 1.5rem;
     text-align: center;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     font-size: 0.875rem;
     line-height: 1.5;
 }
@@ -404,25 +409,26 @@ html.dark .pm-table tbody tr:hover {
 .pm-add-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    background: var(--teal);
+    background: #4c8a41;
     color: #fff;
     font-size: 0.85rem;
     font-weight: 600;
     line-height: 1.4;
     padding: 0.55rem 1rem;
     border-radius: 6px;
-    text-decoration: none;
+    text-decoration: none !important;
     white-space: nowrap;
     transition: background 0.12s ease;
 }
 .pm-add-btn:hover {
-    background: var(--teal-dark);
+    background: #3d7034;
 }
 
 .pm-pagination {
     padding: 1rem 1.5rem;
-    border-top: 1px solid var(--content-border);
+    border-top: 1px solid var(--border);
 }
 
 .pm-toast {
@@ -440,7 +446,7 @@ html.dark .pm-table tbody tr:hover {
     font-weight: 500;
     line-height: 1.4;
     color: #fff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transform: translateY(-12px);
     opacity: 0;
     transition:
@@ -456,14 +462,13 @@ html.dark .pm-table tbody tr:hover {
     background: #1f9d6b;
 }
 .pm-toast.error {
-    background: var(--danger, #dc2626);
+    background: #dc2626;
 }
 
 .pm-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(17, 24, 21, 0.5);
-    backdrop-filter: blur(2px);
+    background: rgba(16, 28, 44, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -479,17 +484,14 @@ html.dark .pm-table tbody tr:hover {
     visibility: visible;
 }
 .pm-modal {
-    background: var(--content-surface);
-    border: 1px solid var(--content-border);
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     padding: 1.75rem 1.75rem 1.5rem;
     width: 100%;
     max-width: 336px;
     text-align: center;
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 12px 28px -6px rgba(0, 0, 0, 0.22),
-        0 24px 48px -12px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     transform: translateY(6px) scale(0.98);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -499,9 +501,9 @@ html.dark .pm-table tbody tr:hover {
 .pm-modal-icon {
     width: 38px;
     height: 38px;
-    border-radius: 9px;
-    background: color-mix(in srgb, var(--danger, #dc2626) 10%, transparent);
-    color: var(--danger, #dc2626);
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #dc2626;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -513,18 +515,18 @@ html.dark .pm-table tbody tr:hover {
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.35;
-    color: var(--content-text);
+    color: var(--text-primary);
     margin: 0 0 0.5rem;
 }
 .pm-modal-text {
     font-family: "poppins", sans-serif;
     font-size: 0.8125rem;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     line-height: 1.55;
     margin: 0 0 1.5rem;
 }
 .pm-modal-text strong {
-    color: var(--content-text);
+    color: var(--text-primary);
     font-weight: 600;
 }
 .pm-modal-actions {
@@ -534,7 +536,7 @@ html.dark .pm-table tbody tr:hover {
 }
 .pm-modal-actions button {
     padding: 0.55rem 1.15rem;
-    border-radius: 7px;
+    border-radius: 6px;
     font-family: "poppins", sans-serif;
     font-size: 0.8125rem;
     font-weight: 500;
@@ -546,20 +548,21 @@ html.dark .pm-table tbody tr:hover {
         border-color 0.12s ease;
 }
 .pm-modal-cancel {
-    background: transparent;
-    border-color: var(--content-border);
-    color: var(--content-text-soft);
+    background: #ffffff;
+    border-color: var(--border);
+    color: var(--text-primary);
 }
 .pm-modal-cancel:hover {
-    background: var(--content-bg);
-    color: var(--content-text);
+    background: #f1f8f4;
+    border-color: var(--primary);
+    color: var(--primary-dark);
 }
 .pm-modal-confirm {
-    background: var(--danger, #dc2626);
+    background: #dc2626;
     color: #fff;
 }
 .pm-modal-confirm:hover {
-    background: color-mix(in srgb, var(--danger, #dc2626) 85%, black);
+    background: #b91c1c;
 }
 .pm-modal-confirm:active {
     transform: scale(0.98);

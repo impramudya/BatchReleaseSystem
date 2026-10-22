@@ -70,8 +70,8 @@
 .um-field input:focus-visible,
 .um-field select:focus-visible {
     outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 138, 65, 0.18);
 }
 
 .um-field-row {
@@ -87,7 +87,7 @@
 
 .um-error {
     font-size: 0.78rem;
-    color: var(--danger);
+    color: #dc2626;
     margin: 0.35rem 0 0;
 }
 
@@ -96,8 +96,8 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1.1rem 1.4rem;
-    border-top: 1px solid var(--content-border);
-    background: var(--content-bg);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
 }
 
 .um-btn-primary {
@@ -105,27 +105,29 @@
     font-size: 0.88rem;
     font-weight: 600;
     color: #fff;
-    background: var(--teal);
+    background: #4c8a41;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    text-decoration: none !important;
 }
 .um-btn-primary:hover {
-    background: var(--teal-dark);
+    background: #3d7034;
 }
 
 .um-btn-ghost {
     padding: 0.62rem 1.1rem;
     font-size: 0.88rem;
-    color: var(--content-text-soft);
-    background: transparent;
-    border: 1px solid var(--content-border);
-    border-radius: 5px;
-    text-decoration: none;
+    color: var(--text-primary);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none !important;
 }
 .um-btn-ghost:hover {
-    color: var(--content-text);
-    border-color: var(--teal);
+    color: var(--primary-dark);
+    background: #f1f8f4;
+    border-color: var(--primary);
 }
 
 .um-breadcrumb {
@@ -303,17 +305,21 @@ html.dark .um-avatar {
 
 .um-role {
     display: inline-block;
-    font-family: "poppins", monospace;
-    font-size: 0.68rem;
+    font-family: "poppins", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--teal-dark);
-    border: 1px solid var(--teal);
+    color: #3d7034;
+    background: #edf5e9;
+    border: 1px solid #d4e7cd;
     padding: 0.2rem 0.55rem;
-    border-radius: 999px;
+    border-radius: 6px;
 }
 html.dark .um-role {
-    color: #7fd6cf;
+    color: #87bd40;
+    background: rgba(76, 138, 65, 0.2);
+    border-color: #4c8a41;
 }
 
 .um-status {
@@ -325,7 +331,7 @@ html.dark .um-role {
 .um-status .dot {
     width: 6px;
     height: 6px;
-    border-radius: 999px;
+    border-radius: 50%;
     background: #1f9d6b;
     flex-shrink: 0;
 }
@@ -397,14 +403,14 @@ html.dark .um-role {
     justify-content: center;
     gap: 0.45rem;
     height: 38px;
-    background: var(--teal);
+    background: #4c8a41;
     color: #fff;
     font-size: 0.85rem;
     font-weight: 600;
     line-height: 1;
     padding: 0 1rem;
     border-radius: 6px;
-    text-decoration: none;
+    text-decoration: none !important;
     white-space: nowrap;
 }
 .um-add-btn svg {
@@ -413,12 +419,12 @@ html.dark .um-role {
     flex-shrink: 0;
 }
 .um-add-btn:hover {
-    background: var(--teal-dark);
+    background: #3d7034;
 }
 
 .um-pagination {
     padding: 1rem 1.4rem;
-    border-top: 1px solid var(--content-border);
+    border-top: 1px solid var(--border);
 }
 
 /* Toast notification */
@@ -436,7 +442,7 @@ html.dark .um-role {
     font-size: 0.85rem;
     font-weight: 500;
     color: #fff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transform: translateY(-12px);
     opacity: 0;
     transition: all 0.25s ease;
@@ -450,7 +456,7 @@ html.dark .um-role {
     background: #1f9d6b;
 }
 .um-toast.error {
-    background: var(--danger, #dc2626);
+    background: #dc2626;
 }
 .um-toast svg {
     flex-shrink: 0;
@@ -460,8 +466,7 @@ html.dark .um-role {
 .um-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(17, 24, 21, 0.5);
-    backdrop-filter: blur(2px);
+    background: rgba(16, 28, 44, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -477,17 +482,14 @@ html.dark .um-role {
     visibility: visible;
 }
 .um-modal {
-    background: var(--content-surface);
-    border: 1px solid var(--content-border);
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     padding: 1.75rem 1.75rem 1.5rem;
     width: 100%;
     max-width: 336px;
     text-align: center;
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 12px 28px -6px rgba(0, 0, 0, 0.22),
-        0 24px 48px -12px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     transform: translateY(6px) scale(0.98);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -497,9 +499,9 @@ html.dark .um-role {
 .um-modal-icon {
     width: 38px;
     height: 38px;
-    border-radius: 9px;
-    background: color-mix(in srgb, var(--danger, #dc2626) 10%, transparent);
-    color: var(--danger, #dc2626);
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #dc2626;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -510,18 +512,18 @@ html.dark .um-role {
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--content-text);
+    color: var(--text-primary);
     margin: 0 0 0.35rem;
 }
 .um-modal-text {
     font-family: "poppins", sans-serif;
     font-size: 0.8125rem;
-    color: var(--content-text-soft);
+    color: var(--text-secondary);
     line-height: 1.55;
     margin: 0 0 1.5rem;
 }
 .um-modal-text strong {
-    color: var(--content-text);
+    color: var(--text-primary);
     font-weight: 600;
 }
 .um-modal-actions {
@@ -531,7 +533,7 @@ html.dark .um-role {
 }
 .um-modal-actions button {
     padding: 0.5rem 1.1rem;
-    border-radius: 7px;
+    border-radius: 6px;
     font-family: "poppins", sans-serif;
     font-size: 0.8125rem;
     font-weight: 500;
@@ -542,20 +544,21 @@ html.dark .um-role {
         border-color 0.12s ease;
 }
 .um-modal-cancel {
-    background: transparent;
-    border-color: var(--content-border);
-    color: var(--content-text-soft);
+    background: #ffffff;
+    border-color: var(--border);
+    color: var(--text-primary);
 }
 .um-modal-cancel:hover {
-    background: var(--content-bg);
-    color: var(--content-text);
+    background: #f1f8f4;
+    border-color: var(--primary);
+    color: var(--primary-dark);
 }
 .um-modal-confirm {
-    background: var(--danger, #dc2626);
+    background: #dc2626;
     color: #fff;
 }
 .um-modal-confirm:hover {
-    background: color-mix(in srgb, var(--danger, #dc2626) 85%, black);
+    background: #b91c1c;
 }
 .um-modal-confirm:active {
     transform: scale(0.98);
