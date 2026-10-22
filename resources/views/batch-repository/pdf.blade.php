@@ -526,24 +526,38 @@
         $supApproval = $batch->approvals->firstWhere('step', 'supervisor');
         $mgrApproval = $batch->approvals->firstWhere('step', 'manager');
 
+        $supInitial = $supApproval?->user?->initial 
+            ?: $batch->supervisor?->initial 
+            ?: ($supApproval?->user_name ? strtoupper(substr($supApproval->user_name, 0, 3)) : 'SPV');
+
+        $mgrInitial = $mgrApproval?->user?->initial 
+            ?: $batch->manager?->initial 
+            ?: ($mgrApproval?->user_name ? strtoupper(substr($mgrApproval->user_name, 0, 3)) : 'MGR');
+
         $approvalNotes = [];
         if (!empty(trim($supApproval?->note ?? ''))) {
-            $approvalNotes[] = 'Supervisor: ' . trim($supApproval->note);
+            $approvalNotes[] = $supInitial . ': ' . trim($supApproval->note);
         }
         if (!empty(trim($mgrApproval?->note ?? ''))) {
-            $approvalNotes[] = 'Manager: ' . trim($mgrApproval->note);
+            $approvalNotes[] = $mgrInitial . ': ' . trim($mgrApproval->note);
         }
         if (empty($approvalNotes) && !empty(trim($batch->keterangan ?? ''))) {
             $approvalNotes[] = trim($batch->keterangan);
         }
 
-        $adminName = $batch->creator->name 
+        $adminName = $batch->creator_name 
+            ?? $adminApproval?->user_name 
+            ?? $batch->creator?->name 
             ?? $adminApproval?->user?->name 
             ?? 'Admin';
-        $supervisorName = $batch->supervisor->name 
+        $supervisorName = $batch->supervisor_name 
+            ?? $supApproval?->user_name 
+            ?? $batch->supervisor?->name 
             ?? $supApproval?->user?->name 
             ?? 'Supervisor';
-        $managerName = $batch->manager->name 
+        $managerName = $batch->manager_name 
+            ?? $mgrApproval?->user_name 
+            ?? $batch->manager?->name 
             ?? $mgrApproval?->user?->name 
             ?? 'Manager';
 

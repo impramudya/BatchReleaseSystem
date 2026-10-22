@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AuditTrailExport;
+use App\Models\ActivityLog;
 use App\Models\Batch;
 use App\Models\BatchApproval;
 use App\Models\LoginLog;
@@ -29,6 +30,12 @@ class AuditTrailController extends Controller
             $currentPage,
             ['path' => $request->url(), 'query' => $request->query()]
         );
+
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+            return view('audit-trail.partials.table-content', [
+                'logs' => $paginator,
+            ]);
+        }
 
         return view('audit-trail.index', [
             'logs' => $paginator,
@@ -73,6 +80,7 @@ class AuditTrailController extends Controller
         $f = $this->filters($request);
 
         $batches = Batch::query()
+            ->with(['creator'])
             ->when($f['dateFrom'], fn($q) => $q->whereDate('created_at', '>=', $f['dateFrom']))
             ->when($f['dateTo'], fn($q) => $q->whereDate('created_at', '<=', $f['dateTo']))
             ->when($f['userId'], fn($q) => $q->where('created_by', $f['userId']))
@@ -84,26 +92,30 @@ class AuditTrailController extends Controller
                     'time' => $batch->created_at,
                     'user' => $creator?->name ?? '-',
                     'action' => 'create',
-                    'action_label' => 'Buat Form',
-                    'detail' => 'Batch #' . $batch->id . ' dibuat',
+                    'action_label' => 'Create Form',
+                    'detail' => $batch->batch_number ?: ('#' . $batch->id),
                 ];
             });
 
         $approvals = BatchApproval::query()
             ->with(['user', 'batch'])
             ->whereNotNull('acted_at')
+            ->where('step', '!=', 'admin')
             ->when($f['dateFrom'], fn($q) => $q->whereDate('acted_at', '>=', $f['dateFrom']))
             ->when($f['dateTo'], fn($q) => $q->whereDate('acted_at', '<=', $f['dateTo']))
             ->when($f['userId'], fn($q) => $q->where('user_id', $f['userId']))
             ->get()
             ->map(function ($approval) {
+                $batch = $approval->batch;
+                $batchNum = $batch?->batch_number ?? ('#' . $approval->batch_id);
+                $detail = $batchNum . ($approval->note ? ' - Remarks: ' . $approval->note : '');
+
                 return [
                     'time' => $approval->acted_at,
                     'user' => $approval->user?->name ?? '-',
                     'action' => $approval->status,
                     'action_label' => ucfirst($approval->status) . ' (' . $approval->stepLabel() . ')',
-                    'detail' => 'Batch #' . $approval->batch_id
-                        . ($approval->note ? ' - Catatan: ' . $approval->note : ''),
+                    'detail' => $detail,
                 ];
             });
 
@@ -123,10 +135,27 @@ class AuditTrailController extends Controller
                 ];
             });
 
+        $activities = ActivityLog::query()
+            ->with('user')
+            ->when($f['dateFrom'], fn($q) => $q->whereDate('created_at', '>=', $f['dateFrom']))
+            ->when($f['dateTo'], fn($q) => $q->whereDate('created_at', '<=', $f['dateTo']))
+            ->when($f['userId'], fn($q) => $q->where('user_id', $f['userId']))
+            ->get()
+            ->map(function ($act) {
+                return [
+                    'time' => $act->created_at,
+                    'user' => $act->user?->name ?? 'System',
+                    'action' => $act->action,
+                    'action_label' => $act->action_label,
+                    'detail' => $act->details,
+                ];
+            });
+
         return (new Collection())
             ->concat($batches)
             ->concat($approvals)
             ->concat($logins)
+            ->concat($activities)
             ->when($f['action'], fn(Collection $c) => $c->where('action', $f['action']))
             ->sortByDesc('time')
             ->values();

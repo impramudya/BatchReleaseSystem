@@ -10,6 +10,16 @@
     border-radius: 6px !important;
 }
 
+/* ---------- Loading state for AJAX ---------- */
+#audit-trail-results {
+    position: relative;
+    transition: opacity 0.15s ease;
+}
+#audit-trail-results.brp-loading {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 /* ---------- Pagination (override view Laravel default) ---------- */
 .brp-pager {
     display: flex;

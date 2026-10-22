@@ -15,18 +15,18 @@
 <body>
     <h2>Audit Trail</h2>
     <p class="sub">
-        Periode:
-        {{ $filters['dateFrom'] ?? '(awal)' }} s/d {{ $filters['dateTo'] ?? '(akhir)' }}
-        &mdash; Dicetak: {{ now()->format('d/m/Y H:i') }}
+        Period:
+        {{ $filters['dateFrom'] ?? '(start)' }} to {{ $filters['dateTo'] ?? '(end)' }}
+        &mdash; Printed: {{ now()->format('d/m/Y H:i') }}
     </p>
 
     <table>
         <thead>
             <tr>
-                <th>Waktu</th>
+                <th>Timestamp</th>
                 <th>User</th>
-                <th>Aksi</th>
-                <th>Detail</th>
+                <th>Action</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" style="text-align:center;">Tidak ada data pada periode ini.</td>
+                    <td colspan="4" style="text-align:center;">No audit trail records found for this period.</td>
                 </tr>
             @endforelse
         </tbody>

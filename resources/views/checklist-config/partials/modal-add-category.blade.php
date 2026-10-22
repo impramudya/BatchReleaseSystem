@@ -1,24 +1,24 @@
-{{-- ================= MODAL: TAMBAH KATEGORI ================= --}}
+{{-- ================= MODAL: ADD CATEGORY ================= --}}
 <div class="ccfg-modal-overlay" id="modal-add-category">
     <div class="ccfg-modal-box">
-        <h3>Tambah Kategori Evaluasi</h3>
+        <h3>Add Evaluation Category</h3>
         @if ($selectedLine)
-            <p class="ccfg-modal-subtext">Untuk: {{ $selectedLine->label }}</p>
+            <p class="ccfg-modal-subtext">For: {{ $selectedLine->label }}</p>
         @endif
         <form action="{{ route('checklist-categories.store') }}" method="POST">
             @csrf
             <input type="hidden" name="production_line_id" value="{{ $selectedLine->id ?? '' }}">
             <div class="ccfg-field">
-                <label for="add-code">Kode (unik dalam line ini)</label>
-                <input type="text" id="add-code" name="code" maxlength="10" placeholder="Misal: A" required>
+                <label for="add-code">Code (unique within this line)</label>
+                <input type="text" id="add-code" name="code" maxlength="10" placeholder="E.g., A" required>
             </div>
             <div class="ccfg-field">
-                <label for="add-name">Nama Kategori</label>
-                <input type="text" id="add-name" name="name" placeholder="Misal: Prosedur Pengolahan Induk" required>
+                <label for="add-name">Category Name</label>
+                <input type="text" id="add-name" name="name" placeholder="E.g., Master Processing Procedure" required>
             </div>
             <div class="ccfg-modal-actions">
-                <button type="button" class="ccfg-btn-secondary" data-modal-close>Batal</button>
-                <button type="submit" class="ccfg-btn-primary">Simpan</button>
+                <button type="button" class="ccfg-btn-secondary" data-modal-close>Cancel</button>
+                <button type="submit" class="ccfg-btn-primary">Save</button>
             </div>
         </form>
     </div>

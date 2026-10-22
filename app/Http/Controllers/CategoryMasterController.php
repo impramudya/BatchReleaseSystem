@@ -40,7 +40,7 @@ class CategoryMasterController extends Controller
 
         return redirect()
             ->route('category-master.index')
-            ->with('status', 'Kategori produk berhasil ditambahkan.');
+            ->with('status', 'Product category successfully added.');
     }
 
     public function edit(Category $category)
@@ -62,7 +62,7 @@ class CategoryMasterController extends Controller
 
         return redirect()
             ->route('category-master.index')
-            ->with('status', 'Kategori produk berhasil diperbarui.');
+            ->with('status', 'Product category successfully updated.');
     }
 
     public function destroy(Category $category)
@@ -70,13 +70,13 @@ class CategoryMasterController extends Controller
         if ($category->products()->exists()) {
             return redirect()
                 ->route('category-master.index')
-                ->with('error', 'Kategori tidak bisa dihapus karena masih dipakai oleh produk.');
+                ->with('error', 'Category cannot be deleted because it is still in use by products.');
         }
 
         $category->delete();
 
         return redirect()
             ->route('category-master.index')
-            ->with('status', 'Kategori produk berhasil dihapus.');
+            ->with('status', 'Product category successfully deleted.');
     }
 }

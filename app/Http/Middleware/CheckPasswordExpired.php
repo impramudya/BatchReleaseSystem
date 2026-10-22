@@ -13,13 +13,21 @@ class CheckPasswordExpired
 
         if ($user && ! $request->routeIs('password.change', 'password.change.update', 'logout')) {
             $changedAt = $user->password_changed_at;
+            $isFirstLogin = is_null($changedAt);
+            $isExpired = $changedAt && now()->diffInDays($changedAt) >= 60;
 
-            if (is_null($changedAt)) {
-                session()->flash('force_password_change', true);
-                session()->flash('password_change_reason', 'first_login');
-            } elseif (now()->diffInDays($changedAt) >= 90) {
-                session()->flash('force_password_change', true);
-                session()->flash('password_change_reason', 'expired');
+            if ($isFirstLogin || $isExpired) {
+                if ($request->routeIs('dashboard')) {
+                    session()->flash('force_password_change', true);
+                    session()->flash('password_change_reason', $isFirstLogin ? 'first_login' : 'expired');
+                } else {
+                    return redirect()->route('password.change')->with(
+                        'warning',
+                        $isFirstLogin
+                            ? 'This is your first login. For security compliance, please set a new password.'
+                            : 'Your password has expired (older than 60 days). Please update your password to continue.'
+                    );
+                }
             }
         }
 

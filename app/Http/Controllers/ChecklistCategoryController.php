@@ -29,7 +29,7 @@ class ChecklistCategoryController extends Controller
 
         return redirect()
             ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
-            ->with('status', 'Kategori evaluasi berhasil ditambahkan.');
+            ->with('status', 'Evaluation category successfully added.');
     }
 
     public function update(Request $request, ChecklistCategory $category): RedirectResponse
@@ -43,7 +43,7 @@ class ChecklistCategoryController extends Controller
             ],
             'name' => ['required', 'string', 'max:255'],
         ], [
-            'code.unique' => 'Kode kategori ini sudah dipakai di line yang sama, gunakan kode lain.',
+            'code.unique' => 'This category code is already used in this production line. Please choose another code.',
         ]);
 
         $category->update($validated);
@@ -51,7 +51,7 @@ class ChecklistCategoryController extends Controller
 
         return redirect()
             ->route('checklist-config.index', ['line' => $category->productionLine, 'category' => $category])
-            ->with('status', 'Kategori evaluasi berhasil diperbarui.');
+            ->with('status', 'Evaluation category successfully updated.');
     }
 
     public function destroy(ChecklistCategory $category): RedirectResponse
@@ -61,6 +61,6 @@ class ChecklistCategoryController extends Controller
 
         return redirect()
             ->route('checklist-config.index', ['line' => $line])
-            ->with('status', 'Kategori evaluasi beserta pertanyaannya berhasil dihapus.');
+            ->with('status', 'Evaluation category and its questions were successfully deleted.');
     }
 }

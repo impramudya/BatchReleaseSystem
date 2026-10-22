@@ -32,6 +32,13 @@ class BatchRepositoryController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+            return view('batch-repository.partials.table-content', [
+                'batches' => $batches,
+                'filters' => $filters,
+            ]);
+        }
+
         return view('batch-repository.index', [
             'batches' => $batches,
             'filters' => $filters,
@@ -41,7 +48,7 @@ class BatchRepositoryController extends Controller
     public function show(Batch $batch, Request $request)
     {
         if ($batch->status === 'draft' && optional($request->user())->role !== 'Admin') {
-            abort(403, 'Draft hanya bisa dilihat oleh Admin.');
+            abort(403, 'Drafts can only be viewed by an Admin.');
         }
 
         $batch->load([

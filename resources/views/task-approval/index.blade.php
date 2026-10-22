@@ -54,7 +54,7 @@
                             <td class="brp-cell-strong">{{ $batch->batch_number }}</td>
                             <td><span class="{{ $batch->lineBadgeClass() }}">{{ $batch->lineLabel() }}</span></td>
                             <td>{{ $batch->product->name ?? '-' }}</td>
-                            <td>{{ $batch->creator->name ?? '-' }}</td>
+                            <td>{{ $batch->creator_display_name }}</td>
                             <td>{{ $batch->created_at?->format('d M Y, H:i') }}</td>
                             <td><span class="{{ $batch->statusBadgeClass() }}">{{ $batch->statusLabel() }}</span></td>
                             <td class="tap-actions">
@@ -100,37 +100,37 @@
                 <div id="tap-spv-fields" style="display: none; margin-bottom: 1.1rem;">
                     {{-- 1. Laporan Penyimpangan --}}
                     <div class="tap-field-group">
-                        <label class="tap-label-strong">Laporan Penyimpangan*</label>
+                        <label class="tap-label-strong">Deviation Report*</label>
                         <div class="tap-radio-group">
                             <label class="tap-radio-label">
                                 <input type="radio" name="laporan_penyimpangan" value="tidak" checked id="radio-penyimpangan-tidak">
-                                <span>Tidak</span>
+                                <span>No</span>
                             </label>
                             <label class="tap-radio-label">
                                 <input type="radio" name="laporan_penyimpangan" value="ada" id="radio-penyimpangan-ada">
-                                <span>Ada</span>
+                                <span>Yes</span>
                             </label>
                         </div>
 
                         <div id="wrap-penyimpangan-table" style="display: none; margin-top: 0.6rem;">
-                            <p class="tap-sub-label">Jika Ada :</p>
+                            <p class="tap-sub-label">If Yes :</p>
                             <table class="tap-inner-table" id="table-penyimpangan">
                                 <thead>
                                     <tr>
-                                        <th style="width: 48%;">No. Penyimpangan</th>
-                                        <th style="width: 44%;">Status Penyimpangan</th>
+                                        <th style="width: 48%;">Deviation No.</th>
+                                        <th style="width: 44%;">Deviation Status</th>
                                         <th style="width: 8%; text-align: center;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-penyimpangan">
                                     <tr>
-                                        <td><input type="text" name="penyimpangan_nomor[]" placeholder="Contoh: DEV/2026/001" class="tap-input-sm"></td>
-                                        <td><input type="text" name="penyimpangan_status[]" placeholder="Contoh: Closed" class="tap-input-sm"></td>
-                                        <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Hapus baris">&times;</button></td>
+                                        <td><input type="text" name="penyimpangan_nomor[]" placeholder="E.g., DEV/2026/001" class="tap-input-sm"></td>
+                                        <td><input type="text" name="penyimpangan_status[]" placeholder="E.g., Closed" class="tap-input-sm"></td>
+                                        <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Remove row">&times;</button></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button type="button" class="tap-btn-add-row" id="btn-add-penyimpangan">+ Tambah Baris</button>
+                            <button type="button" class="tap-btn-add-row" id="btn-add-penyimpangan">+ Add Row</button>
                         </div>
                         <div id="wrap-penyimpangan-na" style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem;">
                             <em>Status auto-fill: N/A</em>
@@ -143,33 +143,33 @@
                         <div class="tap-radio-group">
                             <label class="tap-radio-label">
                                 <input type="radio" name="change_control" value="tidak" checked id="radio-cc-tidak">
-                                <span>Tidak</span>
+                                <span>No</span>
                             </label>
                             <label class="tap-radio-label">
                                 <input type="radio" name="change_control" value="ada" id="radio-cc-ada">
-                                <span>Ada</span>
+                                <span>Yes</span>
                             </label>
                         </div>
 
                         <div id="wrap-cc-table" style="display: none; margin-top: 0.6rem;">
-                            <p class="tap-sub-label">Jika Ada :</p>
+                            <p class="tap-sub-label">If Yes :</p>
                             <table class="tap-inner-table" id="table-cc">
                                 <thead>
                                     <tr>
-                                        <th style="width: 48%;">No. FUP</th>
-                                        <th style="width: 44%;">Status FUP</th>
+                                        <th style="width: 48%;">FUP No.</th>
+                                        <th style="width: 44%;">FUP Status</th>
                                         <th style="width: 8%; text-align: center;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-cc">
                                     <tr>
-                                        <td><input type="text" name="change_control_nomor[]" placeholder="Contoh: FUP/2026/001" class="tap-input-sm"></td>
-                                        <td><input type="text" name="change_control_status[]" placeholder="Contoh: Closed" class="tap-input-sm"></td>
-                                        <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Hapus baris">&times;</button></td>
+                                        <td><input type="text" name="change_control_nomor[]" placeholder="E.g., FUP/2026/001" class="tap-input-sm"></td>
+                                        <td><input type="text" name="change_control_status[]" placeholder="E.g., Closed" class="tap-input-sm"></td>
+                                        <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Remove row">&times;</button></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button type="button" class="tap-btn-add-row" id="btn-add-cc">+ Tambah Baris</button>
+                            <button type="button" class="tap-btn-add-row" id="btn-add-cc">+ Add Row</button>
                         </div>
                         <div id="wrap-cc-na" style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem;">
                             <em>Status auto-fill: N/A</em>

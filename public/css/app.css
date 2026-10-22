@@ -88,6 +88,8 @@ body.brp-body {
     background: var(--content-bg);
     color: var(--content-text);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .brp-icon {
@@ -115,8 +117,41 @@ body.brp-body {
 }
 
 .brp-logo-block {
-    padding: 1.5rem 1.4rem 1.25rem;
+    padding: 1.25rem 1.4rem;
     border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+}
+
+.brp-logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+
+.brp-logo-link:hover {
+    opacity: 0.85;
+}
+
+.brp-brand-logo {
+    height: 52px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.brp-brand-logo-dark {
+    display: none;
+}
+
+html.dark .brp-brand-logo-light {
+    display: none;
+}
+
+html.dark .brp-brand-logo-dark {
+    display: block;
 }
 
 .brp-logo {
@@ -234,15 +269,22 @@ body.brp-body {
 
 .brp-nav-badge {
     margin-left: auto;
-    background: var(--primary);
-    color: var(--text-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 0.45rem;
+    background: #ef4444 !important;
+    color: #ffffff !important;
     font-family: "Poppins", sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     line-height: 1;
-    padding: 0.22rem 0.45rem;
-    border-radius: 6px;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4);
 }
+
 
 /* Submenu / Accordion */
 .brp-nav-parent {
@@ -395,6 +437,39 @@ body.brp-body {
     background: var(--surface-hover);
 }
 
+.brp-user-menu-divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: 0.35rem 0.25rem;
+}
+
+.brp-user-menu-logout {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.brp-user-menu-logout:hover {
+    color: #e53e3e;
+    background: #fff5f5;
+}
+
+html.dark .brp-user-menu-logout:hover {
+    color: #fc8181;
+    background: rgba(229, 62, 62, 0.15);
+}
+
 .brp-theme-icons {
     display: flex;
     align-items: center;
@@ -419,6 +494,8 @@ html.dark .icon-moon {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-width: 0;
+    max-width: calc(100vw - 15.75rem);
 }
 
 .brp-header {
@@ -504,6 +581,33 @@ html.dark .icon-moon {
     flex: 1;
     padding: 1.75rem 2rem;
     background: var(--bg-main);
+    min-width: 0;
+    max-width: 100%;
+}
+
+.brp-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.brp-footer-left,
+.brp-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
 }
 
 /* ==========================================================================
@@ -739,6 +843,7 @@ textarea:focus {
     }
     .brp-main {
         margin-left: 0;
+        max-width: 100%;
     }
     .brp-hamburger {
         display: flex;
@@ -749,11 +854,119 @@ textarea:focus {
     .brp-content {
         padding: 1.25rem;
     }
+    .brp-footer {
+        padding: 0.85rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
 }
 
 /* ==========================================================================
-   GLOBAL PAGINATION COMPONENT (.brp-pager)
+   MINIMALIST GLOBAL PAGINATION COMPONENT (.brp-pager-minimal)
    ========================================================================== */
+.brp-pagination {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+.brp-pager-minimal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-family: "Poppins", sans-serif;
+    min-height: 32px;
+}
+.brp-pager-info {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+}
+.brp-pager-highlight {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.brp-pager-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.brp-pager-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-primary);
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.brp-pager-btn svg {
+    width: 14px;
+    height: 14px;
+}
+a.brp-pager-btn:hover {
+    border-color: var(--primary);
+    background: #f1f8f4;
+    color: var(--primary-dark);
+}
+[data-theme="dark"] a.brp-pager-btn:hover {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: var(--primary);
+    color: #4ade80;
+}
+.brp-pager-btn.brp-pager-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+.brp-pager-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-family: "Poppins", sans-serif;
+    padding: 0 0.35rem;
+    user-select: none;
+}
+.brp-pager-curr {
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 10px;
+    text-align: right;
+}
+.brp-pager-sep {
+    color: var(--text-secondary);
+    opacity: 0.55;
+    font-size: 0.85rem;
+}
+.brp-pager-total {
+    color: var(--text-secondary);
+    min-width: 10px;
+}
+
+/* AJAX Loading State for Seamless Updates */
+.brp-loading {
+    position: relative;
+    pointer-events: none;
+}
+.brp-loading .brp-table-wrap,
+.brp-loading .brp-pagination {
+    opacity: 0.45;
+    transition: opacity 0.18s ease;
+}
+
+/* Legacy pagination fallback (.brp-pager) */
 .brp-pager {
     display: flex;
     flex-wrap: wrap;

@@ -43,7 +43,7 @@ class ProductMasterController extends Controller
 
         return redirect()
             ->route('product-master.index')
-            ->with('status', 'Produk berhasil ditambahkan.');
+            ->with('status', 'Product successfully added.');
     }
 
     public function edit(Product $product)
@@ -67,7 +67,7 @@ class ProductMasterController extends Controller
 
         return redirect()
             ->route('product-master.index')
-            ->with('status', 'Produk berhasil diperbarui.');
+            ->with('status', 'Product successfully updated.');
     }
 
     public function destroy(Product $product)
@@ -76,6 +76,6 @@ class ProductMasterController extends Controller
 
         return redirect()
             ->route('product-master.index')
-            ->with('status', 'Produk berhasil dihapus.');
+            ->with('status', 'Product successfully deleted.');
     }
 }

@@ -89,12 +89,12 @@
     display: block;
     width: 100%;
     background: var(--teal);
-    color: var(--paper);
+    color: #ffffff !important;
     font-family: "Poppins", sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
-    padding: 0.6rem 0;
+    padding: 0.65rem 0;
     border-radius: 6px;
     transition:
         background 0.15s ease,
@@ -103,9 +103,11 @@
 
 .brp-modal-btn:hover {
     background: var(--teal-dark);
+    color: #ffffff !important;
 }
 .brp-modal-btn:active {
     transform: scale(0.98);
+    color: #ffffff !important;
 }
 
 @media (max-width: 480px) {

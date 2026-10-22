@@ -71,3 +71,14 @@
         });
     });
 })();
+
+(function () {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isDark = document.documentElement.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+})();

@@ -179,6 +179,10 @@ class BatchFormController extends Controller
                 $nomorLaporan = null;
             }
 
+            $supervisorUser = User::find($validated['supervisor_id']);
+            $managerUser = User::find($validated['manager_id']);
+            $currentUserName = $request->user()?->name;
+
             $batch->update([
                 'product_id' => $validated['product_id'],
                 'batch_number' => $validated['batch_number'],
@@ -187,7 +191,10 @@ class BatchFormController extends Controller
                 'production_line_id' => $validated['production_line_id'],
                 'batch_date' => $validated['batch_date'],
                 'supervisor_id' => $validated['supervisor_id'],
+                'supervisor_name' => $supervisorUser?->name,
                 'manager_id' => $validated['manager_id'],
+                'manager_name' => $managerUser?->name,
+                'creator_name' => $batch->creator_name ?? $currentUserName,
                 'keterangan' => $validated['keterangan'] ?? $batch->keterangan ?? null,
                 'batch_validasi' => $isBatchValidasi,
                 'laporan_validasi' => $laporanValidasi,
@@ -237,6 +244,7 @@ class BatchFormController extends Controller
                         'step' => 'admin',
                         'order_no' => 1,
                         'user_id' => $request->user()?->id,
+                        'user_name' => $currentUserName,
                         'status' => 'approved',
                         'note' => null,
                         'acted_at' => $now,
@@ -248,6 +256,7 @@ class BatchFormController extends Controller
                         'step' => 'supervisor',
                         'order_no' => 2,
                         'user_id' => $validated['supervisor_id'],
+                        'user_name' => $supervisorUser?->name,
                         'status' => 'pending',
                         'note' => null,
                         'acted_at' => null,
@@ -259,6 +268,7 @@ class BatchFormController extends Controller
                         'step' => 'manager',
                         'order_no' => 3,
                         'user_id' => $validated['manager_id'],
+                        'user_name' => $managerUser?->name,
                         'status' => 'pending',
                         'note' => null,
                         'acted_at' => null,
@@ -269,19 +279,23 @@ class BatchFormController extends Controller
 
                 // Notif ke supervisor yang dipilih di form ini
                 if ($supervisor = User::find($validated['supervisor_id'])) {
-                    $supervisor->notify(new BatchStatusNotification(
-                        $batch,
-                        "Batch #{$batch->batch_number} butuh approval kamu",
-                        "Batch #{$batch->batch_number} baru disubmit dan menunggu approval Supervisor.",
-                        route('task-approval.index')
-                    ));
+                    try {
+                        $supervisor->notify(new BatchStatusNotification(
+                            $batch,
+                            "[Action Required] Batch #{$batch->batch_number} - Approval Required",
+                            "A batch release form (#{$batch->batch_number}) has been submitted by " . ($request->user()?->name ?? 'Admin') . " and is awaiting your review and approval.",
+                            route('task-approval.index')
+                        ));
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error('Failed sending email to supervisor: ' . $e->getMessage());
+                    }
                 }
             }
         });
 
         $message = $validated['action'] === 'submit'
-            ? 'Form evaluasi berhasil disubmit ke supervisor.'
-            : 'Perubahan draft berhasil disimpan.';
+            ? 'Evaluation form successfully submitted for Supervisor review.'
+            : 'Draft changes successfully saved.';
 
         return redirect()
             ->route('dashboard')
@@ -364,6 +378,10 @@ class BatchFormController extends Controller
                 $nomorLaporan = null;
             }
 
+            $supervisorUser = User::find($validated['supervisor_id']);
+            $managerUser = User::find($validated['manager_id']);
+            $currentUserName = $request->user()?->name;
+
             $batch = Batch::create([
                 'product_id' => $validated['product_id'],
                 'batch_number' => $validated['batch_number'],
@@ -372,7 +390,9 @@ class BatchFormController extends Controller
                 'production_line_id' => $validated['production_line_id'],
                 'batch_date' => $validated['batch_date'],
                 'supervisor_id' => $validated['supervisor_id'],
+                'supervisor_name' => $supervisorUser?->name,
                 'manager_id' => $validated['manager_id'],
+                'manager_name' => $managerUser?->name,
                 'keterangan' => $validated['keterangan'] ?? null,
                 'batch_validasi' => $isBatchValidasi,
                 'laporan_validasi' => $laporanValidasi,
@@ -383,6 +403,7 @@ class BatchFormController extends Controller
                 'change_control_items' => [['nomor' => 'N/A', 'status' => 'N/A']],
                 'status' => $validated['action'] === 'submit' ? 'submitted' : 'draft',
                 'created_by' => $request->user()?->id,
+                'creator_name' => $currentUserName,
             ]);
 
             $notes = $validated['notes'] ?? [];
@@ -421,6 +442,7 @@ class BatchFormController extends Controller
                         'step' => 'admin',
                         'order_no' => 1,
                         'user_id' => $request->user()?->id,
+                        'user_name' => $currentUserName,
                         'status' => 'approved',
                         'note' => null,
                         'acted_at' => $now,
@@ -432,6 +454,7 @@ class BatchFormController extends Controller
                         'step' => 'supervisor',
                         'order_no' => 2,
                         'user_id' => $validated['supervisor_id'],
+                        'user_name' => $supervisorUser?->name,
                         'status' => 'pending',
                         'note' => null,
                         'acted_at' => null,
@@ -443,6 +466,7 @@ class BatchFormController extends Controller
                         'step' => 'manager',
                         'order_no' => 3,
                         'user_id' => $validated['manager_id'],
+                        'user_name' => $managerUser?->name,
                         'status' => 'pending',
                         'note' => null,
                         'acted_at' => null,
@@ -453,12 +477,16 @@ class BatchFormController extends Controller
 
                 // Notif ke supervisor yang dipilih di form ini
                 if ($supervisor = User::find($validated['supervisor_id'])) {
-                    $supervisor->notify(new BatchStatusNotification(
-                        $batch,
-                        "Batch #{$batch->batch_number} butuh approval kamu",
-                        "Batch #{$batch->batch_number} baru disubmit dan menunggu approval Supervisor.",
-                        route('task-approval.index')
-                    ));
+                    try {
+                        $supervisor->notify(new BatchStatusNotification(
+                            $batch,
+                            "[Action Required] Batch #{$batch->batch_number} - Approval Required",
+                            "A batch release form (#{$batch->batch_number}) has been submitted by " . ($request->user()?->name ?? 'Admin') . " and is awaiting your review and approval.",
+                            route('task-approval.index')
+                        ));
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error('Failed sending email to supervisor: ' . $e->getMessage());
+                    }
                 }
             }
 
@@ -466,8 +494,8 @@ class BatchFormController extends Controller
         });
 
         $message = $validated['action'] === 'submit'
-            ? 'Form evaluasi berhasil disubmit ke supervisor.'
-            : 'Form evaluasi berhasil disimpan sebagai draft.';
+            ? 'Evaluation form successfully submitted for Supervisor review.'
+            : 'Evaluation form successfully saved as draft.';
 
         return redirect()
             ->route('dashboard')

@@ -4,28 +4,9 @@
 @section('page-title', 'Dashboard')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=4">
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
 @endpush
-
-@section('header-actions')
-<a href="{{ route('batch-repository.index') }}" class="brp-btn brp-btn-ghost">
-    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="8.5" cy="8.5" r="5.5" />
-        <path d="M17 17l-4.3-4.3" />
-    </svg>
-    Search Batches
-</a>
-
-@if (in_array(auth()->user()->role ?? null, ['Super Admin', 'Admin']))
-<a href="{{ route('batch-form.create') }}" class="brp-btn brp-btn-primary">
-    <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M10 4v12M4 10h12" />
-    </svg>
-    Create Form
-</a>
-@endif
-@endsection
 
 @section('content')
 
@@ -53,6 +34,7 @@ $segments = [
     <input type="hidden" name="status" value="{{ $quickFilters['status'] ?? '' }}">
     <input type="hidden" name="date_from" value="{{ $quickFilters['date_from'] ?? '' }}">
     <input type="hidden" name="date_to" value="{{ $quickFilters['date_to'] ?? '' }}">
+    <input type="hidden" name="per_page" value="{{ $perPage ?? 5 }}">
 </form>
 
 {{-- ============ STAT CARDS ============ --}}
@@ -177,8 +159,11 @@ $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
         </div>
     </div>
 
-    <form method="GET" action="{{ route('dashboard') }}" class="brp-filter-bar">
-        <input type="text" name="q" value="{{ $quickFilters['q'] ?? '' }}" placeholder="Search batch no / product...">
+    <form method="GET" action="{{ route('dashboard') }}" class="brp-filter-bar" id="recent-batches-filter">
+        @if (!empty($selectedYear))
+        <input type="hidden" name="year" value="{{ $selectedYear }}">
+        @endif
+        <input type="text" name="q" value="{{ $quickFilters['q'] ?? '' }}" placeholder="Search batch no / product..." autocomplete="off">
         <select name="status">
             <option value="">All Statuses</option>
             <option value="draft" {{ ($quickFilters['status'] ?? '') === 'draft' ? 'selected' : '' }}>Draft</option>
@@ -187,64 +172,19 @@ $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
             <option value="released" {{ ($quickFilters['status'] ?? '') === 'released' ? 'selected' : '' }}>Released</option>
             <option value="rejected" {{ ($quickFilters['status'] ?? '') === 'rejected' ? 'selected' : '' }}>Rejected</option>
         </select>
-        <input type="date" name="date_from" value="{{ $quickFilters['date_from'] ?? '' }}">
-        <input type="date" name="date_to" value="{{ $quickFilters['date_to'] ?? '' }}">
-        <button type="submit" class="brp-btn-primary">Filter</button>
-        @if (($quickFilters['q'] ?? null) || ($quickFilters['status'] ?? null) || ($quickFilters['date_from'] ?? null) || ($quickFilters['date_to'] ?? null))
-        <a href="{{ route('dashboard') }}" class="brp-btn-outline">Reset</a>
-        @endif
+        <input type="date" name="date_from" value="{{ $quickFilters['date_from'] ?? '' }}" title="From Date">
+        <input type="date" name="date_to" value="{{ $quickFilters['date_to'] ?? '' }}" title="To Date">
+        <select name="per_page" title="Show rows per page">
+            <option value="5" {{ ($perPage ?? 5) == 5 ? 'selected' : '' }}>5 rows</option>
+            <option value="10" {{ ($perPage ?? 5) == 10 ? 'selected' : '' }}>10 rows</option>
+            <option value="15" {{ ($perPage ?? 5) == 15 ? 'selected' : '' }}>15 rows</option>
+            <option value="20" {{ ($perPage ?? 5) == 20 ? 'selected' : '' }}>20 rows</option>
+        </select>
+        <a href="{{ route('dashboard', ['year' => $selectedYear]) }}" class="brp-btn-outline btn-reset-filter" id="btn-recent-reset" style="{{ (($quickFilters['q'] ?? null) || ($quickFilters['status'] ?? null) || ($quickFilters['date_from'] ?? null) || ($quickFilters['date_to'] ?? null) || ($perPage ?? 5) != 5) ? '' : 'display:none;' }}">Reset</a>
     </form>
 
-    <div class="brp-table-wrap">
-        <table class="brp-table">
-            <thead>
-                <tr>
-                    <th>Batch No</th>
-                    <th>Product Code</th>
-                    <th>Product Name</th>
-                    <th>Manufacturer</th>
-                    <th>Status</th>
-                    <th>Created Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($recentBatches as $batch)
-                <tr>
-                    <td class="brp-cell-strong">{{ $batch->batch_number }}</td>
-                    <td>{{ $batch->product->product_code ?? '-' }}</td>
-                    <td>{{ $batch->product->name ?? '-' }}</td>
-                    <td>{{ $batch->manufacturer }}</td>
-                    <td>
-                        <span class="{{ $batch->statusBadgeClass() }} brp-status-badge brp-status-{{ $batch->status }}">
-                            {{ $batch->statusLabel() }}
-                        </span>
-                    </td>
-                    <td>{{ $batch->created_at?->format('d M Y') ?? '—' }}</td>
-                    <td>
-                        @if ($batch->status === 'draft')
-                        <a href="{{ route('batch-form.edit', $batch) }}" class="brp-btn-outline">
-                            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;">
-                                <path d="M13.3 3.3a1.5 1.5 0 0 1 2.1 2.1L6 15.1l-2.8.7.7-2.8L13.3 3.3Z" /></svg>
-                            Edit
-                        </a>
-                        @else
-                        <a href="{{ route('batch-repository.show', $batch) }}" class="brp-btn-outline">
-                            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;">
-                                <path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6z" />
-                                <circle cx="10" cy="10" r="2.25" /></svg>
-                            View
-                        </a>
-                        @endif
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" class="brp-empty">No batches recorded yet.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div id="recent-batches-results">
+        @include('dashboard.partials.recent-batches-table')
     </div>
 </div>
 
@@ -256,10 +196,10 @@ $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
         <p>This is your first login. For security compliance, please change your default password.</p>
         @else
         <h3>Your Password Has Expired</h3>
-        <p>Your password has been used for more than 90 days. Please change your password to continue.</p>
+        <p>Your password has been used for more than 60 days. Please change your password to continue.</p>
         @endif
 
-        <a href="{{ route('password.change') }}" class="brp-modal-btn">
+        <a href="{{ route('password.change') }}" class="brp-modal-btn" style="color: #ffffff !important;">
             Change Password Now
         </a>
     </div>
@@ -267,3 +207,138 @@ $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
 @endif
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterForm = document.getElementById('recent-batches-filter');
+    const resultsContainer = document.getElementById('recent-batches-results');
+    const resetBtn = document.getElementById('btn-recent-reset');
+
+    if (!filterForm || !resultsContainer) return;
+
+    let debounceTimer = null;
+
+    function buildFilterUrl(page = null) {
+        const formData = new FormData(filterForm);
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+            if (value !== '' && value !== null) {
+                params.append(key, value);
+            }
+        }
+        if (page) {
+            params.set('page', page);
+        }
+        return filterForm.getAttribute('action') + '?' + params.toString();
+    }
+
+    function updateControlsVisibility() {
+        const q = filterForm.querySelector('input[name="q"]').value.trim();
+        const status = filterForm.querySelector('select[name="status"]').value;
+        const dateFrom = filterForm.querySelector('input[name="date_from"]').value;
+        const dateTo = filterForm.querySelector('input[name="date_to"]').value;
+        const perPage = filterForm.querySelector('select[name="per_page"]').value;
+
+        const isFiltered = q !== '' || status !== '' || dateFrom !== '' || dateTo !== '' || perPage !== '5';
+        if (resetBtn) {
+            resetBtn.style.display = isFiltered ? 'inline-flex' : 'none';
+        }
+    }
+
+    function loadResults(url) {
+        resultsContainer.classList.add('brp-loading');
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(function (response) {
+            if (!response.ok) throw new Error('Network error');
+            return response.text();
+        })
+        .then(function (html) {
+            resultsContainer.innerHTML = html;
+            resultsContainer.classList.remove('brp-loading');
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', url);
+            }
+            updateControlsVisibility();
+            bindPaginationLinks();
+        })
+        .catch(function (err) {
+            console.error('AJAX error:', err);
+            resultsContainer.classList.remove('brp-loading');
+            window.location.href = url;
+        });
+    }
+
+    function triggerInstantFilter() {
+        clearTimeout(debounceTimer);
+        const url = buildFilterUrl();
+        loadResults(url);
+    }
+
+    function bindPaginationLinks() {
+        const links = resultsContainer.querySelectorAll('.brp-pager-controls a, .brp-pagination a');
+        links.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    loadResults(href);
+                }
+            });
+        });
+    }
+
+    // Text search input: Live Debounced (300ms)
+    const searchInput = filterForm.querySelector('input[name="q"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+            updateControlsVisibility();
+            debounceTimer = setTimeout(function () {
+                triggerInstantFilter();
+            }, 300);
+        });
+
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                triggerInstantFilter();
+            }
+        });
+    }
+
+    // Selects and date inputs: Instant filter on change
+    const changeInputs = filterForm.querySelectorAll('select, input[type="date"]');
+    changeInputs.forEach(function (el) {
+        el.addEventListener('change', function () {
+            triggerInstantFilter();
+        });
+    });
+
+    // Reset button
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            filterForm.querySelector('input[name="q"]').value = '';
+            filterForm.querySelector('select[name="status"]').value = '';
+            filterForm.querySelector('input[name="date_from"]').value = '';
+            filterForm.querySelector('input[name="date_to"]').value = '';
+            filterForm.querySelector('select[name="per_page"]').value = '5';
+            triggerInstantFilter();
+        });
+    }
+
+    filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        triggerInstantFilter();
+    });
+
+    bindPaginationLinks();
+});
+</script>
+@endpush

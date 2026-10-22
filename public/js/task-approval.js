@@ -36,9 +36,9 @@
         if (tbodyPenyimpangan) {
             tbodyPenyimpangan.innerHTML = `
                 <tr>
-                    <td><input type="text" name="penyimpangan_nomor[]" placeholder="Contoh: DEV/2026/001" class="tap-input-sm"></td>
-                    <td><input type="text" name="penyimpangan_status[]" placeholder="Contoh: Closed" class="tap-input-sm"></td>
-                    <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Hapus baris">&times;</button></td>
+                    <td><input type="text" name="penyimpangan_nomor[]" placeholder="E.g., DEV/2026/001" class="tap-input-sm"></td>
+                    <td><input type="text" name="penyimpangan_status[]" placeholder="E.g., Closed" class="tap-input-sm"></td>
+                    <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Remove row">&times;</button></td>
                 </tr>
             `;
         }
@@ -49,9 +49,9 @@
         if (tbodyCc) {
             tbodyCc.innerHTML = `
                 <tr>
-                    <td><input type="text" name="change_control_nomor[]" placeholder="Contoh: FUP/2026/001" class="tap-input-sm"></td>
-                    <td><input type="text" name="change_control_status[]" placeholder="Contoh: Closed" class="tap-input-sm"></td>
-                    <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Hapus baris">&times;</button></td>
+                    <td><input type="text" name="change_control_nomor[]" placeholder="E.g., FUP/2026/001" class="tap-input-sm"></td>
+                    <td><input type="text" name="change_control_status[]" placeholder="E.g., Closed" class="tap-input-sm"></td>
+                    <td style="text-align: center;"><button type="button" class="tap-btn-remove-row" title="Remove row">&times;</button></td>
                 </tr>
             `;
         }
@@ -66,7 +66,7 @@
 
         if (action === "approve") {
             title.textContent = "Approve Batch";
-            noteLabel.textContent = "Catatan (opsional)";
+            noteLabel.textContent = "Remarks (optional)";
             noteInput.required = false;
             submitBtn.textContent = "Approve";
             submitBtn.className = "brp-btn-primary";
@@ -79,7 +79,7 @@
             }
         } else {
             title.textContent = "Reject Batch";
-            noteLabel.textContent = "Alasan Reject (wajib diisi)";
+            noteLabel.textContent = "Rejection Reason (required)";
             noteInput.required = true;
             submitBtn.textContent = "Reject";
             submitBtn.className = "tap-btn-reject";
@@ -187,7 +187,7 @@
     form.addEventListener("submit", function (e) {
         if (currentAction === "reject" && !noteInput.value.trim()) {
             e.preventDefault();
-            errorEl.textContent = "Alasan reject wajib diisi.";
+            errorEl.textContent = "Rejection reason is required.";
             errorEl.classList.add("show");
             return;
         }
@@ -202,7 +202,7 @@
                 });
                 if (!hasFilled) {
                     e.preventDefault();
-                    errorEl.textContent = "Jika Laporan Penyimpangan 'Ada', mohon isi minimal satu No. Penyimpangan.";
+                    errorEl.textContent = "If Deviation Report is 'Yes', please fill in at least one Deviation No.";
                     errorEl.classList.add("show");
                     return;
                 }
@@ -216,7 +216,7 @@
                 });
                 if (!hasFilledCc) {
                     e.preventDefault();
-                    errorEl.textContent = "Jika Change Control 'Ada', mohon isi minimal satu No. FUP.";
+                    errorEl.textContent = "If Change Control is 'Yes', please fill in at least one FUP No.";
                     errorEl.classList.add("show");
                     return;
                 }

@@ -21,7 +21,7 @@
 
         <div class="um-form-card">
             <div class="um-form-head">
-                <h3 class="um-form-title">Edit Pengguna</h3>
+                <h3 class="um-form-title">Edit User</h3>
                 {{-- <p class="um-form-sub">
                     Login terakhir:
                     {{ $user->last_login ? $user->last_login->format('d M Y, H:i') : 'Belum pernah login' }}
@@ -33,8 +33,8 @@
             </div>
 
             <div class="um-form-actions">
-                <button type="submit" class="um-btn-primary">Simpan Perubahan</button>
-                <a href="{{ route('user-management.index') }}" class="um-btn-ghost">Batal</a>
+                <button type="submit" class="um-btn-primary">Save Changes</button>
+                <a href="{{ route('user-management.index') }}" class="um-btn-ghost">Cancel</a>
             </div>
         </div>
     </form>

@@ -82,7 +82,7 @@
                             @endif
                             @if ($hasCheckmark && !empty($row->keterangan))
                                 <div class="brp-question-keterangan">
-                                    <span class="brp-keterangan-label">Keterangan:</span> {{ $row->keterangan }}
+                                    <span class="brp-keterangan-label">Remarks:</span> {{ $row->keterangan }}
                                 </div>
                             @endif
                         </div>
@@ -109,26 +109,26 @@
             {{-- Point: Batch Validasi --}}
             <div class="bfm-category-bar" style="margin-top: 1.5rem;">
                 <span class="bfm-category-code">{{ $validasiPointCode }}</span>
-                Batch Validasi
+                Validation Batch
             </div>
             <div style="background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 1.1rem 1.4rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
-                    <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Batch Validasi</span>
+                    <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Validation Batch</span>
                     <span class="brp-answer-pill {{ ($batch->batch_validasi ?? '') === 'ya' ? 'brp-answer-c' : 'brp-answer-na' }}">
-                        {{ strtoupper($batch->batch_validasi ?? '—') }}
+                        {{ strtoupper(($batch->batch_validasi ?? '') === 'ya' ? 'YES' : (($batch->batch_validasi ?? '') === 'tidak' ? 'NO' : ($batch->batch_validasi ?? '—'))) }}
                     </span>
                 </div>
                 @php
-                    $lapVal = ($batch->batch_validasi === 'tidak') ? 'tidak' : ($batch->laporan_validasi ?? null);
+                    $lapVal = ($batch->batch_validasi === 'tidak') ? 'No' : (($batch->laporan_validasi ?? '') === 'ada' ? 'Yes' : (($batch->laporan_validasi ?? '') === 'tidak' ? 'No' : ($batch->laporan_validasi ?? null)));
                     $noLapVal = ($batch->batch_validasi === 'tidak') ? 'N/A' : ($batch->nomor_laporan_validasi ?? null);
                 @endphp
                 @if ($lapVal !== null)
                     <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-top: 1px dashed var(--border); font-size: 0.88rem;">
-                        <span style="color: var(--text-secondary);">Laporan Validasi:</span>
+                        <span style="color: var(--text-secondary);">Validation Report:</span>
                         <span style="font-weight: 600; color: var(--text-primary);">{{ ucfirst($lapVal) }}</span>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0 0 0; border-top: 1px dashed var(--border); font-size: 0.88rem;">
-                        <span style="color: var(--text-secondary);">Nomor Laporan:</span>
+                        <span style="color: var(--text-secondary);">Report Number:</span>
                         <span style="font-weight: 600; color: var(--text-primary);">{{ $noLapVal ?: '-' }}</span>
                     </div>
                 @endif
@@ -136,26 +136,26 @@
 
             {{-- Point: Laporan Penyimpangan --}}
             @php
-                $penyimpanganVal = ($batch->laporan_penyimpangan === 'ada') ? 'ada' : 'tidak';
-                $changeControlVal = ($batch->change_control === 'ada') ? 'ada' : 'tidak';
+                $penyimpanganVal = ($batch->laporan_penyimpangan === 'ada') ? 'YES' : 'NO';
+                $changeControlVal = ($batch->change_control === 'ada') ? 'YES' : 'NO';
             @endphp
             <div class="bfm-category-bar" style="margin-top: 1.5rem;">
                 <span class="bfm-category-code">{{ $penyimpanganPointCode }}</span>
-                Laporan Penyimpangan
+                Deviation Report
             </div>
             <div style="background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 1.1rem 1.4rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
-                    <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Laporan Penyimpangan</span>
-                    <span class="brp-answer-pill {{ $penyimpanganVal === 'ada' ? 'brp-answer-c' : 'brp-answer-na' }}">
-                        {{ strtoupper($penyimpanganVal) }}
+                    <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Deviation Report</span>
+                    <span class="brp-answer-pill {{ $penyimpanganVal === 'YES' ? 'brp-answer-c' : 'brp-answer-na' }}">
+                        {{ $penyimpanganVal }}
                     </span>
                 </div>
                 <div style="margin-top: 0.8rem; border-top: 1px dashed var(--border); padding-top: 0.8rem;">
                     <table class="brp-table" style="font-size: 0.85rem;">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">No. Penyimpangan</th>
-                                <th style="width: 50%;">Status Penyimpangan</th>
+                                <th style="width: 50%;">Deviation No.</th>
+                                <th style="width: 50%;">Deviation Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -183,16 +183,16 @@
             <div style="background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 1.1rem 1.4rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
                     <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Change Control</span>
-                    <span class="brp-answer-pill {{ $changeControlVal === 'ada' ? 'brp-answer-c' : 'brp-answer-na' }}">
-                        {{ strtoupper($changeControlVal) }}
+                    <span class="brp-answer-pill {{ $changeControlVal === 'YES' ? 'brp-answer-c' : 'brp-answer-na' }}">
+                        {{ $changeControlVal }}
                     </span>
                 </div>
                 <div style="margin-top: 0.8rem; border-top: 1px dashed var(--border); padding-top: 0.8rem;">
                     <table class="brp-table" style="font-size: 0.85rem;">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">No. FUP</th>
-                                <th style="width: 50%;">Status FUP</th>
+                                <th style="width: 50%;">FUP No.</th>
+                                <th style="width: 50%;">FUP Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -250,7 +250,7 @@
                 <li>
                     <span class="brp-timeline-dot"></span>
                     <div>
-                        <p class="brp-timeline-title">Batch initiated by {{ $batch->creator->name ?? '-' }}</p>
+                        <p class="brp-timeline-title">Batch initiated by {{ $batch->creator_display_name }}</p>
                         <p class="brp-timeline-time">{{ $batch->created_at?->format('d M Y, H:i') }}</p>
                     </div>
                 </li>
@@ -264,7 +264,7 @@
                                     @if ($approval->status === 'approved') approved this batch
                                     @elseif ($approval->status === 'rejected') rejected this batch
                                     @endif
-                                    ({{ $approval->user->name ?? '-' }})
+                                    ({{ $approval->user_display_name }})
                                 </p>
                                 <p class="brp-timeline-time">{{ $approval->acted_at->format('d M Y, H:i') }}</p>
                                 @if ($approval->note)

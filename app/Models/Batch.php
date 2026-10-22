@@ -32,6 +32,9 @@ class Batch extends Model
         'status',
         'released_at',
         'created_by',
+        'creator_name',
+        'supervisor_name',
+        'manager_name',
     ];
 
     protected $casts = [
@@ -65,6 +68,21 @@ class Batch extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getCreatorDisplayNameAttribute(): string
+    {
+        return $this->creator_name ?? $this->creator?->name ?? '-';
+    }
+
+    public function getSupervisorDisplayNameAttribute(): string
+    {
+        return $this->supervisor_name ?? $this->supervisor?->name ?? '-';
+    }
+
+    public function getManagerDisplayNameAttribute(): string
+    {
+        return $this->manager_name ?? $this->manager?->name ?? '-';
     }
 
     public function answers(): HasMany

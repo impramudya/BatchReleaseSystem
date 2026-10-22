@@ -49,11 +49,17 @@ class DashboardController extends Controller
         $availableYears = range(now()->year, $earliestYear);
 
 
+        $perPage = (int) $request->query('per_page', 5);
+        if (!in_array($perPage, [5, 10, 15, 20])) {
+            $perPage = 5;
+        }
+
         $quickFilters = [
             'q' => $request->query('q'),
             'status' => $request->query('status'),
             'date_from' => $request->query('date_from'),
             'date_to' => $request->query('date_to'),
+            'per_page' => $perPage,
         ];
 
         $recentBatches = Batch::query()
@@ -83,13 +89,23 @@ class DashboardController extends Controller
                 $query->whereDate('created_at', '<=', $date);
             })
             ->orderByDesc('created_at')
-            ->limit(5)
-            ->get();
+            ->paginate($perPage)
+            ->withQueryString();
+
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+            return view('dashboard.partials.recent-batches-table', [
+                'recentBatches' => $recentBatches,
+                'quickFilters' => $quickFilters,
+                'perPage' => $perPage,
+                'selectedYear' => $year,
+            ]);
+        }
 
         return view('dashboard', [
             'stats' => $stats,
             'recentBatches' => $recentBatches,
             'quickFilters' => $quickFilters,
+            'perPage' => $perPage,
             'selectedYear' => $year,
             'availableYears' => $availableYears,
         ]);

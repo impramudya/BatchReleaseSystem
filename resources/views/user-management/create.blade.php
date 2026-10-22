@@ -2,8 +2,8 @@
 
 <link rel="stylesheet" href="{{ asset('css/user-management.css') }}">
 
-@section('title', 'Tambah User')
-@section('page-title', 'Tambah User')
+@section('title', 'Add User')
+@section('page-title', 'Add User')
 
 @section('content')
 
@@ -13,7 +13,7 @@
             User Management
         </a>
         <span class="sep">/</span>
-        <span class="current">Tambah User</span>
+        <span class="current">Add User</span>
     </div>
 
     <form action="{{ route('user-management.store') }}" method="POST">
@@ -21,8 +21,8 @@
 
         <div class="um-form-card">
             <div class="um-form-head">
-                <h3 class="um-form-title">Tambah Pengguna Baru</h3>
-                <p class="um-form-sub">Akun akan langsung bisa login setelah dibuat.</p>
+                <h3 class="um-form-title">Add New User</h3>
+                <p class="um-form-sub">The account will be able to log in immediately after creation.</p>
             </div>
 
             <div class="um-form-body">
@@ -30,8 +30,8 @@
             </div>
 
             <div class="um-form-actions">
-                <button type="submit" class="um-btn-primary">Simpan User</button>
-                <a href="{{ route('user-management.index') }}" class="um-btn-ghost">Batal</a>
+                <button type="submit" class="um-btn-primary">Save User</button>
+                <a href="{{ route('user-management.index') }}" class="um-btn-ghost">Cancel</a>
             </div>
         </div>
     </form>

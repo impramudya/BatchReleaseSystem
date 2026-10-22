@@ -15,6 +15,7 @@ class BatchApproval extends Model
         'step',
         'order_no',
         'user_id',
+        'user_name',
         'status',
         'note',
         'acted_at',
@@ -33,6 +34,11 @@ class BatchApproval extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getUserDisplayNameAttribute(): string
+    {
+        return $this->user_name ?? $this->user?->name ?? '-';
     }
 
     public function stepLabel(): string

@@ -462,11 +462,13 @@ html.dark .um-role {
     flex-shrink: 0;
 }
 
-/* Modal konfirmasi delete */
+/* Modal konfirmasi delete & actions */
 .um-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(16, 28, 44, 0.65);
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -474,46 +476,60 @@ html.dark .um-role {
     opacity: 0;
     visibility: hidden;
     transition:
-        opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1),
-        visibility 0.18s;
+        opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.2s;
 }
 .um-modal-overlay.show {
     opacity: 1;
     visibility: visible;
 }
 .um-modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
     padding: 1.75rem 1.75rem 1.5rem;
     width: 100%;
-    max-width: 336px;
+    max-width: 360px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    transform: translateY(6px) scale(0.98);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    transform: translateY(10px) scale(0.96);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .um-modal-overlay.show .um-modal {
     transform: translateY(0) scale(1);
 }
 .um-modal-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 6px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
     background: #fee2e2;
     color: #dc2626;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.1rem;
+    transition: background 0.15s ease, color 0.15s ease;
 }
+.um-modal-icon.unlock {
+    background: #dcfce7;
+    color: #16a34a;
+}
+.um-modal-icon.reset {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+.um-modal-icon.delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
 .um-modal-title {
     font-family: "poppins", sans-serif;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--text-primary);
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.4rem;
 }
 .um-modal-text {
     font-family: "poppins", sans-serif;
@@ -529,10 +545,10 @@ html.dark .um-role {
 .um-modal-actions {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.65rem;
 }
 .um-modal-actions button {
-    padding: 0.5rem 1.1rem;
+    padding: 0.55rem 1.15rem;
     border-radius: 6px;
     font-family: "poppins", sans-serif;
     font-size: 0.8125rem;
@@ -541,23 +557,45 @@ html.dark .um-role {
     border: 1px solid transparent;
     transition:
         background 0.12s ease,
-        border-color 0.12s ease;
+        border-color 0.12s ease,
+        transform 0.1s ease;
 }
 .um-modal-cancel {
     background: #ffffff;
-    border-color: var(--border);
-    color: var(--text-primary);
+    border-color: #cbd5e1;
+    color: #334155;
 }
 .um-modal-cancel:hover {
-    background: #f1f8f4;
-    border-color: var(--primary);
-    color: var(--primary-dark);
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
 }
 .um-modal-confirm {
     background: #dc2626;
     color: #fff;
 }
 .um-modal-confirm:hover {
+    background: #b91c1c;
+}
+.um-modal-confirm.unlock {
+    background: #16a34a;
+    color: #fff;
+}
+.um-modal-confirm.unlock:hover {
+    background: #15803d;
+}
+.um-modal-confirm.reset {
+    background: #0284c7;
+    color: #fff;
+}
+.um-modal-confirm.reset:hover {
+    background: #0369a1;
+}
+.um-modal-confirm.delete {
+    background: #dc2626;
+    color: #fff;
+}
+.um-modal-confirm.delete:hover {
     background: #b91c1c;
 }
 .um-modal-confirm:active {

@@ -271,22 +271,22 @@
             <div class="bfm-card-header">
                 <h3>
                     <span class="bfm-category-code" style="background:var(--primary); color:#fff; font-weight:700;">{{ $validasiPointCode }}</span>
-                    Batch Validasi
+                    Validation Batch
                 </h3>
             </div>
             <div style="padding: 1.4rem;">
                 <div class="bfm-field" style="margin-bottom: 1.25rem;">
-                    <label style="margin-bottom: 0.6rem;">Batch Validasi <span class="bfm-required">*</span></label>
+                    <label style="margin-bottom: 0.6rem;">Validation Batch <span class="bfm-required">*</span></label>
                     <div style="display: flex; gap: 1rem; align-items: center;">
                         <label class="bfm-answer-pill bfm-answer-c" style="cursor: pointer; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
                             <input type="radio" name="batch_validasi" value="ya" id="batch_validasi_ya"
                                 {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'ya' ? 'checked' : '' }}>
-                            Ya
+                            Yes
                         </label>
                         <label class="bfm-answer-pill bfm-answer-nc" style="cursor: pointer; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
                             <input type="radio" name="batch_validasi" value="tidak" id="batch_validasi_tidak"
                                 {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'tidak' ? 'checked' : '' }}>
-                            Tidak
+                            No
                         </label>
                     </div>
                     @error('batch_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
@@ -294,29 +294,29 @@
 
                 {{-- Sub-kondisi Jika Ya --}}
                 <div id="sub-validasi-container" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 1.2rem; display: {{ old('batch_validasi', $batch->batch_validasi ?? '') === 'ya' ? 'block' : 'none' }};">
-                    <p style="font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0;">Jika Ya :</p>
+                    <p style="font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0;">If Yes :</p>
                     <div class="bfm-grid" style="padding: 0; gap: 1.2rem 1.5rem;">
                         <div class="bfm-field">
-                            <label style="margin-bottom: 0.6rem;">Laporan Validasi <span class="bfm-required">*</span></label>
+                            <label style="margin-bottom: 0.6rem;">Validation Report <span class="bfm-required">*</span></label>
                             <div style="display: flex; gap: 1rem; align-items: center; min-height: 40px;">
                                 <label class="bfm-answer-pill bfm-answer-c" style="cursor: pointer; padding: 0.45rem 1rem; font-size: 0.82rem;">
                                     <input type="radio" name="laporan_validasi" value="ada" id="laporan_validasi_ada"
                                         {{ old('laporan_validasi', $batch->laporan_validasi ?? '') === 'ada' ? 'checked' : '' }}>
-                                    Ada
+                                    Yes
                                 </label>
                                 <label class="bfm-answer-pill bfm-answer-nc" style="cursor: pointer; padding: 0.45rem 1rem; font-size: 0.82rem;">
                                     <input type="radio" name="laporan_validasi" value="tidak" id="laporan_validasi_tidak"
                                         {{ old('laporan_validasi', $batch->laporan_validasi ?? '') === 'tidak' ? 'checked' : '' }}>
-                                    Tidak
+                                    No
                                 </label>
                             </div>
                             @error('laporan_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
                         </div>
                         <div class="bfm-field">
-                            <label for="nomor_laporan_validasi">Nomor Laporan</label>
+                            <label for="nomor_laporan_validasi">Report Number</label>
                             <input type="text" id="nomor_laporan_validasi" name="nomor_laporan_validasi"
                                    value="{{ old('nomor_laporan_validasi', $batch->nomor_laporan_validasi ?? '') }}"
-                                   placeholder="Contoh: VAL/2026/089...">
+                                   placeholder="E.g., VAL/2026/089...">
                             @error('nomor_laporan_validasi') <p class="bfm-error">{{ $message }}</p> @enderror
                         </div>
                     </div>

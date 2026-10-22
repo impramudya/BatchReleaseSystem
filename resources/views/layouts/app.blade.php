@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +14,6 @@
             if (isDark) document.documentElement.classList.add('dark');
         })();
     </script>
-
-    @vite(['resources/css/app.css', 'resources/js/theme.js'])
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,8 +45,10 @@
     <aside class="brp-sidebar" id="brp-sidebar">
 
         <div class="brp-logo-block">
-            <p class="brp-logo"><span>BatchRelease</span><span class="accent">Pro</span></p>
-            <p class="brp-logo-sub">Batch Release System &mdash; QA</p>
+            <a href="{{ route('dashboard') }}" class="brp-logo-link" title="Kalbe Consumer Health">
+                <img src="{{ asset('images/kalbe-consumer-health.png') }}" alt="Kalbe Consumer Health" class="brp-brand-logo brp-brand-logo-light">
+                <img src="{{ asset('images/kalbe-consumer-health-dark.png') }}" alt="Kalbe Consumer Health" class="brp-brand-logo brp-brand-logo-dark">
+            </a>
         </div>
 
         <nav class="brp-nav">
@@ -117,7 +117,7 @@
                     @if ($canSeeTaskApproval)
                         <a href="{{ route('task-approval.index') }}" class="brp-nav-link {{ request()->routeIs('task-approval.*') ? 'is-active' : '' }}">
                             <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M7 10.2l2 2 4-4.3"/></svg>
-                            Task Approval
+                            <span>Task Approval</span>
                             @if (isset($sidebarPendingApprovalCount) && $sidebarPendingApprovalCount > 0)
                                 <span class="brp-nav-badge">{{ $sidebarPendingApprovalCount }}</span>
                             @endif
@@ -205,13 +205,23 @@
                         <svg class="brp-icon icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16.5 12.3A6.8 6.8 0 0 1 7.7 3.5a6.8 6.8 0 1 0 8.8 8.8z"/></svg>
                     </span>
                 </button>
+
+                <div class="brp-user-menu-divider"></div>
+
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="brp-user-menu-logout">
+                        <span>Logout</span>
+                        <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 17.5H4.167a1.667 1.667 0 01-1.667-1.667V4.167A1.667 1.667 0 014.167 2.5H7.5M13.333 14.167L17.5 10l-4.167-4.167M17.5 10H7.5"/></svg>
+                    </button>
+                </form>
             </div>
 
             <button type="button" class="brp-user-block" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
-                <div class="brp-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
+                <div class="brp-avatar">{{ strtoupper(auth()->user()->initial ?: substr(auth()->user()->name, 0, 2)) }}</div>
                 <div>
                     <p class="brp-user-name">{{ auth()->user()->name }}</p>
-                    <p class="brp-user-role">{{ auth()->user()->role ?? 'User' }}</p>
+                    <p class="brp-user-role">{{ auth()->user()->role ?? 'User' }}{{ !empty(auth()->user()->nik) ? ' (' . auth()->user()->nik . ')' : '' }}</p>
                 </div>
                 <svg class="brp-icon brp-user-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 12.5L10 8l4.5 4.5"/></svg>
             </button>
@@ -248,16 +258,21 @@
                         </div>
                     </div>
                 </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="brp-logout">Logout</button>
-                </form>
             </div>
         </header>
 
         <main class="brp-content">
             @yield('content')
         </main>
+
+        <footer class="brp-footer">
+            <div class="brp-footer-left">
+                <span>&copy; {{ date('Y') }} &mdash; PT. Saka Farma Laboratories (Kalbe Consumer Health)</span>
+            </div>
+            <div class="brp-footer-right">
+                <span>Batch Release System &mdash; Version 1.1</span>
+            </div>
+        </footer>
     </div>
 
     <script src="{{ asset('js/app.js') }}" defer></script>

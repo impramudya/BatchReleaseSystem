@@ -47,9 +47,9 @@
                     <td>{{ $batch->product->product_code ?? '-' }}</td>
                     <td>{{ $batch->product->name ?? '-' }}</td>
                     <td>{{ $batch->manufacturer }}</td>
-                    <td>{{ $batch->creator->name ?? '-' }}</td>
-                    <td>{{ $batch->supervisor->name ?? '-' }}</td>
-                    <td>{{ $batch->manager->name ?? '-' }}</td>
+                    <td>{{ $batch->creator_display_name }}</td>
+                    <td>{{ $batch->supervisor_display_name }}</td>
+                    <td>{{ $batch->manager_display_name }}</td>
                     <td>{{ $batch->statusLabel() }}</td>
                     <td>{{ $batch->batch_date?->format('d M Y') }}</td>
                     <td>{{ $batch->released_at?->format('d M Y') ?? '-' }}</td>
