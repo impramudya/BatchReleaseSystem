@@ -281,10 +281,10 @@
     border-bottom: none;
 }
 .cm-table tbody tr:hover {
-    background: var(--teal-tint);
+    background: #f1f8f4;
 }
 html.dark .cm-table tbody tr:hover {
-    background: rgba(14, 124, 123, 0.08);
+    background: var(--surface-hover) !important;
 }
 
 .cm-table td {
@@ -496,7 +496,7 @@ html.dark .cm-table tbody tr:hover {
         border-color 0.12s ease;
 }
 .cm-modal-cancel {
-    background: #ffffff;
+    background: var(--surface);
     border-color: var(--border);
     color: var(--text-primary);
 }
@@ -504,6 +504,16 @@ html.dark .cm-table tbody tr:hover {
     background: #f1f8f4;
     border-color: var(--primary);
     color: var(--primary-dark);
+}
+html.dark .cm-modal-cancel {
+    background: var(--surface-hover);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+html.dark .cm-modal-cancel:hover {
+    background: #323b35;
+    border-color: var(--border-light);
+    color: #ffffff;
 }
 .cm-modal-confirm {
     background: #dc2626;

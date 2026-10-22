@@ -11,7 +11,7 @@
         <select id="role" name="role" required>
             @php $selectedRole = old('role', $user->role ?? ''); @endphp
             <option value="" disabled {{ $selectedRole === '' ? 'selected' : '' }}>Select Role</option>
-            @foreach (['Admin', 'Super Admin', 'Supervisor', 'Manager', 'Viewer'] as $roleOption)
+            @foreach (['Admin', 'System Administrator', 'Supervisor', 'Manager'] as $roleOption)
             <option value="{{ $roleOption }}" {{ $selectedRole === $roleOption ? 'selected' : '' }}>{{ $roleOption }}</option>
             @endforeach
         </select>
@@ -43,7 +43,7 @@
     <div class="um-field">
         <label for="password">{{ isset($user) ? 'New Password' : 'Password' }}</label>
         <input id="password" type="password" name="password" {{ isset($user) ? '' : 'required' }} autocomplete="new-password">
-        <span class="hint" style="display:block; margin-top:4px; font-size:0.75rem; color:#64748b;">
+        <span class="hint" style="display:block; margin-top:4px; font-size:0.75rem; color:var(--text-secondary);">
             Must be at least 8 characters with uppercase, lowercase, numbers, and symbols.
             {{ isset($user) ? 'Leave blank to keep current password.' : '' }}
         </span>

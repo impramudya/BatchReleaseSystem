@@ -4,8 +4,8 @@
 @section('page-title', 'Audit Trail')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
-    <link rel="stylesheet" href="{{ asset('css/audit-trail.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v={{ filemtime(public_path('css/batch-repository.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/audit-trail.css') }}?v={{ filemtime(public_path('css/audit-trail.css')) }}">
 @endpush
 
 @section('content')

@@ -4,7 +4,7 @@
 @section('page-title', 'Batch Repository')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
+<link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v={{ filemtime(public_path('css/batch-repository.css')) }}">
 @endpush
 
 @section('content')

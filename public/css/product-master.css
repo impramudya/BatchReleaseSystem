@@ -163,7 +163,7 @@
     line-height: 1.4;
     color: var(--text-primary);
     border: 1px solid var(--border);
-    background: #ffffff;
+    background: var(--surface);
     text-decoration: none !important;
     transition:
         color 0.12s ease,
@@ -173,6 +173,16 @@
 .pf-cancel:hover {
     color: var(--primary-dark);
     background: #f1f8f4;
+    border-color: var(--primary);
+}
+html.dark .pf-cancel {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+html.dark .pf-cancel:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
     border-color: var(--primary);
 }
 
@@ -286,19 +296,21 @@
 }
 
 .pm-table thead th:nth-child(1) {
-    width: 15%;
-}
-.pm-table thead th:nth-child(2) {
-    width: 32%;
-}
-.pm-table thead th:nth-child(3) {
     width: 22%;
 }
-.pm-table thead th:nth-child(4) {
-    width: 13%;
+.pm-table thead th:nth-child(2) {
+    width: 48%;
 }
-.pm-table thead th:nth-child(5) {
-    width: 18%;
+.pm-table thead th:nth-child(3) {
+    width: 15%;
+}
+.pm-table thead th:nth-child(4) {
+    width: 15%;
+    text-align: right;
+}
+
+.pm-table th:last-child,
+.pm-table td:last-child {
     text-align: right;
 }
 
@@ -310,10 +322,10 @@
     border-bottom: none;
 }
 .pm-table tbody tr:hover {
-    background: var(--teal-tint);
+    background: #f1f8f4;
 }
 html.dark .pm-table tbody tr:hover {
-    background: rgba(14, 124, 123, 0.08);
+    background: var(--surface-hover) !important;
 }
 
 .pm-table td {
@@ -548,7 +560,7 @@ html.dark .pm-table tbody tr:hover {
         border-color 0.12s ease;
 }
 .pm-modal-cancel {
-    background: #ffffff;
+    background: var(--surface);
     border-color: var(--border);
     color: var(--text-primary);
 }
@@ -556,6 +568,16 @@ html.dark .pm-table tbody tr:hover {
     background: #f1f8f4;
     border-color: var(--primary);
     color: var(--primary-dark);
+}
+html.dark .pm-modal-cancel {
+    background: var(--surface-hover);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+html.dark .pm-modal-cancel:hover {
+    background: #323b35;
+    border-color: var(--border-light);
+    color: #ffffff;
 }
 .pm-modal-confirm {
     background: #dc2626;

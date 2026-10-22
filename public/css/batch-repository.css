@@ -56,6 +56,28 @@
     box-shadow: 0 0 0 3px rgba(76, 138, 65, 0.18);
 }
 
+/* Date picker indicator in filter bar */
+.brp-filter-bar input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.65;
+    transition: opacity 0.15s ease;
+}
+.brp-filter-bar input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+html.dark .brp-filter-bar input[type="date"] {
+    color-scheme: dark !important;
+}
+html.dark .brp-filter-bar input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23e8ede9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>') !important;
+    filter: none !important;
+    opacity: 0.85 !important;
+}
+html.dark .brp-filter-bar input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1 !important;
+}
+
 /* ---------- Buttons ---------- */
 .brp-btn-outline,
 .brp-btn-primary {
@@ -73,7 +95,7 @@
     transition: all 0.15s ease;
 }
 .brp-btn-outline {
-    background: #ffffff;
+    background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-primary);
 }
@@ -82,6 +104,18 @@
     background: #f1f8f4;
     border-color: var(--primary);
     color: var(--primary-dark);
+}
+
+html.dark .brp-btn-outline {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+
+html.dark .brp-btn-outline:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary);
+    color: var(--text-primary);
 }
 
 .brp-btn-outline:disabled {
@@ -138,6 +172,9 @@
 }
 .brp-table tbody tr:hover {
     background-color: #f1f8f4 !important;
+}
+html.dark .brp-table tbody tr:hover {
+    background-color: var(--surface-hover) !important;
 }
 .brp-table tbody tr:last-child td {
     border-bottom: none;

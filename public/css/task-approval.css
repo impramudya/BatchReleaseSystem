@@ -106,7 +106,7 @@ html.dark .tap-stat-rejected .tap-stat-value {
     transition: all 0.15s ease;
 }
 .tap-btn-outline {
-    background: #ffffff;
+    background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-primary);
 }
@@ -114,6 +114,16 @@ html.dark .tap-stat-rejected .tap-stat-value {
     background: #f1f8f4;
     border-color: var(--primary);
     color: var(--primary-dark);
+}
+html.dark .tap-btn-outline {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+html.dark .tap-btn-outline:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary);
+    color: var(--text-primary);
 }
 .tap-btn-approve {
     background: #4c8a41;

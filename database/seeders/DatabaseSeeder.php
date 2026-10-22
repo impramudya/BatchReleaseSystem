@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'SuperPram',
             'email' => 'pram@batchrelease.local',
             'password' => 'password123',
-            'role' => 'Super Admin',
+            'role' => 'System Administrator',
         ]);
 
         User::create([

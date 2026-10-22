@@ -31,7 +31,10 @@ class AuditTrailController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+        $isTableOnlyAjax = ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial'))
+            && !$request->header('X-BRP-Navigation');
+
+        if ($isTableOnlyAjax) {
             return view('audit-trail.partials.table-content', [
                 'logs' => $paginator,
             ]);
@@ -80,17 +83,16 @@ class AuditTrailController extends Controller
         $f = $this->filters($request);
 
         $batches = Batch::query()
-            ->with(['creator'])
+            ->select(['id', 'batch_number', 'created_by', 'created_at'])
+            ->with(['creator:id,name'])
             ->when($f['dateFrom'], fn($q) => $q->whereDate('created_at', '>=', $f['dateFrom']))
             ->when($f['dateTo'], fn($q) => $q->whereDate('created_at', '<=', $f['dateTo']))
             ->when($f['userId'], fn($q) => $q->where('created_by', $f['userId']))
             ->get()
             ->map(function ($batch) {
-                $creator = $batch->creator ?? User::find($batch->created_by ?? null);
-
                 return [
                     'time' => $batch->created_at,
-                    'user' => $creator?->name ?? '-',
+                    'user' => $batch->creator?->name ?? '-',
                     'action' => 'create',
                     'action_label' => 'Create Form',
                     'detail' => $batch->batch_number ?: ('#' . $batch->id),
@@ -98,7 +100,8 @@ class AuditTrailController extends Controller
             });
 
         $approvals = BatchApproval::query()
-            ->with(['user', 'batch'])
+            ->select(['id', 'batch_id', 'user_id', 'status', 'step', 'note', 'acted_at'])
+            ->with(['user:id,name', 'batch:id,batch_number'])
             ->whereNotNull('acted_at')
             ->where('step', '!=', 'admin')
             ->when($f['dateFrom'], fn($q) => $q->whereDate('acted_at', '>=', $f['dateFrom']))
@@ -120,7 +123,8 @@ class AuditTrailController extends Controller
             });
 
         $logins = LoginLog::query()
-            ->with('user')
+            ->select(['id', 'user_id', 'action', 'ip_address', 'created_at'])
+            ->with('user:id,name')
             ->when($f['dateFrom'], fn($q) => $q->whereDate('created_at', '>=', $f['dateFrom']))
             ->when($f['dateTo'], fn($q) => $q->whereDate('created_at', '<=', $f['dateTo']))
             ->when($f['userId'], fn($q) => $q->where('user_id', $f['userId']))
@@ -136,7 +140,8 @@ class AuditTrailController extends Controller
             });
 
         $activities = ActivityLog::query()
-            ->with('user')
+            ->select(['id', 'user_id', 'action', 'action_label', 'details', 'created_at'])
+            ->with('user:id,name')
             ->when($f['dateFrom'], fn($q) => $q->whereDate('created_at', '>=', $f['dateFrom']))
             ->when($f['dateTo'], fn($q) => $q->whereDate('created_at', '<=', $f['dateTo']))
             ->when($f['userId'], fn($q) => $q->where('user_id', $f['userId']))

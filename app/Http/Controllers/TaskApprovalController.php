@@ -18,7 +18,13 @@ class TaskApprovalController extends Controller
         $user = $request->user();
         $role = $user?->role;
 
-        $base = Batch::query()->with(['product', 'productionLine', 'creator', 'supervisor', 'manager']);
+        $base = Batch::query()->with([
+            'product:id,name,product_code',
+            'productionLine:id,name,code,parent_id',
+            'creator:id,name',
+            'supervisor:id,name',
+            'manager:id,name'
+        ]);
 
         if ($role === 'Supervisor') {
             $pendingBatches = (clone $base)
@@ -42,19 +48,19 @@ class TaskApprovalController extends Controller
             $canAct = false;
         }
 
-        $approvedCount = BatchApproval::query()
+        $approvalStats = BatchApproval::query()
             ->when($role === 'Supervisor', fn ($q) => $q->where('step', 'supervisor')->where('user_id', $user->id))
             ->when($role === 'Manager', fn ($q) => $q->where('step', 'manager')->where('user_id', $user->id))
             ->when(! in_array($role, ['Supervisor', 'Manager']), fn ($q) => $q->where('step', '!=', 'admin'))
-            ->where('status', 'approved')
-            ->count();
+            ->whereIn('status', ['approved', 'rejected'])
+            ->selectRaw("
+                COUNT(CASE WHEN status = 'approved' THEN 1 END) as approved_count,
+                COUNT(CASE WHEN status = 'rejected' THEN 1 END) as rejected_count
+            ")
+            ->first();
 
-        $rejectedCount = BatchApproval::query()
-            ->when($role === 'Supervisor', fn ($q) => $q->where('step', 'supervisor')->where('user_id', $user->id))
-            ->when($role === 'Manager', fn ($q) => $q->where('step', 'manager')->where('user_id', $user->id))
-            ->when(! in_array($role, ['Supervisor', 'Manager']), fn ($q) => $q->where('step', '!=', 'admin'))
-            ->where('status', 'rejected')
-            ->count();
+        $approvedCount = (int) ($approvalStats->approved_count ?? 0);
+        $rejectedCount = (int) ($approvalStats->rejected_count ?? 0);
 
         return view('task-approval.index', [
             'pendingBatches' => $pendingBatches,

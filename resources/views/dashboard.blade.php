@@ -5,7 +5,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v={{ time() }}">
-<link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v=4">
+<link rel="stylesheet" href="{{ asset('css/batch-repository.css') }}?v={{ filemtime(public_path('css/batch-repository.css')) }}">
 @endpush
 
 @section('content')
@@ -20,12 +20,32 @@ $segments = [
 ];
 @endphp
 
+{{-- ============ WELCOME GREETING ============ --}}
+@php
+    $hour = now()->hour;
+    if ($hour >= 5 && $hour < 12) {
+        $greeting = 'Good morning';
+    } elseif ($hour >= 12 && $hour < 18) {
+        $greeting = 'Good afternoon';
+    } elseif ($hour >= 18 && $hour < 21) {
+        $greeting = 'Good evening';
+    } else {
+        $greeting = 'Good night';
+    }
+@endphp
+
+<div class="dashboard-greeting" style="margin-bottom: 0.95rem;">
+    <h2 id="dashboard-user-greeting" style="font-family: 'Poppins', sans-serif; font-size: 1.45rem; font-weight: 600; color: var(--text-primary); margin: 0; letter-spacing: -0.015em;">
+        {{ $greeting }}, {{ auth()->user()->name }}!
+    </h2>
+</div>
+
 {{-- ============ YEAR FILTER ============ --}}
-<form method="GET" action="{{ route('dashboard') }}" class="brp-filter-bar" style="border-bottom:none; padding: 0 0 0.9rem;">
-    <label for="year-select" style="display:flex; align-items:center; font-family:'Poppins', sans-serif; font-size:0.85rem; color: var(--content-text-soft); gap: 0.5rem;">
+<form method="GET" action="{{ route('dashboard') }}" style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1.1rem; background:transparent; border:none; padding:0;">
+    <label for="year-select" style="font-family:'Poppins', sans-serif; font-size:0.875rem; font-weight:500; color:var(--content-text-soft);">
         Year Statistics
     </label>
-    <select id="year-select" name="year" onchange="this.form.submit()">
+    <select id="year-select" name="year" onchange="this.form.submit()" class="brp-year-select">
         @foreach ($availableYears as $y)
         <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
         @endforeach
@@ -48,7 +68,7 @@ $segments = [
                     <path d="M12 3.5V7h3" />
                     <path d="M6.8 11h6.4M6.8 13.5h6.4M6.8 8.5h3" /></svg>
             </span>
-            <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['total_form_this_month'] }} this month</span>
+            <span class="brp-stat-trend brp-trend-neutral">&uarr; {{ $stats['total_form_this_month'] }} this month</span>
         </div>
         <p class="brp-stat-value">{{ $stats['total_form'] }}</p>
         <p class="brp-stat-label">Total Forms</p>
@@ -100,7 +120,7 @@ $segments = [
                     <circle cx="10" cy="10" r="7" />
                     <path d="M7 10.2l2 2 4-4.3" /></svg>
             </span>
-            <span class="brp-stat-trend brp-trend-up">&uarr; {{ $stats['released_recent'] }} recent</span>
+            <span class="brp-stat-trend brp-trend-neutral">&uarr; {{ $stats['released_recent'] }} recent</span>
         </div>
         <p class="brp-stat-value">{{ $stats['released'] }}</p>
         <p class="brp-stat-label">Released</p>
@@ -211,6 +231,22 @@ $segmentTotal = max(array_sum(array_column($segments, 'value')), 1);
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Dynamic greeting based on user local time
+    (function () {
+        const greetingEl = document.getElementById('dashboard-user-greeting');
+        if (!greetingEl) return;
+        const hour = new Date().getHours();
+        let greeting = 'Good night';
+        if (hour >= 5 && hour < 12) {
+            greeting = 'Good morning';
+        } else if (hour >= 12 && hour < 18) {
+            greeting = 'Good afternoon';
+        } else if (hour >= 18 && hour < 21) {
+            greeting = 'Good evening';
+        }
+        greetingEl.textContent = greeting + ', {{ auth()->user()->name }}!';
+    })();
+
     const filterForm = document.getElementById('recent-batches-filter');
     const resultsContainer = document.getElementById('recent-batches-results');
     const resetBtn = document.getElementById('btn-recent-reset');

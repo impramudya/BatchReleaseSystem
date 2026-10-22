@@ -3,9 +3,11 @@
 @section('title', 'User Management')
 @section('page-title', 'User Management')
 
-@section('content')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/user-management.css') }}?v={{ filemtime(public_path('css/user-management.css')) }}">
+@endpush
 
-     <link rel="stylesheet" href="{{ asset('css/user-management.css') }}?v={{ time() }}">
+@section('content')
 
     <div id="um-toast" class="um-toast">
         <svg id="um-toast-icon" class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"></svg>
@@ -34,7 +36,7 @@
         <div class="um-card-head">
             <div>
                 <h3 class="um-card-title">User List</h3>
-                <p class="um-card-sub">{{ $users->total() }} accounts registered in QA system</p>
+                <p class="um-card-sub">{{ $users->count() }} accounts registered in QA system</p>
             </div>
             <div class="um-head-right">
                 <div class="um-search">
@@ -64,15 +66,12 @@
                 @forelse ($users as $user)
                     <tr>
                         <td>
-                            <div class="um-person">
-                                <div class="um-avatar">{{ strtoupper($user->initial ?: substr($user->name, 0, 2)) }}</div>
-                                <span class="um-name">{{ $user->name }}</span>
-                            </div>
+                            <span class="um-name">{{ $user->name }}</span>
                         </td>
                         <td><span style="font-family: monospace; font-size: 0.82rem; font-weight: 500;">{{ $user->nik ?? '—' }}</span></td>
-                        <td><span class="um-role" style="font-weight: 600; letter-spacing: 0.05em;">{{ $user->initial ?? '—' }}</span></td>
+                        <td class="um-email">{{ $user->initial ?? '—' }}</td>
                         <td class="um-email">{{ $user->email }}</td>
-                        <td><span class="um-role">{{ $user->role }}</span></td>
+                        <td class="um-email">{{ $user->role }}</td>
                         <td>
                             @if(!empty($user->locked_at))
                                 <span class="um-status" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5;" title="Locked at {{ $user->locked_at->format('d M Y H:i') }} (5 failed attempts)"><span class="dot" style="background:#ef4444;"></span> Locked</span>
@@ -120,10 +119,6 @@
                 @endforelse
             </tbody>
         </table>
-
-        @if (method_exists($users, 'links'))
-            <div class="um-pagination">{{ $users->links() }}</div>
-        @endif
     </div>
 
     <script>

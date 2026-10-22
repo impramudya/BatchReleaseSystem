@@ -10,44 +10,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        
         $year = (int) $request->query('year', now()->year);
-
-        $yearStart = now()->setDate($year, 1, 1)->startOfDay();
-        $yearEnd = now()->setDate($year, 12, 31)->endOfDay();
-
-        $lastWeek = now()->subDays(7);
-
-        $stats = [
-            'total_form' => Batch::whereBetween('created_at', [$yearStart, $yearEnd])->count(),
-            'total_form_this_month' => Batch::where('created_at', '>=', now()->startOfMonth())->count(),
-
-            'draft' => Batch::where('status', 'draft')
-                ->whereBetween('created_at', [$yearStart, $yearEnd])
-                ->count(),
-            'waiting_spv' => Batch::where('status', 'submitted')
-                ->whereBetween('created_at', [$yearStart, $yearEnd])
-                ->count(),
-            'waiting_manager' => Batch::where('status', 'waiting_manager')
-                ->whereBetween('created_at', [$yearStart, $yearEnd])
-                ->count(),
-            'released' => Batch::where('status', 'released')
-                ->whereBetween('created_at', [$yearStart, $yearEnd])
-                ->count(),
-            'rejected' => Batch::where('status', 'rejected')
-                ->whereBetween('created_at', [$yearStart, $yearEnd])
-                ->count(),
-
-            'released_recent' => Batch::where('status', 'released')
-                ->where('released_at', '>=', $lastWeek)
-                ->count(),
-        ];
-
-
-        $earliestYear = Batch::min('created_at');
-        $earliestYear = $earliestYear ? (int) date('Y', strtotime($earliestYear)) : now()->year;
-        $availableYears = range(now()->year, $earliestYear);
-
 
         $perPage = (int) $request->query('per_page', 5);
         if (!in_array($perPage, [5, 10, 15, 20])) {
@@ -63,9 +26,9 @@ class DashboardController extends Controller
         ];
 
         $recentBatches = Batch::query()
-            ->with(['product', 'creator'])
+            ->with(['product:id,name,product_code', 'creator:id,name'])
             ->when(
-                !in_array(Auth::user()->role ?? null, ['Super Admin', 'Admin']),
+                !in_array(Auth::user()->role ?? null, ['System Administrator', 'Admin']),
                 function ($query) {
                     $query->where('status', '!=', 'draft');
                 }
@@ -92,7 +55,10 @@ class DashboardController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+        $isTableOnlyAjax = ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial'))
+            && !$request->header('X-BRP-Navigation');
+
+        if ($isTableOnlyAjax) {
             return view('dashboard.partials.recent-batches-table', [
                 'recentBatches' => $recentBatches,
                 'quickFilters' => $quickFilters,
@@ -100,6 +66,47 @@ class DashboardController extends Controller
                 'selectedYear' => $year,
             ]);
         }
+
+        $yearStart = now()->setDate($year, 1, 1)->startOfDay();
+        $yearEnd = now()->setDate($year, 12, 31)->endOfDay();
+        $startOfMonth = now()->startOfMonth();
+        $lastWeek = now()->subDays(7);
+
+        // Single optimized aggregation query replacing 8 separate count queries
+        $statsRow = Batch::selectRaw("
+            COUNT(CASE WHEN created_at BETWEEN ? AND ? THEN 1 END) as total_form,
+            COUNT(CASE WHEN created_at >= ? THEN 1 END) as total_form_this_month,
+            COUNT(CASE WHEN status = 'draft' AND created_at BETWEEN ? AND ? THEN 1 END) as draft,
+            COUNT(CASE WHEN status = 'submitted' AND created_at BETWEEN ? AND ? THEN 1 END) as waiting_spv,
+            COUNT(CASE WHEN status = 'waiting_manager' AND created_at BETWEEN ? AND ? THEN 1 END) as waiting_manager,
+            COUNT(CASE WHEN status = 'released' AND created_at BETWEEN ? AND ? THEN 1 END) as released,
+            COUNT(CASE WHEN status = 'rejected' AND created_at BETWEEN ? AND ? THEN 1 END) as rejected,
+            COUNT(CASE WHEN status = 'released' AND released_at >= ? THEN 1 END) as released_recent
+        ", [
+            $yearStart, $yearEnd,
+            $startOfMonth,
+            $yearStart, $yearEnd,
+            $yearStart, $yearEnd,
+            $yearStart, $yearEnd,
+            $yearStart, $yearEnd,
+            $yearStart, $yearEnd,
+            $lastWeek,
+        ])->first();
+
+        $stats = [
+            'total_form' => (int) ($statsRow->total_form ?? 0),
+            'total_form_this_month' => (int) ($statsRow->total_form_this_month ?? 0),
+            'draft' => (int) ($statsRow->draft ?? 0),
+            'waiting_spv' => (int) ($statsRow->waiting_spv ?? 0),
+            'waiting_manager' => (int) ($statsRow->waiting_manager ?? 0),
+            'released' => (int) ($statsRow->released ?? 0),
+            'rejected' => (int) ($statsRow->rejected ?? 0),
+            'released_recent' => (int) ($statsRow->released_recent ?? 0),
+        ];
+
+        $earliestYear = Batch::min('created_at');
+        $earliestYear = $earliestYear ? (int) date('Y', strtotime($earliestYear)) : now()->year;
+        $availableYears = range(now()->year, $earliestYear);
 
         return view('dashboard', [
             'stats' => $stats,

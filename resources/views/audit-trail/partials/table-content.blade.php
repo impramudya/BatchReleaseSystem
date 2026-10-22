@@ -13,7 +13,7 @@
                 <tr>
                     <td class="brp-cell-strong">{{ \Illuminate\Support\Carbon::parse($log['time'])->format('d/m/Y H:i:s') }}</td>
                     <td>{{ $log['user'] }}</td>
-                    <td style="font-weight: 500; color: #1e293b;">{{ $log['action_label'] }}</td>
+                    <td class="audit-action-cell">{{ $log['action_label'] }}</td>
                     <td>{{ $log['detail'] }}</td>
                 </tr>
             @empty

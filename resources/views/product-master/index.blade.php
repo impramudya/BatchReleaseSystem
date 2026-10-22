@@ -3,9 +3,11 @@
 @section('title', 'Product Master')
 @section('page-title', 'Product Master')
 
-@section('content')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v={{ filemtime(public_path('css/product-master.css')) }}">
+@endpush
 
-<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v=4">
+@section('content')
 
 <div id="pm-toast" class="pm-toast">
         <svg id="pm-toast-icon" class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"></svg>

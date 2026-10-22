@@ -4,7 +4,7 @@
 @section('page-title', isset($batch) ? 'Edit Draft — '.$batch->batch_number : 'Finished Product Release Evaluation Form')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}?v=4">
+    <link rel="stylesheet" href="{{ asset('css/batch-form.css') }}?v={{ filemtime(public_path('css/batch-form.css')) }}">
 @endpush
 
 @section('content')

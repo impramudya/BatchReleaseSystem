@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
                     $count = Batch::where('status', 'waiting_manager')
                         ->where('manager_id', $user->id)
                         ->count();
-                } elseif ($role === 'Super Admin') {
+                } elseif ($role === 'System Administrator' || $role === 'Super Admin') {
                     $count = Batch::whereIn('status', ['submitted', 'waiting_manager'])
                         ->count();
                 }

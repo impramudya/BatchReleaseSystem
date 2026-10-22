@@ -32,7 +32,10 @@ class BatchRepositoryController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial')) {
+        $isTableOnlyAjax = ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest' || $request->has('partial'))
+            && !$request->header('X-BRP-Navigation');
+
+        if ($isTableOnlyAjax) {
             return view('batch-repository.partials.table-content', [
                 'batches' => $batches,
                 'filters' => $filters,

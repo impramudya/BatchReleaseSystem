@@ -119,14 +119,25 @@
     padding: 0.62rem 1.1rem;
     font-size: 0.88rem;
     color: var(--text-primary);
-    background: #ffffff;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 6px;
     text-decoration: none !important;
+    transition: all 0.15s ease;
 }
 .um-btn-ghost:hover {
     color: var(--primary-dark);
     background: #f1f8f4;
+    border-color: var(--primary);
+}
+html.dark .um-btn-ghost {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+html.dark .um-btn-ghost:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
     border-color: var(--primary);
 }
 
@@ -259,10 +270,10 @@
     border-bottom: none;
 }
 .um-table tbody tr:hover {
-    background: var(--teal-tint);
+    background: #f1f8f4;
 }
 html.dark .um-table tbody tr:hover {
-    background: rgba(14, 124, 123, 0.08);
+    background: var(--surface-hover) !important;
 }
 
 .um-table td {
@@ -493,7 +504,12 @@ html.dark .um-role {
     text-align: center;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
     transform: translateY(10px) scale(0.96);
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s ease, border-color 0.15s ease;
+}
+html.dark .um-modal {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
 .um-modal-overlay.show .um-modal {
     transform: translateY(0) scale(1);
@@ -521,6 +537,18 @@ html.dark .um-role {
 .um-modal-icon.delete {
     background: #fee2e2;
     color: #dc2626;
+}
+html.dark .um-modal-icon.unlock {
+    background: rgba(22, 163, 74, 0.2);
+    color: #4ade80;
+}
+html.dark .um-modal-icon.reset {
+    background: rgba(2, 132, 199, 0.2);
+    color: #38bdf8;
+}
+html.dark .um-modal-icon.delete {
+    background: rgba(220, 38, 38, 0.2);
+    color: #f87171;
 }
 
 .um-modal-title {
@@ -569,6 +597,16 @@ html.dark .um-role {
     background: #f8fafc;
     border-color: #94a3b8;
     color: #0f172a;
+}
+html.dark .um-modal-cancel {
+    background: var(--surface-hover);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+html.dark .um-modal-cancel:hover {
+    background: #323b35;
+    border-color: var(--border-light);
+    color: #ffffff;
 }
 .um-modal-confirm {
     background: #dc2626;

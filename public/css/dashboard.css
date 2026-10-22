@@ -478,7 +478,7 @@
 
 /* ---------- Filter tahun (dropdown statistik) ---------- */
 @media (max-width: 620px) {
-    .brp-filter-bar select#year-select {
+    select#year-select {
         width: 100%;
     }
 }
@@ -533,30 +533,55 @@
     border-color: #4c8a41 !important;
 }
 
-/* ---------- Uniform White Dashboard Stat Cards ---------- */
+/* ---------- Year Statistics Select ---------- */
+.brp-year-select {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.brp-year-select option {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+/* ---------- Dashboard Stat Cards (Adaptive Light & Dark Mode) ---------- */
 .brp-stat-grid .brp-stat-card {
-    background: #ffffff !important;
-    color: #292d2b !important;
-    border: 1px solid #e3e7e3 !important;
+    background: var(--surface) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border) !important;
     box-shadow: none !important;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 /* Angka dan label */
 .brp-stat-grid .brp-stat-card .brp-stat-value,
 .brp-stat-grid .brp-stat-card .brp-stat-label {
-    color: #292d2b !important;
+    color: var(--text-primary) !important;
     opacity: 1 !important;
 }
 
 /* Ikon */
 .brp-stat-grid .brp-stat-card .brp-stat-icon {
-    background: #f0f2f0 !important;
-    color: #292d2b !important;
+    background: var(--surface-hover) !important;
+    color: var(--text-primary) !important;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* Badge kecil di atas kartu */
-.brp-stat-grid .brp-stat-card .brp-stat-trend {
-    background: #f0f2f0 !important;
-    color: #555d57 !important;
+/* Badge kecil di atas kartu (seluruh kartu senada: Final approval, Not submitted, this month, recent) */
+.brp-stat-grid .brp-stat-card .brp-stat-trend,
+.brp-stat-grid .brp-stat-card .brp-trend-up,
+.brp-stat-grid .brp-stat-card .brp-trend-neutral {
+    background: var(--surface-hover) !important;
+    color: var(--text-secondary) !important;
     opacity: 1 !important;
+    transition: background 0.2s ease, color 0.2s ease;
 }

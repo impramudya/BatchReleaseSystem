@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-<link rel="stylesheet" href="{{ asset('css/user-management.css') }}">
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/user-management.css') }}?v={{ filemtime(public_path('css/user-management.css')) }}">
+@endpush
 
 @section('title', 'Add User')
 @section('page-title', 'Add User')

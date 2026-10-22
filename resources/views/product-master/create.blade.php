@@ -1,5 +1,8 @@
 @extends('layouts.app')
-<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v=4">
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/product-master.css') }}?v={{ filemtime(public_path('css/product-master.css')) }}">
+@endpush
 
 @section('title', 'Add Product')
 @section('page-title', 'Add Product')

@@ -19,15 +19,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Poppins:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
 
     @stack('styles')
 </head>
 <body class="brp-body">
+    <div id="brp-progress-bar"></div>
 
     @php
         $userRole = auth()->user()->role ?? null;
-        $isSuperAdmin = $userRole === 'Super Admin';
+        $isSuperAdmin = in_array($userRole, ['System Administrator', 'Super Admin'], true);
         $isAdmin = $userRole === 'Admin';
         $isSupervisor = $userRole === 'Supervisor';
         $isManager = $userRole === 'Manager';
@@ -241,7 +242,9 @@
                 <h2 class="brp-page-title">@yield('page-title', 'Dashboard')</h2>
             </div>
             <div class="brp-header-actions">
-                @yield('header-actions')
+                <div class="brp-header-actions-slot" id="brp-header-actions-slot">
+                    @yield('header-actions')
+                </div>
                 <div class="brp-notif-wrap" id="notif-wrap">
                     <button class="brp-bell" type="button" id="notif-trigger" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
                         <svg class="brp-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8a5 5 0 0 1 10 0c0 3.2 1 4.3 1 4.3H4S5 11.2 5 8z"/><path d="M8.2 15.3a1.8 1.8 0 0 0 3.6 0"/></svg>
@@ -275,7 +278,7 @@
         </footer>
     </div>
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}" defer></script>
 
     <script>
         (function () {
@@ -392,13 +395,19 @@
         }
         .brp-notif-item:hover { background: #f2f5f2; }
         .brp-notif-item.is-unread { background: #edf5e9; }
+        html.dark .brp-notif-item:hover { background: var(--surface-hover); }
+        html.dark .brp-notif-item.is-unread { background: rgba(76, 138, 65, 0.18); }
+        html.dark .brp-notif-item.is-unread:hover { background: rgba(76, 138, 65, 0.28); }
+        html.dark .brp-notif-dropdown { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6); }
         .brp-notif-title { margin: 0; font-size: 0.82rem; font-weight: 600; color: var(--content-text); }
         .brp-notif-message { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--content-text-soft); }
         .brp-notif-time { margin: 0.25rem 0 0; font-size: 0.7rem; color: var(--content-text-soft); }
         .brp-notif-empty { padding: 1rem; text-align: center; font-size: 0.8rem; color: var(--content-text-soft); }
     </style>
 
-    @stack('scripts')
+    <div id="brp-page-scripts">
+        @stack('scripts')
+    </div>
 
 </body>
 </html>

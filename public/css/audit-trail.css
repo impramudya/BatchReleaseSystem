@@ -10,6 +10,12 @@
     border-radius: 6px !important;
 }
 
+/* ---------- Action Column (Adaptive Light & Dark Mode) ---------- */
+.audit-action-cell {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
 /* ---------- Loading state for AJAX ---------- */
 #audit-trail-results {
     position: relative;
@@ -49,6 +55,11 @@ a.brp-pager-link:hover {
     border-color: var(--primary);
     background: #f1f8f4;
     color: var(--primary-dark);
+}
+html.dark a.brp-pager-link:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+    border-color: var(--primary);
 }
 .brp-pager-active {
     background: var(--primary) !important;
